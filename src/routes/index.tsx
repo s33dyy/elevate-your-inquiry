@@ -1035,9 +1035,9 @@ function FormSection({
           >
             <StickyProgress step={step} progress={progress} />
 
-            <div className="mt-5 glass-card rounded-2xl p-6 sm:p-12">
-              {/* Step label */}
-              <div className="mb-10 flex items-baseline justify-between border-b border-border pb-5">
+            <div className="mt-2 rounded-2xl p-0 sm:mt-5 sm:glass-card sm:p-12">
+              {/* Step label (hidden on mobile to save space, already in sticky header) */}
+              <div className="mb-10 hidden items-baseline justify-between border-b border-border pb-5 sm:flex">
                 <span
                   className="section-index"
                   style={{ color: "rgba(139,125,255,0.7)" }}
@@ -1172,7 +1172,7 @@ function StickyProgress({
 }) {
   return (
     <div className="sticky top-2 z-30 sm:top-4">
-      <div className="glass-card rounded-xl px-4 py-3 sm:px-5 sm:py-4">
+      <div className="rounded-xl px-2 py-3 sm:glass-card sm:px-5 sm:py-4">
         {/* Mobile: compact current step */}
         <div className="mb-2.5 flex items-center justify-between sm:hidden">
           <span className="section-index text-white">
@@ -1277,9 +1277,9 @@ function StepHeader({
   subtitle?: string;
 }) {
   return (
-    <div className="mb-10">
-      <span className="section-index">{eyebrow}</span>
-      <h2 className="mt-4 font-display text-4xl leading-[1.02] tracking-[-0.02em] sm:text-5xl">
+    <div className="mb-6 sm:mb-10">
+      <span className="section-index hidden sm:block">{eyebrow}</span>
+      <h2 className="font-display text-4xl leading-[1.05] tracking-[-0.02em] sm:mt-4 sm:text-5xl">
         {title}
       </h2>
       {subtitle && (
