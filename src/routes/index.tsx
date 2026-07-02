@@ -571,7 +571,23 @@ function Nav() {
           ))}
         </nav>
 
-        {/* CTA */}
+        {/* Mobile CTA */}
+        <motion.a
+          href="#apply"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ duration: 0.15 }}
+          className="sm:hidden inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-white"
+          style={{
+            background: "rgba(139,125,255,0.12)",
+            border: "1px solid rgba(139,125,255,0.28)",
+          }}
+        >
+          Apply
+          <ArrowRight className="h-3 w-3" />
+        </motion.a>
+
+        {/* Desktop CTA */}
         <motion.a
           href="#apply"
           whileHover={{
@@ -633,7 +649,7 @@ function Hero({ onCta }: { onCta: () => void }) {
               }}
             />
 
-            <h1 className="font-display text-[13vw] leading-[0.92] tracking-[-0.03em] sm:text-[8.8rem]">
+            <h1 className="font-display leading-[0.92] tracking-[-0.03em] text-[clamp(2.6rem,11vw,8.8rem)]">
               Websites &amp; software
               <br />
               that{" "}
@@ -643,15 +659,15 @@ function Hero({ onCta }: { onCta: () => void }) {
           </div>
 
           {/* Sub-copy grid */}
-          <div className="mt-12 grid gap-8 sm:grid-cols-12">
+          <div className="mt-10 grid gap-6 sm:mt-12 sm:grid-cols-12">
             <div className="sm:col-span-5">
-              <p className="text-compressed text-2xl leading-[0.93] text-white/75 sm:text-4xl">
+              <p className="text-compressed text-xl leading-[0.93] text-white/75 sm:text-4xl">
                 BoutiqueStudio
                 <br />
                 SinceDay1
               </p>
             </div>
-            <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:col-span-6 sm:col-start-7 sm:text-lg">
+            <p className="max-w-xl text-sm leading-relaxed text-muted-foreground sm:col-span-6 sm:col-start-7 sm:text-lg">
               Techilla is a boutique studio for founders who need more than a
               template. We build high-conversion websites, custom software, and
               AI automation for teams that actually ship. Tell us about your
@@ -827,6 +843,7 @@ function LeadPage() {
           <FormSection
             active={showForm}
             onSubmitted={() => setSubmitted(true)}
+            onActivate={scrollToForm}
           />
         )}
       </div>
@@ -843,9 +860,11 @@ function LeadPage() {
 function FormSection({
   active,
   onSubmitted,
+  onActivate,
 }: {
   active: boolean;
   onSubmitted: () => void;
+  onActivate: () => void;
 }) {
   const [step, setStep] = useState(0);
   const [data, setData] = useState<FormState>(INITIAL);
@@ -973,18 +992,38 @@ function FormSection({
         {!active ? (
           <motion.div
             key="teaser"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="glass-card rounded-2xl p-10 text-center"
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="glass-card rounded-2xl px-6 py-14 sm:px-16 sm:py-20"
           >
-            <p className="text-sm text-muted-foreground">
-              Press{" "}
-              <kbd className="mx-1 rounded-lg border border-border bg-accent px-2 py-1 font-mono text-xs text-white/70">
+            <div className="mx-auto flex max-w-lg flex-col items-center gap-7 text-center">
+              {/* Decorative rule */}
+              <div
+                className="h-px w-12 rounded-full"
+                style={{ background: G.purple, opacity: 0.5 }}
+              />
+              <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
+                We don't build websites. We build digital products that{" "}
+                <span style={{ color: "rgba(255,255,255,0.75)" }}>
+                  generate leads, automate operations, and help your business
+                  grow.
+                </span>
+              </p>
+              <motion.button
+                onClick={onActivate}
+                whileHover={{ y: -2, ...G.primaryBtnHover }}
+                whileTap={{ y: 0, scale: 0.98 }}
+                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium text-white"
+                style={G.primaryBtn}
+              >
                 Begin application
-              </kbd>{" "}
-              above to open the intake form.
-            </p>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </motion.button>
+              <span className="section-index">Seven steps · ~4 minutes · Autosaved</span>
+            </div>
           </motion.div>
         ) : (
           <motion.div
@@ -1132,9 +1171,20 @@ function StickyProgress({
   progress: number;
 }) {
   return (
-    <div className="sticky top-4 z-30">
-      <div className="glass-card rounded-xl px-5 py-4">
-        <div className="mb-3 flex items-center gap-2 overflow-x-auto section-index">
+    <div className="sticky top-2 z-30 sm:top-4">
+      <div className="glass-card rounded-xl px-4 py-3 sm:px-5 sm:py-4">
+        {/* Mobile: compact current step */}
+        <div className="mb-2.5 flex items-center justify-between sm:hidden">
+          <span className="section-index text-white">
+            0{step + 1} — {STEPS[step].label}
+          </span>
+          <span className="section-index">
+            {step + 1} / {STEPS.length}
+          </span>
+        </div>
+
+        {/* Desktop: all steps */}
+        <div className="mb-2.5 hidden items-center gap-2 overflow-x-auto sm:flex section-index">
           {STEPS.map((s, i) => (
             <div key={s.key} className="flex items-center gap-2">
               <span
@@ -1255,7 +1305,7 @@ function ChipToggle({
       type="button"
       onClick={onClick}
       className={cn(
-        "group relative flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-all duration-200",
+        "group relative flex min-h-[44px] items-center gap-2 rounded-full border px-4 py-2 text-sm transition-all duration-200",
         active
           ? "border-primary/45 bg-primary/10 text-white"
           : "border-border text-muted-foreground hover:border-white/15 hover:bg-white/[0.03] hover:text-white",
