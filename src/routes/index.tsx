@@ -1,6 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useTransform,
+  useSpring,
+} from "framer-motion";
 import { z } from "zod";
 import {
   ArrowRight,
@@ -9,7 +15,6 @@ import {
   ChevronDown,
   Sparkles,
   Shield,
-  Clock,
   Zap,
   Server,
   TrendingUp,
@@ -43,7 +48,40 @@ export const Route = createFileRoute("/")({
   component: LeadPage,
 });
 
-/* ---------------- Constants ---------------- */
+/* ============================================================ */
+/*  Design tokens (inline helpers)                               */
+/* ============================================================ */
+
+const G = {
+  purple:
+    "linear-gradient(135deg, #8B7DFF 0%, #B4A9FF 52%, #6E78FF 100%)" as const,
+  purpleSubtle:
+    "linear-gradient(135deg, #8B7DFF 0%, #7A6FEE 100%)" as const,
+  primaryBtn: {
+    background: "linear-gradient(135deg, #8B7DFF 0%, #7A6FEE 100%)",
+    border: "1px solid rgba(139,125,255,0.35)",
+    boxShadow:
+      "0 0 20px rgba(139,125,255,0.18), 0 2px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)",
+  },
+  primaryBtnHover: {
+    boxShadow:
+      "0 0 40px rgba(139,125,255,0.30), 0 8px 28px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.08)",
+  },
+} as const;
+
+function purpleText(italic = true): React.CSSProperties {
+  return {
+    background: G.purple,
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
+    fontStyle: italic ? "italic" : "normal",
+  };
+}
+
+/* ============================================================ */
+/*  Constants                                                    */
+/* ============================================================ */
 
 const STEPS = [
   { key: "business", label: "Business" },
@@ -87,8 +125,20 @@ const GOALS = [
   "Launch MVP",
   "Other",
 ];
-const BUDGETS = ["₹5k–10k", "₹10k–25k", "₹25k–50k", "₹50k–1L", "₹1L+", "Not Sure Yet"];
-const TIMELINES = ["Immediately", "Within 2 Weeks", "Within 1 Month", "Flexible"];
+const BUDGETS = [
+  "₹5k–10k",
+  "₹10k–25k",
+  "₹25k–50k",
+  "₹50k–1L",
+  "₹1L+",
+  "Not Sure Yet",
+];
+const TIMELINES = [
+  "Immediately",
+  "Within 2 Weeks",
+  "Within 1 Month",
+  "Flexible",
+];
 const CONTACT_METHODS = ["Phone", "WhatsApp", "Email", "Meeting"];
 
 const TRUST = [
@@ -127,7 +177,9 @@ const FAQS = [
   },
 ];
 
-/* ---------------- Types ---------------- */
+/* ============================================================ */
+/*  Types                                                        */
+/* ============================================================ */
 
 type FormState = {
   business_name: string;
@@ -171,7 +223,9 @@ const INITIAL: FormState = {
 
 const STORAGE_KEY = "techilla_lead_draft_v1";
 
-/* ---------------- Validation per step ---------------- */
+/* ============================================================ */
+/*  Validation                                                   */
+/* ============================================================ */
 
 const stepSchemas = [
   z.object({
@@ -183,8 +237,12 @@ const stepSchemas = [
     business_size: z.string().min(1, "Select a size"),
     online_presence: z.array(z.string()),
   }),
-  z.object({ services_required: z.array(z.string()).min(1, "Pick at least one service") }),
-  z.object({ project_goals: z.array(z.string()).min(1, "Pick at least one goal") }),
+  z.object({
+    services_required: z.array(z.string()).min(1, "Pick at least one service"),
+  }),
+  z.object({
+    project_goals: z.array(z.string()).min(1, "Pick at least one goal"),
+  }),
   z.object({
     current_problems: z.string().trim().min(10, "Tell us a bit more").max(2000),
   }),
@@ -199,7 +257,548 @@ const stepSchemas = [
   }),
 ] as const;
 
-/* ---------------- Page ---------------- */
+/* ============================================================ */
+/*  Framer variants                                              */
+/* ============================================================ */
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 22, filter: "blur(4px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
+
+/* ============================================================ */
+/*  Ambient Background                                           */
+/* ============================================================ */
+
+function AmbientBackground() {
+  return (
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+      {/* Grid */}
+      <div className="absolute inset-0 bg-grid opacity-100" />
+
+      {/* Blob A — top-right, behind hero */}
+      <div
+        className="animate-blob-a absolute -right-60 -top-60 h-[900px] w-[900px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(139,125,255,0.09) 0%, transparent 65%)",
+          filter: "blur(90px)",
+        }}
+      />
+
+      {/* Blob B — left-center, behind form */}
+      <div
+        className="animate-blob-b absolute -left-60 top-[45%] h-[700px] w-[700px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(110,120,255,0.07) 0%, transparent 65%)",
+          filter: "blur(90px)",
+        }}
+      />
+
+      {/* Noise */}
+      <div
+        className="absolute inset-0 opacity-[0.28]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E")`,
+          backgroundSize: "256px 256px",
+        }}
+      />
+
+      {/* Vignette */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 38%, rgba(0,0,0,0.55) 100%)",
+        }}
+      />
+    </div>
+  );
+}
+
+/* ============================================================ */
+/*  Cursor Glow                                                  */
+/* ============================================================ */
+
+function CursorGlow() {
+  const x = useMotionValue(-500);
+  const y = useMotionValue(-500);
+  const sx = useSpring(x, { stiffness: 180, damping: 40 });
+  const sy = useSpring(y, { stiffness: 180, damping: 40 });
+
+  useEffect(() => {
+    const move = (e: MouseEvent) => {
+      x.set(e.clientX);
+      y.set(e.clientY);
+    };
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, [x, y]);
+
+  return (
+    <motion.div
+      className="pointer-events-none fixed top-0 left-0 z-[9998]"
+      style={{ x: sx, y: sy, translateX: "-50%", translateY: "-50%" }}
+    >
+      <div
+        className="h-[480px] w-[480px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(139,125,255,0.048) 0%, transparent 65%)",
+        }}
+      />
+    </motion.div>
+  );
+}
+
+/* ============================================================ */
+/*  Hero Sculpture — glass sphere + orbital rings               */
+/* ============================================================ */
+
+function HeroSculpture() {
+  const mx = useMotionValue(0.5);
+  const my = useMotionValue(0.5);
+  const rawX = useTransform(mx, [0, 1], [-18, 18]);
+  const rawY = useTransform(my, [0, 1], [-12, 12]);
+  const spx = useSpring(rawX, { stiffness: 45, damping: 22 });
+  const spy = useSpring(rawY, { stiffness: 45, damping: 22 });
+
+  useEffect(() => {
+    const move = (e: MouseEvent) => {
+      mx.set(e.clientX / window.innerWidth);
+      my.set(e.clientY / window.innerHeight);
+    };
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, [mx, my]);
+
+  return (
+    <div
+      className="relative flex h-[380px] w-[380px] items-center justify-center"
+      style={{ perspective: "1200px" }}
+    >
+      {/* Ambient halo */}
+      <div
+        className="animate-pulse-halo absolute inset-0 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(139,125,255,0.18) 0%, transparent 62%)",
+          filter: "blur(50px)",
+        }}
+      />
+
+      {/* Parallax wrapper */}
+      <motion.div
+        style={{ x: spx, y: spy }}
+        className="relative flex items-center justify-center"
+      >
+        {/* Float wrapper */}
+        <motion.div
+          animate={{ y: [-10, 10, -10] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          className="relative flex items-center justify-center"
+        >
+          {/* Central glass sphere */}
+          <div
+            className="absolute rounded-full"
+            style={{
+              width: 148,
+              height: 148,
+              background:
+                "radial-gradient(circle at 36% 30%, rgba(180,168,255,0.20) 0%, rgba(139,125,255,0.08) 48%, rgba(15,15,22,0.04) 100%)",
+              border: "1px solid rgba(139,125,255,0.22)",
+              boxShadow:
+                "0 0 80px rgba(139,125,255,0.13), inset 0 0 50px rgba(139,125,255,0.05), 0 30px 80px rgba(0,0,0,0.55)",
+            }}
+          />
+
+          {/* Specular highlight */}
+          <div
+            className="absolute rounded-full"
+            style={{
+              width: 52,
+              height: 52,
+              background:
+                "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)",
+              top: -36,
+              left: -38,
+            }}
+          />
+
+          {/* Ring 1 — primary orbit */}
+          <motion.div
+            initial={{ rotateX: 70, rotateZ: 0 }}
+            animate={{ rotateZ: 360 }}
+            transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+            className="absolute rounded-full"
+            style={{
+              width: 216,
+              height: 216,
+              border: "1px solid rgba(139,125,255,0.22)",
+              boxShadow: "0 0 14px rgba(139,125,255,0.08)",
+            }}
+          />
+
+          {/* Ring 2 — secondary orbit */}
+          <motion.div
+            initial={{ rotateX: 52, rotateY: 28, rotateZ: 0 }}
+            animate={{ rotateZ: -360 }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            className="absolute rounded-full"
+            style={{
+              width: 296,
+              height: 296,
+              border: "1px solid rgba(110,120,255,0.11)",
+            }}
+          />
+
+          {/* Orbiting dot 1 (ring 1 speed) */}
+          <motion.div
+            initial={{ rotate: 0 }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+            className="absolute"
+            style={{ width: 216, height: 216 }}
+          >
+            <div
+              className="absolute rounded-full"
+              style={{
+                width: 7,
+                height: 7,
+                top: "0%",
+                left: "50%",
+                transform: "translateX(-50%) translateY(-50%)",
+                background: "rgba(139,125,255,0.8)",
+                boxShadow:
+                  "0 0 14px rgba(139,125,255,0.65), 0 0 5px rgba(139,125,255,0.95)",
+              }}
+            />
+          </motion.div>
+
+          {/* Orbiting dot 2 (ring 2 speed) */}
+          <motion.div
+            initial={{ rotate: 100 }}
+            animate={{ rotate: -260 }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            className="absolute"
+            style={{ width: 296, height: 296 }}
+          >
+            <div
+              className="absolute rounded-full"
+              style={{
+                width: 4,
+                height: 4,
+                bottom: "10%",
+                right: "6%",
+                background: "rgba(110,120,255,0.65)",
+                boxShadow: "0 0 8px rgba(110,120,255,0.5)",
+              }}
+            />
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ============================================================ */
+/*  Nav                                                          */
+/* ============================================================ */
+
+function Nav() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  return (
+    <motion.header
+      initial={{ opacity: 0, y: -14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className={cn(
+        "sticky top-0 z-50 transition-all duration-500",
+        scrolled ? "glass-nav" : "",
+      )}
+    >
+      <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
+        {/* Wordmark */}
+        <a
+          href="/"
+          className="flex items-center gap-2.5 font-display text-xl italic leading-none tracking-tight"
+        >
+          <span
+            className="h-2 w-2 shrink-0 rounded-full"
+            style={{
+              background: G.purple,
+              boxShadow: "0 0 10px rgba(139,125,255,0.6)",
+            }}
+          />
+          Techilla
+        </a>
+
+        {/* Links */}
+        <nav className="hidden items-center gap-8 sm:flex">
+          {(
+            [
+              ["#trust", "01", "Practice"],
+              ["#apply", "02", "Apply"],
+              ["#faq", "03", "FAQ"],
+            ] as const
+          ).map(([href, num, label]) => (
+            <a
+              key={href}
+              href={href}
+              className="section-index group flex items-center gap-2 transition-colors duration-200 hover:text-white"
+            >
+              <span
+                className="transition-colors duration-200"
+                style={{ color: "rgba(139,125,255,0.4)" }}
+              >
+                {num}
+              </span>
+              {label}
+            </a>
+          ))}
+        </nav>
+
+        {/* CTA */}
+        <motion.a
+          href="#apply"
+          whileHover={{
+            y: -1,
+            boxShadow: "0 0 18px rgba(139,125,255,0.25)",
+          }}
+          transition={{ duration: 0.2 }}
+          className="hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-white"
+          style={{
+            background: "rgba(139,125,255,0.10)",
+            border: "1px solid rgba(139,125,255,0.25)",
+            boxShadow: "0 0 10px rgba(139,125,255,0.08)",
+          }}
+        >
+          Apply now
+          <ArrowRight className="h-3.5 w-3.5" />
+        </motion.a>
+      </div>
+    </motion.header>
+  );
+}
+
+/* ============================================================ */
+/*  Hero                                                         */
+/* ============================================================ */
+
+function Hero({ onCta }: { onCta: () => void }) {
+  return (
+    <section className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 pt-20 sm:px-10 sm:pt-28 sm:pb-40">
+      {/* Section label row */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.1 }}
+        className="mb-16 flex items-baseline justify-between border-t border-border pt-6"
+      >
+        <span className="section-index">00 / Introduction</span>
+        <span className="section-index hidden sm:block">
+          Now accepting projects · 2026
+        </span>
+      </motion.div>
+
+      {/* Content + Sculpture grid */}
+      <div className="grid items-center gap-12 lg:grid-cols-[1fr_400px]">
+        {/* Left column */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+        >
+          {/* Ambient behind headline */}
+          <div className="relative">
+            <div
+              className="pointer-events-none absolute -inset-20 -z-10 rounded-full"
+              style={{
+                background:
+                  "radial-gradient(circle at 30% 50%, rgba(139,125,255,0.09) 0%, transparent 65%)",
+                filter: "blur(40px)",
+              }}
+            />
+
+            <h1 className="font-display text-[13vw] leading-[0.92] tracking-[-0.03em] sm:text-[8.8rem]">
+              Websites &amp; software
+              <br />
+              that{" "}
+              <span style={purpleText(true)}>earn</span>
+              {" "}their keep.
+            </h1>
+          </div>
+
+          {/* Sub-copy grid */}
+          <div className="mt-12 grid gap-8 sm:grid-cols-12">
+            <div className="sm:col-span-5">
+              <p className="text-compressed text-2xl leading-[0.93] text-white/75 sm:text-4xl">
+                BoutiqueStudio
+                <br />
+                SinceDay1
+              </p>
+            </div>
+            <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:col-span-6 sm:col-start-7 sm:text-lg">
+              Techilla is a boutique studio for founders who need more than a
+              template. We build high-conversion websites, custom software, and
+              AI automation for teams that actually ship. Tell us about your
+              business — we respond within twenty-four hours.
+            </p>
+          </div>
+
+          {/* CTA row */}
+          <div className="mt-14 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+            <motion.button
+              onClick={onCta}
+              whileHover={{
+                y: -2,
+                ...G.primaryBtnHover,
+              }}
+              whileTap={{ y: 0, scale: 0.98 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="group inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium text-white"
+              style={G.primaryBtn}
+            >
+              Begin application
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </motion.button>
+
+            <a
+              href="#faq"
+              className="section-index transition-colors duration-200 hover:text-white"
+            >
+              → Read FAQ first
+            </a>
+          </div>
+        </motion.div>
+
+        {/* Right column — sculpture */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.88 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 1.3,
+            ease: [0.22, 1, 0.36, 1],
+            delay: 0.3,
+          }}
+          className="hidden items-center justify-center lg:flex"
+        >
+          <HeroSculpture />
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.6, duration: 1 }}
+        className="mt-24 flex items-center gap-3 text-muted-foreground"
+      >
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ChevronDown className="h-4 w-4" />
+        </motion.div>
+        <span className="section-index">Scroll to explore</span>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ============================================================ */
+/*  Trust Strip                                                  */
+/* ============================================================ */
+
+function TrustStrip() {
+  return (
+    <section
+      id="trust"
+      className="relative z-10 mx-auto max-w-[1400px] px-6 pb-36 sm:px-10"
+    >
+      {/* Section ambient */}
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(139,125,255,0.06) 0%, transparent 65%)",
+          filter: "blur(80px)",
+        }}
+      />
+
+      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">01 / Practice</span>
+        <span className="section-index hidden sm:block">
+          What every project ships with
+        </span>
+      </div>
+
+      <h2 className="mb-16 max-w-4xl font-display text-5xl leading-[0.97] tracking-[-0.025em] sm:text-7xl">
+        A small studio,
+        <br />
+        <span style={purpleText(true)}>deliberately.</span>
+      </h2>
+
+      {/* Glass cards grid */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {TRUST.map((t, i) => (
+          <motion.div
+            key={t.label}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ delay: i * 0.07 }}
+            whileHover={{ y: -4, transition: { duration: 0.25 } }}
+            className="glass-card group rounded-2xl p-8 transition-colors duration-300 hover:border-[rgba(139,125,255,0.14)]"
+          >
+            <div className="mb-6 flex items-center justify-between">
+              <span
+                className="section-index"
+                style={{ color: "rgba(139,125,255,0.45)" }}
+              >
+                0{i + 1}
+              </span>
+              <t.icon
+                className="h-5 w-5 transition-all duration-300"
+                strokeWidth={1.5}
+                style={{ color: "rgba(139,125,255,0.55)" }}
+              />
+            </div>
+            <div className="font-display text-2xl leading-tight tracking-tight">
+              {t.label}
+            </div>
+            {/* Purple left accent — appears on hover */}
+            <div
+              className="mt-5 h-px w-0 transition-all duration-500 group-hover:w-full"
+              style={{
+                background: G.purple,
+                opacity: 0.35,
+              }}
+            />
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================ */
+/*  Lead Page (root)                                             */
+/* ============================================================ */
 
 function LeadPage() {
   const [showForm, setShowForm] = useState(false);
@@ -216,7 +815,8 @@ function LeadPage() {
   return (
     <main className="relative min-h-screen overflow-hidden">
       <Toaster theme="dark" position="top-center" richColors />
-      <div className="pointer-events-none fixed inset-0 bg-grid opacity-60" />
+      <CursorGlow />
+      <AmbientBackground />
       <Nav />
       <Hero onCta={scrollToForm} />
       <TrustStrip />
@@ -224,7 +824,10 @@ function LeadPage() {
         {submitted ? (
           <SuccessScreen />
         ) : (
-          <FormSection active={showForm} onSubmitted={() => setSubmitted(true)} />
+          <FormSection
+            active={showForm}
+            onSubmitted={() => setSubmitted(true)}
+          />
         )}
       </div>
       <FAQSection />
@@ -233,147 +836,9 @@ function LeadPage() {
   );
 }
 
-/* ---------------- Nav ---------------- */
-
-function Nav() {
-  return (
-    <header className="relative z-20 mx-auto flex max-w-[1400px] items-center justify-between px-6 pt-6 sm:px-10">
-      <a href="/" className="flex items-baseline gap-1 font-display text-2xl italic leading-none tracking-tight">
-        <span>Techilla</span>
-        <span className="text-muted-foreground/50">Techilla</span>
-      </a>
-      <nav className="hidden items-center gap-10 section-index sm:flex">
-        <a href="#trust" className="transition hover:text-foreground">
-          <span className="mr-2 text-foreground/40">01</span>Practice
-        </a>
-        <a href="#apply" className="transition hover:text-foreground">
-          <span className="mr-2 text-foreground/40">02</span>Apply
-        </a>
-        <a href="#faq" className="transition hover:text-foreground">
-          <span className="mr-2 text-foreground/40">03</span>FAQ
-        </a>
-      </nav>
-      <span className="hidden section-index sm:block">Est. Studio</span>
-    </header>
-  );
-}
-
-/* ---------------- Hero ---------------- */
-
-function Hero({ onCta }: { onCta: () => void }) {
-  return (
-    <section className="relative z-10 mx-auto max-w-[1400px] px-6 pt-24 pb-24 sm:px-10 sm:pt-36 sm:pb-36">
-      <div className="mb-16 flex items-baseline justify-between border-t border-border pt-6">
-        <span className="section-index">00 / Introduction</span>
-        <span className="section-index hidden sm:block">Now accepting Q1 · 2026</span>
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="max-w-5xl"
-      >
-        <h1 className="font-display text-[13vw] leading-[0.92] tracking-[-0.03em] sm:text-[9.5rem]">
-          Websites &amp; software
-          <br />
-          that <span className="italic text-gold">earn</span> their keep.
-        </h1>
-
-        <div className="mt-14 grid gap-10 sm:grid-cols-12">
-          <div className="sm:col-span-5">
-            <p className="text-compressed text-3xl leading-[0.95] text-foreground/90 sm:text-5xl">
-              BoutiqueStudioSinceDay1
-            </p>
-          </div>
-          <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:col-span-6 sm:col-start-7 sm:text-lg">
-            Techilla is a boutique studio for founders who need more than a template.
-            We build high-conversion websites, custom internal software, and AI automation
-            for teams that actually ship. Tell us about your business — we respond within
-            twenty-four hours.
-          </p>
-        </div>
-
-        <div className="mt-16 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-          <Button
-            size="lg"
-            onClick={onCta}
-            className="group h-14 rounded-full bg-primary px-8 text-base font-medium text-primary-foreground hover:bg-primary/90"
-          >
-            Begin application
-            <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Button>
-          <a
-            href="#faq"
-            className="section-index transition hover:text-foreground"
-          >
-            → Read FAQ first
-          </a>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1 }}
-        className="mt-28 flex items-center gap-3 text-muted-foreground"
-      >
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <ChevronDown className="h-4 w-4" />
-        </motion.div>
-        <span className="section-index">Scroll</span>
-      </motion.div>
-    </section>
-  );
-}
-
-/* ---------------- Trust ---------------- */
-
-function TrustStrip() {
-  return (
-    <section id="trust" className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 sm:px-10">
-      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
-        <span className="section-index">01 / Practice</span>
-        <span className="section-index hidden sm:block">What every project ships with</span>
-      </div>
-
-      <h2 className="mb-16 max-w-4xl font-display text-5xl leading-[0.98] tracking-[-0.02em] sm:text-7xl">
-        A small studio,
-        <br />
-        <span className="italic text-gold">deliberately.</span>
-      </h2>
-
-      <div className="grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
-        {TRUST.map((t, i) => (
-          <motion.div
-            key={t.label}
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ delay: i * 0.05, duration: 0.5 }}
-            className="group flex items-start gap-5 p-8 transition hover:bg-white/[0.02] sm:min-h-[180px]"
-          >
-            <span className="section-index shrink-0 pt-1">
-              0{i + 1}
-            </span>
-            <div className="flex-1">
-              <t.icon className="mb-6 h-5 w-5 text-gold" strokeWidth={1.5} />
-              <div className="font-display text-2xl leading-tight tracking-tight">
-                {t.label}
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-
-/* ---------------- Form ---------------- */
+/* ============================================================ */
+/*  Form Section                                                  */
+/* ============================================================ */
 
 function FormSection({
   active,
@@ -394,7 +859,8 @@ function FormSection({
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed?.data) setData({ ...INITIAL, ...parsed.data });
-        if (typeof parsed?.step === "number") setStep(Math.min(parsed.step, STEPS.length - 1));
+        if (typeof parsed?.step === "number")
+          setStep(Math.min(parsed.step, STEPS.length - 1));
       }
     } catch {}
   }, []);
@@ -416,7 +882,9 @@ function FormSection({
       const arr = d[key] as string[];
       return {
         ...d,
-        [key]: arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value],
+        [key]: arr.includes(value)
+          ? arr.filter((v) => v !== value)
+          : [...arr, value],
       };
     });
     setErrors((e) => ({ ...e, [key as string]: "" }));
@@ -474,28 +942,48 @@ function FormSection({
   const progress = useMemo(() => ((step + 1) / STEPS.length) * 100, [step]);
 
   return (
-    <section id="apply" className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 sm:px-10">
+    <section
+      id="apply"
+      className="relative z-10 mx-auto max-w-[1400px] px-6 pb-36 sm:px-10"
+    >
+      {/* Section ambient */}
+      <div
+        className="pointer-events-none absolute right-0 top-1/3 h-[500px] w-[500px] -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(139,125,255,0.07) 0%, transparent 65%)",
+          filter: "blur(80px)",
+        }}
+      />
+
       <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
         <span className="section-index">02 / Apply</span>
-        <span className="section-index hidden sm:block">Seven steps · ~4 minutes</span>
+        <span className="section-index hidden sm:block">
+          Seven steps · ~4 minutes
+        </span>
       </div>
-      <h2 className="mb-14 max-w-4xl font-display text-5xl leading-[0.98] tracking-[-0.02em] sm:text-7xl">
+
+      <h2 className="mb-14 max-w-4xl font-display text-5xl leading-[0.97] tracking-[-0.025em] sm:text-7xl">
         Tell us what you're
         <br />
-        <span className="italic text-gold">building.</span>
+        <span style={purpleText(true)}>building.</span>
       </h2>
-      <AnimatePresence mode="wait">
 
+      <AnimatePresence mode="wait">
         {!active ? (
           <motion.div
             key="teaser"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="border border-border p-10 text-center"
+            className="glass-card rounded-2xl p-10 text-center"
           >
             <p className="text-sm text-muted-foreground">
-              Press <kbd className="mx-1 rounded border border-border px-1.5 py-0.5 font-mono text-xs">Begin</kbd> above to open the intake.
+              Press{" "}
+              <kbd className="mx-1 rounded-lg border border-border bg-accent px-2 py-1 font-mono text-xs text-white/70">
+                Begin application
+              </kbd>{" "}
+              above to open the intake form.
             </p>
           </motion.div>
         ) : (
@@ -503,14 +991,18 @@ function FormSection({
             key="form"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mx-auto max-w-4xl"
           >
             <StickyProgress step={step} progress={progress} />
 
-            <div className="mt-6 border border-border bg-card/40 p-6 sm:p-12">
+            <div className="mt-5 glass-card rounded-2xl p-6 sm:p-12">
+              {/* Step label */}
               <div className="mb-10 flex items-baseline justify-between border-b border-border pb-5">
-                <span className="section-index text-gold">
+                <span
+                  className="section-index"
+                  style={{ color: "rgba(139,125,255,0.7)" }}
+                >
                   Step 0{step + 1} — {STEPS[step].label}
                 </span>
                 <span className="section-index">Autosaved</span>
@@ -519,21 +1011,71 @@ function FormSection({
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: 16, filter: "blur(4px)" }}
+                  animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, x: -16, filter: "blur(4px)" }}
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  {step === 0 && <StepBusiness data={data} update={update} toggleArr={toggleArr} errors={errors} />}
-                  {step === 1 && <StepProject data={data} update={update} toggleArr={toggleArr} errors={errors} />}
-                  {step === 2 && <StepGoals data={data} update={update} toggleArr={toggleArr} errors={errors} />}
-                  {step === 3 && <StepProblems data={data} update={update} toggleArr={toggleArr} errors={errors} />}
-                  {step === 4 && <StepBudget data={data} update={update} toggleArr={toggleArr} errors={errors} />}
-                  {step === 5 && <StepTimeline data={data} update={update} toggleArr={toggleArr} errors={errors} />}
-                  {step === 6 && <StepContact data={data} update={update} toggleArr={toggleArr} errors={errors} />}
+                  {step === 0 && (
+                    <StepBusiness
+                      data={data}
+                      update={update}
+                      toggleArr={toggleArr}
+                      errors={errors}
+                    />
+                  )}
+                  {step === 1 && (
+                    <StepProject
+                      data={data}
+                      update={update}
+                      toggleArr={toggleArr}
+                      errors={errors}
+                    />
+                  )}
+                  {step === 2 && (
+                    <StepGoals
+                      data={data}
+                      update={update}
+                      toggleArr={toggleArr}
+                      errors={errors}
+                    />
+                  )}
+                  {step === 3 && (
+                    <StepProblems
+                      data={data}
+                      update={update}
+                      toggleArr={toggleArr}
+                      errors={errors}
+                    />
+                  )}
+                  {step === 4 && (
+                    <StepBudget
+                      data={data}
+                      update={update}
+                      toggleArr={toggleArr}
+                      errors={errors}
+                    />
+                  )}
+                  {step === 5 && (
+                    <StepTimeline
+                      data={data}
+                      update={update}
+                      toggleArr={toggleArr}
+                      errors={errors}
+                    />
+                  )}
+                  {step === 6 && (
+                    <StepContact
+                      data={data}
+                      update={update}
+                      toggleArr={toggleArr}
+                      errors={errors}
+                    />
+                  )}
                 </motion.div>
               </AnimatePresence>
 
+              {/* Navigation */}
               <div className="mt-12 flex items-center justify-between border-t border-border pt-6">
                 <Button
                   type="button"
@@ -544,26 +1086,31 @@ function FormSection({
                 >
                   <ArrowLeft className="mr-1 h-4 w-4" /> Back
                 </Button>
-                <Button
+
+                <motion.button
                   type="button"
                   onClick={next}
                   disabled={submitting}
-                  className="group h-12 rounded-full bg-primary px-7 text-primary-foreground hover:bg-primary/90"
+                  whileHover={submitting ? {} : { y: -2, ...G.primaryBtnHover }}
+                  whileTap={{ y: 0, scale: 0.98 }}
+                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                  className="group inline-flex h-12 items-center justify-center gap-2 rounded-full px-7 text-sm font-medium text-white disabled:opacity-50"
+                  style={G.primaryBtn}
                 >
-
                   {submitting ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Submitting
                     </>
                   ) : step === STEPS.length - 1 ? (
                     <>Submit application</>
                   ) : (
                     <>
                       Continue
-                      <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                     </>
                   )}
-                </Button>
+                </motion.button>
               </div>
             </div>
           </motion.div>
@@ -573,36 +1120,51 @@ function FormSection({
   );
 }
 
-/* ---------------- Progress ---------------- */
+/* ============================================================ */
+/*  Sticky Progress                                              */
+/* ============================================================ */
 
-function StickyProgress({ step, progress }: { step: number; progress: number }) {
+function StickyProgress({
+  step,
+  progress,
+}: {
+  step: number;
+  progress: number;
+}) {
   return (
     <div className="sticky top-4 z-30">
-      <div className="border border-border bg-background/90 px-5 py-3 backdrop-blur">
-        <div className="mb-3 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 overflow-x-auto section-index">
-            {STEPS.map((s, i) => (
-              <div key={s.key} className="flex items-center gap-2">
-                <span
-                  className={cn(
-                    "whitespace-nowrap transition",
-                    i < step && "text-gold",
-                    i === step && "text-foreground",
-                    i > step && "text-muted-foreground/50",
-                  )}
-                >
-                  0{i + 1} {s.label}
-                </span>
-                {i < STEPS.length - 1 && (
-                  <span className="text-muted-foreground/30">·</span>
+      <div className="glass-card rounded-xl px-5 py-4">
+        <div className="mb-3 flex items-center gap-2 overflow-x-auto section-index">
+          {STEPS.map((s, i) => (
+            <div key={s.key} className="flex items-center gap-2">
+              <span
+                className={cn(
+                  "whitespace-nowrap transition-colors duration-200",
+                  i < step && "text-primary/60",
+                  i === step && "text-white",
+                  i > step && "text-muted-foreground/40",
                 )}
-              </div>
-            ))}
-          </div>
+              >
+                0{i + 1} {s.label}
+              </span>
+              {i < STEPS.length - 1 && (
+                <span className="text-muted-foreground/25">·</span>
+              )}
+            </div>
+          ))}
         </div>
-        <div className="h-px overflow-hidden bg-border">
+
+        {/* Progress bar */}
+        <div
+          className="h-px overflow-hidden rounded-full"
+          style={{ background: "rgba(255,255,255,0.06)" }}
+        >
           <motion.div
-            className="h-full bg-gold"
+            className="h-full rounded-full"
+            style={{
+              background: G.purple,
+              boxShadow: "0 0 8px rgba(139,125,255,0.5)",
+            }}
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.4, ease: "easeOut" }}
@@ -613,8 +1175,9 @@ function StickyProgress({ step, progress }: { step: number; progress: number }) 
   );
 }
 
-
-/* ---------------- Shared field bits ---------------- */
+/* ============================================================ */
+/*  Shared field components                                      */
+/* ============================================================ */
 
 function Field({
   label,
@@ -635,27 +1198,45 @@ function Field({
         <Label className="text-sm font-medium text-foreground">
           {label}
           {optional && (
-            <span className="ml-1.5 text-xs font-normal text-muted-foreground">(optional)</span>
+            <span className="ml-1.5 text-xs font-normal text-muted-foreground">
+              (optional)
+            </span>
           )}
         </Label>
-        {hint && <span className="text-[11px] text-muted-foreground">{hint}</span>}
+        {hint && (
+          <span className="text-[11px] text-muted-foreground">{hint}</span>
+        )}
       </div>
       {children}
-      {error && <p className="text-xs text-destructive">{error}</p>}
+      {error && (
+        <p className="text-xs" style={{ color: "#F87171" }}>
+          {error}
+        </p>
+      )}
     </div>
   );
 }
 
-function StepHeader({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle?: string }) {
+function StepHeader({
+  eyebrow,
+  title,
+  subtitle,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+}) {
   return (
     <div className="mb-10">
-      <span className="section-index">
-        {eyebrow}
-      </span>
+      <span className="section-index">{eyebrow}</span>
       <h2 className="mt-4 font-display text-4xl leading-[1.02] tracking-[-0.02em] sm:text-5xl">
         {title}
       </h2>
-      {subtitle && <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">{subtitle}</p>}
+      {subtitle && (
+        <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+          {subtitle}
+        </p>
+      )}
     </div>
   );
 }
@@ -674,19 +1255,24 @@ function ChipToggle({
       type="button"
       onClick={onClick}
       className={cn(
-        "group relative flex items-center gap-2 border px-4 py-2 text-sm transition",
+        "group relative flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-all duration-200",
         active
-          ? "border-foreground bg-foreground text-background"
-          : "border-border bg-transparent text-muted-foreground hover:border-foreground/60 hover:text-foreground",
+          ? "border-primary/45 bg-primary/10 text-white"
+          : "border-border text-muted-foreground hover:border-white/15 hover:bg-white/[0.03] hover:text-white",
       )}
+      style={
+        active
+          ? { boxShadow: "0 0 14px rgba(139,125,255,0.14)" }
+          : undefined
+      }
     >
       <span
         className={cn(
-          "grid h-3.5 w-3.5 place-items-center border transition",
-          active ? "border-background bg-background text-foreground" : "border-border",
+          "grid h-3.5 w-3.5 shrink-0 place-items-center rounded-full border transition-all duration-200",
+          active ? "border-primary bg-primary" : "border-border",
         )}
       >
-        {active && <Check className="h-2.5 w-2.5" />}
+        {active && <Check className="h-2 w-2 text-white" />}
       </span>
       {children}
     </button>
@@ -703,33 +1289,40 @@ function CardSelect({
   children: React.ReactNode;
 }) {
   return (
-    <button
+    <motion.button
       type="button"
       onClick={onClick}
+      whileHover={{ y: -2, transition: { duration: 0.2 } }}
       className={cn(
-        "group relative border p-6 text-left transition",
+        "group relative border p-6 text-left transition-all duration-200 rounded-xl",
         active
-          ? "border-foreground bg-white/[0.04]"
-          : "border-border bg-transparent hover:border-foreground/50 hover:bg-white/[0.02]",
+          ? "border-primary/40 bg-primary/8 text-white"
+          : "border-border bg-transparent text-foreground hover:border-white/12 hover:bg-white/[0.02]",
       )}
+      style={
+        active
+          ? { boxShadow: "0 0 24px rgba(139,125,255,0.12)" }
+          : undefined
+      }
     >
       <div className="flex items-center justify-between">
         <span className="font-display text-xl tracking-tight">{children}</span>
         <span
           className={cn(
-            "grid h-5 w-5 place-items-center border transition",
-            active ? "border-foreground bg-foreground text-background" : "border-border",
-
+            "grid h-5 w-5 shrink-0 place-items-center rounded-full border transition-all duration-200",
+            active ? "border-primary bg-primary" : "border-border",
           )}
         >
-          {active && <Check className="h-3 w-3" />}
+          {active && <Check className="h-3 w-3 text-white" />}
         </span>
       </div>
-    </button>
+    </motion.button>
   );
 }
 
-/* ---------------- Steps ---------------- */
+/* ============================================================ */
+/*  Step Components                                              */
+/* ============================================================ */
 
 type StepProps = {
   data: FormState;
@@ -769,7 +1362,10 @@ function StepBusiness({ data, update, toggleArr, errors }: StepProps) {
           />
         </Field>
         <Field label="Business size" error={errors.business_size}>
-          <Select value={data.business_size} onValueChange={(v) => update("business_size", v)}>
+          <Select
+            value={data.business_size}
+            onValueChange={(v) => update("business_size", v)}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Team size" />
             </SelectTrigger>
@@ -799,7 +1395,9 @@ function StepBusiness({ data, update, toggleArr, errors }: StepProps) {
       </div>
       <div className="mt-8">
         <Label className="text-sm font-medium">Current online presence</Label>
-        <p className="mb-3 mt-1 text-xs text-muted-foreground">Select all that apply.</p>
+        <p className="mb-3 mt-1 text-xs text-muted-foreground">
+          Select all that apply.
+        </p>
         <div className="flex flex-wrap gap-2">
           {ONLINE_PRESENCE.map((p) => (
             <ChipToggle
@@ -836,7 +1434,9 @@ function StepProject({ data, toggleArr, errors }: StepProps) {
         ))}
       </div>
       {errors.services_required && (
-        <p className="mt-3 text-xs text-destructive">{errors.services_required}</p>
+        <p className="mt-3 text-xs" style={{ color: "#F87171" }}>
+          {errors.services_required}
+        </p>
       )}
     </div>
   );
@@ -862,7 +1462,9 @@ function StepGoals({ data, toggleArr, errors }: StepProps) {
         ))}
       </div>
       {errors.project_goals && (
-        <p className="mt-3 text-xs text-destructive">{errors.project_goals}</p>
+        <p className="mt-3 text-xs" style={{ color: "#F87171" }}>
+          {errors.project_goals}
+        </p>
       )}
     </div>
   );
@@ -880,18 +1482,13 @@ function StepProblems({ data, update, errors }: StepProps) {
         value={data.current_problems}
         onChange={(e) => update("current_problems", e.target.value)}
         rows={8}
-        placeholder={`Describe what's slowing your business down.
-
-Examples:
-• Losing leads through WhatsApp with no follow-up
-• Slow website — bounce rate 70%+
-• No online presence at all
-• Manual data entry between tools
-• Poor conversion on our landing page`}
-        className="min-h-[200px] resize-none rounded-2xl bg-card/50 p-5 leading-relaxed"
+        placeholder={`Describe what's slowing your business down.\n\nExamples:\n• Losing leads through WhatsApp with no follow-up\n• Slow website — bounce rate 70%+\n• No online presence at all\n• Manual data entry between tools\n• Poor conversion on our landing page`}
+        className="min-h-[200px] resize-none rounded-xl bg-card/50 p-5 leading-relaxed"
       />
       {errors.current_problems && (
-        <p className="mt-2 text-xs text-destructive">{errors.current_problems}</p>
+        <p className="mt-2 text-xs" style={{ color: "#F87171" }}>
+          {errors.current_problems}
+        </p>
       )}
     </div>
   );
@@ -916,7 +1513,11 @@ function StepBudget({ data, update, errors }: StepProps) {
           </CardSelect>
         ))}
       </div>
-      {errors.budget && <p className="mt-3 text-xs text-destructive">{errors.budget}</p>}
+      {errors.budget && (
+        <p className="mt-3 text-xs" style={{ color: "#F87171" }}>
+          {errors.budget}
+        </p>
+      )}
     </div>
   );
 }
@@ -940,7 +1541,11 @@ function StepTimeline({ data, update, errors }: StepProps) {
           </CardSelect>
         ))}
       </div>
-      {errors.timeline && <p className="mt-3 text-xs text-destructive">{errors.timeline}</p>}
+      {errors.timeline && (
+        <p className="mt-3 text-xs" style={{ color: "#F87171" }}>
+          {errors.timeline}
+        </p>
+      )}
     </div>
   );
 }
@@ -998,50 +1603,80 @@ function StepContact({ data, update, errors }: StepProps) {
           ))}
         </div>
         {errors.preferred_contact && (
-          <p className="mt-2 text-xs text-destructive">{errors.preferred_contact}</p>
+          <p className="mt-2 text-xs" style={{ color: "#F87171" }}>
+            {errors.preferred_contact}
+          </p>
         )}
       </div>
     </div>
   );
 }
 
-/* ---------------- Success ---------------- */
+/* ============================================================ */
+/*  Success Screen                                               */
+/* ============================================================ */
 
 function SuccessScreen() {
   return (
-    <section className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 pt-8 sm:px-10">
+    <section className="relative z-10 mx-auto max-w-[1400px] px-6 pb-36 pt-8 sm:px-10">
+      {/* Ambient */}
+      <div
+        className="animate-pulse-halo pointer-events-none absolute inset-x-0 top-0 h-[600px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle at 40% 40%, rgba(139,125,255,0.10) 0%, transparent 65%)",
+          filter: "blur(80px)",
+        }}
+      />
+
       <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
-        <span className="section-index text-gold">02 / Received</span>
-        <span className="section-index hidden sm:block">Reply within 24 hours</span>
+        <span
+          className="section-index"
+          style={{ color: "rgba(139,125,255,0.7)" }}
+        >
+          02 / Received
+        </span>
+        <span className="section-index hidden sm:block">
+          Reply within 24 hours
+        </span>
       </div>
+
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         className="max-w-4xl"
       >
-        <h2 className="font-display text-6xl leading-[0.98] tracking-[-0.02em] sm:text-8xl">
+        <h2 className="font-display text-6xl leading-[0.97] tracking-[-0.025em] sm:text-8xl">
           Application
           <br />
-          <span className="italic text-gold">received.</span>
+          <span style={purpleText(true)}>received.</span>
         </h2>
+
         <p className="mt-10 max-w-xl text-lg leading-relaxed text-muted-foreground">
-          Thanks for the detail. A partner will personally review your intake and reply
-          within twenty-four hours. If it's a fit, we'll schedule a discovery call to scope
-          the build.
+          Thanks for the detail. A partner will personally review your intake
+          and reply within twenty-four hours. If it's a fit, we'll schedule a
+          discovery call to scope the build.
         </p>
 
         <div className="mt-12 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-          <a
+          <motion.a
             href="https://cal.com"
             target="_blank"
             rel="noreferrer"
-            className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-8 text-base font-medium text-primary-foreground transition hover:bg-primary/90"
+            whileHover={{ y: -2, ...G.primaryBtnHover }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.22 }}
+            className="inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium text-white"
+            style={G.primaryBtn}
           >
             Book discovery call
             <ExternalLink className="h-4 w-4" />
-          </a>
-          <a href="/" className="section-index transition hover:text-foreground">
+          </motion.a>
+          <a
+            href="/"
+            className="section-index transition-colors hover:text-white"
+          >
             ← Back to home
           </a>
         </div>
@@ -1050,31 +1685,60 @@ function SuccessScreen() {
   );
 }
 
-/* ---------------- FAQ ---------------- */
+/* ============================================================ */
+/*  FAQ Section                                                  */
+/* ============================================================ */
 
 function FAQSection() {
   return (
-    <section id="faq" className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 sm:px-10">
+    <section
+      id="faq"
+      className="relative z-10 mx-auto max-w-[1400px] px-6 pb-36 sm:px-10"
+    >
+      {/* Ambient */}
+      <div
+        className="pointer-events-none absolute left-1/4 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(110,120,255,0.06) 0%, transparent 65%)",
+          filter: "blur(80px)",
+        }}
+      />
+
       <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
         <span className="section-index">03 / FAQ</span>
         <span className="section-index hidden sm:block">
           Still curious?{" "}
-          <a href="mailto:hello@techilla.studio" className="text-foreground hover:text-gold">
+          <a
+            href="mailto:hello@techilla.studio"
+            className="transition-colors hover:text-white"
+            style={{ color: "rgba(139,125,255,0.7)" }}
+          >
             hello@techilla.studio
           </a>
         </span>
       </div>
 
-      <div className="grid gap-12 sm:grid-cols-12">
-        <h2 className="font-display text-5xl leading-[0.98] tracking-[-0.02em] sm:col-span-5 sm:text-7xl">
+      <div className="grid gap-14 sm:grid-cols-12">
+        <motion.h2
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="font-display text-5xl leading-[0.97] tracking-[-0.025em] sm:col-span-5 sm:text-7xl"
+        >
           Questions
           <br />
-          <span className="italic text-gold">worth</span>
+          <span style={purpleText(true)}>worth</span>
           <br />
           answering.
-        </h2>
+        </motion.h2>
 
-        <Accordion type="single" collapsible className="sm:col-span-7">
+        <Accordion
+          type="single"
+          collapsible
+          className="sm:col-span-7"
+        >
           {FAQS.map((f, i) => (
             <AccordionItem
               key={i}
@@ -1083,7 +1747,12 @@ function FAQSection() {
             >
               <AccordionTrigger className="py-6 text-left font-display text-xl tracking-tight hover:no-underline sm:text-2xl">
                 <span className="flex items-baseline gap-4">
-                  <span className="section-index shrink-0">0{i + 1}</span>
+                  <span
+                    className="section-index shrink-0"
+                    style={{ color: "rgba(139,125,255,0.4)" }}
+                  >
+                    0{i + 1}
+                  </span>
                   {f.q}
                 </span>
               </AccordionTrigger>
@@ -1098,18 +1767,37 @@ function FAQSection() {
   );
 }
 
-/* ---------------- Footer ---------------- */
+/* ============================================================ */
+/*  Footer                                                       */
+/* ============================================================ */
 
 function Footer() {
   return (
     <footer className="relative z-10 border-t border-border">
-      <div className="mx-auto max-w-[1400px] px-6 py-16 sm:px-10">
-        <div className="text-compressed text-[16vw] leading-[0.85] tracking-[-0.04em] sm:text-[13rem]">
-          Techilla<span className="text-muted-foreground/40">Techilla</span>
+      <div className="mx-auto max-w-[1400px] px-6 py-20 sm:px-10">
+        {/* Large editorial wordmark */}
+        <div className="overflow-hidden">
+          <div className="text-compressed text-[16vw] leading-[0.85] tracking-[-0.04em] sm:text-[13rem]">
+            <span>Techilla</span>
+            <span className="text-muted-foreground/22">Techilla</span>
+          </div>
         </div>
+
+        {/* Meta row */}
         <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-border pt-6 section-index sm:flex-row sm:items-center">
           <span>Studio · Web · Software · AI</span>
-          <a href="mailto:hello@techilla.studio" className="hover:text-foreground">
+          <a
+            href="mailto:hello@techilla.studio"
+            className="transition-colors"
+            style={{ color: "rgba(139,125,255,0.7)" }}
+            onMouseEnter={(e) =>
+              ((e.currentTarget as HTMLAnchorElement).style.color = "#8B7DFF")
+            }
+            onMouseLeave={(e) =>
+              ((e.currentTarget as HTMLAnchorElement).style.color =
+                "rgba(139,125,255,0.7)")
+            }
+          >
             hello@techilla.studio
           </a>
           <span>© {new Date().getFullYear()} — All rights reserved</span>
