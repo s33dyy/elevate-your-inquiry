@@ -92,6 +92,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Techilla — Apply to Work With Us" },
+      { name: "description", content: "Premium Lead Flow is a lead qualification page for Techilla, a web development and AI automation studio." },
+      { property: "og:description", content: "Premium Lead Flow is a lead qualification page for Techilla, a web development and AI automation studio." },
+      { name: "twitter:description", content: "Premium Lead Flow is a lead qualification page for Techilla, a web development and AI automation studio." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1b0cf11a-f029-4e12-8443-f2db5805351a/id-preview-e2a12758--6398ce63-6786-45b9-8492-99e4e21cbe78.lovable.app-1783016939265.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1b0cf11a-f029-4e12-8443-f2db5805351a/id-preview-e2a12758--6398ce63-6786-45b9-8492-99e4e21cbe78.lovable.app-1783016939265.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
