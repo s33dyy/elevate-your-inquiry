@@ -1009,45 +1009,40 @@ function StepContact({ data, update, errors }: StepProps) {
 
 function SuccessScreen() {
   return (
-    <section className="relative z-10 mx-auto max-w-3xl px-6 pb-32 pt-4">
+    <section className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 pt-8 sm:px-10">
+      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index text-gold">02 / Received</span>
+        <span className="section-index hidden sm:block">Reply within 24 hours</span>
+      </div>
       <motion.div
-        initial={{ opacity: 0, y: 30, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="glass overflow-hidden rounded-3xl p-10 text-center sm:p-16"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="max-w-4xl"
       >
-        <motion.div
-          initial={{ scale: 0, rotate: -30 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ delay: 0.2, type: "spring", stiffness: 180, damping: 14 }}
-          className="mx-auto mb-8 grid h-20 w-20 place-items-center rounded-full bg-primary/15 ring-1 ring-primary/40"
-        >
-          <Check className="h-9 w-9 text-primary" strokeWidth={2.5} />
-        </motion.div>
-
-        <h2 className="font-display text-4xl leading-tight tracking-tight sm:text-5xl">
-          Application <span className="italic text-gold">submitted.</span>
+        <h2 className="font-display text-6xl leading-[0.98] tracking-[-0.02em] sm:text-8xl">
+          Application
+          <br />
+          <span className="italic text-gold">received.</span>
         </h2>
-        <p className="mx-auto mt-5 max-w-lg text-balance text-muted-foreground">
-          Thanks for telling us about your project. We'll review your requirements and get
-          back to you within 24 hours. If it's a good fit, we'll schedule a free discovery
-          call.
+        <p className="mt-10 max-w-xl text-lg leading-relaxed text-muted-foreground">
+          Thanks for the detail. A partner will personally review your intake and reply
+          within twenty-four hours. If it's a fit, we'll schedule a discovery call to scope
+          the build.
         </p>
 
-        <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-          <a href="/">
-            <Button variant="outline" className="h-11 rounded-full px-6">
-              Back home
-            </Button>
-          </a>
+        <div className="mt-12 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
           <a
             href="https://cal.com"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground ring-glow transition hover:bg-primary/90"
+            className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-8 text-base font-medium text-primary-foreground transition hover:bg-primary/90"
           >
             Book discovery call
-            <ExternalLink className="h-3.5 w-3.5" />
+            <ExternalLink className="h-4 w-4" />
+          </a>
+          <a href="/" className="section-index transition hover:text-foreground">
+            ← Back to home
           </a>
         </div>
       </motion.div>
@@ -1059,35 +1054,46 @@ function SuccessScreen() {
 
 function FAQSection() {
   return (
-    <section id="faq" className="relative z-10 mx-auto max-w-3xl px-6 pb-32">
-      <div className="mb-10 flex items-baseline justify-between">
-        <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground">
-          FAQ
-        </span>
-        <span className="text-xs text-muted-foreground">
+    <section id="faq" className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 sm:px-10">
+      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">03 / FAQ</span>
+        <span className="section-index hidden sm:block">
           Still curious?{" "}
-          <a href="#" className="text-foreground underline-offset-4 hover:underline">
+          <a href="mailto:hello@techilla.studio" className="text-foreground hover:text-gold">
             hello@techilla.studio
           </a>
         </span>
       </div>
-      <h2 className="font-display text-4xl leading-tight tracking-tight sm:text-5xl">
-        Questions <span className="italic text-gold">worth</span> answering.
-      </h2>
-      <Accordion type="single" collapsible className="mt-10 space-y-3">
-        {FAQS.map((f, i) => (
-          <AccordionItem
-            key={i}
-            value={`item-${i}`}
-            className="glass rounded-2xl border-none px-5"
-          >
-            <AccordionTrigger className="text-left text-base font-medium hover:no-underline">
-              {f.q}
-            </AccordionTrigger>
-            <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+
+      <div className="grid gap-12 sm:grid-cols-12">
+        <h2 className="font-display text-5xl leading-[0.98] tracking-[-0.02em] sm:col-span-5 sm:text-7xl">
+          Questions
+          <br />
+          <span className="italic text-gold">worth</span>
+          <br />
+          answering.
+        </h2>
+
+        <Accordion type="single" collapsible className="sm:col-span-7">
+          {FAQS.map((f, i) => (
+            <AccordionItem
+              key={i}
+              value={`item-${i}`}
+              className="border-b border-border first:border-t"
+            >
+              <AccordionTrigger className="py-6 text-left font-display text-xl tracking-tight hover:no-underline sm:text-2xl">
+                <span className="flex items-baseline gap-4">
+                  <span className="section-index shrink-0">0{i + 1}</span>
+                  {f.q}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="pb-6 pl-12 text-base leading-relaxed text-muted-foreground">
+                {f.a}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
     </section>
   );
 }
@@ -1097,17 +1103,21 @@ function FAQSection() {
 function Footer() {
   return (
     <footer className="relative z-10 border-t border-border">
-      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-6 py-10 text-sm text-muted-foreground sm:flex-row sm:items-center">
-        <div className="flex items-center gap-2">
-          <div className="grid h-7 w-7 place-items-center rounded-md bg-primary/15 ring-1 ring-primary/30">
-            <span className="font-display text-base italic text-primary">T</span>
-          </div>
-          <span>Techilla — Studio for web, software & AI</span>
+      <div className="mx-auto max-w-[1400px] px-6 py-16 sm:px-10">
+        <div className="text-compressed text-[16vw] leading-[0.85] tracking-[-0.04em] sm:text-[13rem]">
+          Techilla<span className="text-muted-foreground/40">Techilla</span>
         </div>
-        <span className="text-xs font-mono uppercase tracking-[0.2em]">
-          © {new Date().getFullYear()}
-        </span>
+        <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-border pt-6 section-index sm:flex-row sm:items-center">
+          <span>Studio · Web · Software · AI</span>
+          <a href="mailto:hello@techilla.studio" className="hover:text-foreground">
+            hello@techilla.studio
+          </a>
+          <span>© {new Date().getFullYear()} — All rights reserved</span>
+        </div>
       </div>
     </footer>
+  );
+}
+
   );
 }
