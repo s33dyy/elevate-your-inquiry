@@ -283,7 +283,7 @@ function AmbientBackground() {
 
       {/* Blob A — top-right, behind hero */}
       <div
-        className="animate-blob-a absolute -right-60 -top-60 h-[900px] w-[900px] rounded-full"
+        className="animate-blob-a absolute -right-60 -top-60 hidden h-[900px] w-[900px] rounded-full sm:block"
         style={{
           background:
             "radial-gradient(circle, rgba(139,125,255,0.09) 0%, transparent 65%)",
@@ -293,7 +293,7 @@ function AmbientBackground() {
 
       {/* Blob B — left-center, behind form */}
       <div
-        className="animate-blob-b absolute -left-60 top-[45%] h-[700px] w-[700px] rounded-full"
+        className="animate-blob-b absolute -left-60 top-[45%] hidden h-[700px] w-[700px] rounded-full sm:block"
         style={{
           background:
             "radial-gradient(circle, rgba(110,120,255,0.07) 0%, transparent 65%)",
@@ -303,7 +303,7 @@ function AmbientBackground() {
 
       {/* Noise */}
       <div
-        className="absolute inset-0 opacity-[0.28]"
+        className="absolute inset-0 hidden opacity-[0.28] sm:block"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E")`,
           backgroundSize: "256px 256px",
@@ -343,7 +343,7 @@ function CursorGlow() {
 
   return (
     <motion.div
-      className="pointer-events-none fixed top-0 left-0 z-[9998]"
+      className="pointer-events-none fixed left-0 top-0 z-[9998] hidden sm:block"
       style={{ x: sx, y: sy, translateX: "-50%", translateY: "-50%" }}
     >
       <div
