@@ -648,14 +648,14 @@ function Field({
 
 function StepHeader({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle?: string }) {
   return (
-    <div className="mb-8">
-      <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground">
+    <div className="mb-10">
+      <span className="section-index">
         {eyebrow}
       </span>
-      <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight sm:text-4xl">
+      <h2 className="mt-4 font-display text-4xl leading-[1.02] tracking-[-0.02em] sm:text-5xl">
         {title}
       </h2>
-      {subtitle && <p className="mt-2 text-sm text-muted-foreground">{subtitle}</p>}
+      {subtitle && <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">{subtitle}</p>}
     </div>
   );
 }
@@ -674,16 +674,16 @@ function ChipToggle({
       type="button"
       onClick={onClick}
       className={cn(
-        "group relative flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition",
+        "group relative flex items-center gap-2 border px-4 py-2 text-sm transition",
         active
-          ? "border-primary/50 bg-primary/15 text-foreground"
-          : "border-border bg-card/40 text-muted-foreground hover:border-primary/30 hover:text-foreground",
+          ? "border-foreground bg-foreground text-background"
+          : "border-border bg-transparent text-muted-foreground hover:border-foreground/60 hover:text-foreground",
       )}
     >
       <span
         className={cn(
-          "grid h-4 w-4 place-items-center rounded-full border transition",
-          active ? "border-primary bg-primary text-primary-foreground" : "border-border",
+          "grid h-3.5 w-3.5 place-items-center border transition",
+          active ? "border-background bg-background text-foreground" : "border-border",
         )}
       >
         {active && <Check className="h-2.5 w-2.5" />}
@@ -707,18 +707,19 @@ function CardSelect({
       type="button"
       onClick={onClick}
       className={cn(
-        "group relative rounded-2xl border p-5 text-left transition",
+        "group relative border p-6 text-left transition",
         active
-          ? "border-primary/60 bg-primary/10 ring-glow"
-          : "border-border bg-card/40 hover:border-primary/30 hover:bg-card/70",
+          ? "border-foreground bg-white/[0.04]"
+          : "border-border bg-transparent hover:border-foreground/50 hover:bg-white/[0.02]",
       )}
     >
       <div className="flex items-center justify-between">
-        <span className="font-medium">{children}</span>
+        <span className="font-display text-xl tracking-tight">{children}</span>
         <span
           className={cn(
-            "grid h-5 w-5 place-items-center rounded-full border transition",
-            active ? "border-primary bg-primary text-primary-foreground" : "border-border",
+            "grid h-5 w-5 place-items-center border transition",
+            active ? "border-foreground bg-foreground text-background" : "border-border",
+
           )}
         >
           {active && <Check className="h-3 w-3" />}
