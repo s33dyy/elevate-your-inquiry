@@ -769,7 +769,7 @@ function TrustStrip() {
       </h2>
 
       {/* Glass cards grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         {TRUST.map((t, i) => (
           <motion.div
             key={t.label}
@@ -779,22 +779,22 @@ function TrustStrip() {
             viewport={{ once: true, margin: "-60px" }}
             transition={{ delay: i * 0.07 }}
             whileHover={{ y: -4, transition: { duration: 0.25 } }}
-            className="glass-card group rounded-2xl p-8 transition-colors duration-300 hover:border-[rgba(139,125,255,0.14)]"
+            className="glass-card group flex h-full flex-col justify-between rounded-xl p-3 transition-colors duration-300 hover:border-[rgba(139,125,255,0.14)] sm:rounded-2xl sm:p-8"
           >
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-3 flex flex-col-reverse justify-between gap-2 sm:mb-6 sm:flex-row sm:items-center sm:gap-0">
               <span
-                className="section-index"
+                className="section-index text-[10px] sm:text-xs"
                 style={{ color: "rgba(139,125,255,0.45)" }}
               >
                 0{i + 1}
               </span>
               <t.icon
-                className="h-5 w-5 transition-all duration-300"
+                className="h-4 w-4 self-end transition-all duration-300 sm:h-5 sm:w-5 sm:self-auto"
                 strokeWidth={1.5}
                 style={{ color: "rgba(139,125,255,0.55)" }}
               />
             </div>
-            <div className="font-display text-2xl leading-tight tracking-tight">
+            <div className="font-display text-xs leading-[1.15] tracking-tight sm:text-2xl sm:leading-tight">
               {t.label}
             </div>
             {/* Purple left accent — appears on hover */}
@@ -1243,9 +1243,9 @@ function Field({
   optional?: boolean;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-4 sm:space-y-2">
       <div className="flex items-baseline justify-between">
-        <Label className="text-sm font-medium text-foreground">
+        <Label className="text-lg font-medium text-foreground sm:text-sm">
           {label}
           {optional && (
             <span className="ml-1.5 text-xs font-normal text-muted-foreground">
@@ -1389,7 +1389,7 @@ function StepBusiness({ data, update, toggleArr, errors }: StepProps) {
         title="Tell us about your business."
         subtitle="A few basics so we can put your project in context."
       />
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-7 sm:grid-cols-2 sm:gap-5">
         <Field label="Business name" error={errors.business_name}>
           <Input
             value={data.business_name}
@@ -1608,7 +1608,7 @@ function StepContact({ data, update, errors }: StepProps) {
         title="How can we reach you?"
         subtitle="We'll get back within 24 hours."
       />
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-7 sm:grid-cols-2 sm:gap-5">
         <Field label="Full name" error={errors.full_name}>
           <Input
             value={data.full_name}
