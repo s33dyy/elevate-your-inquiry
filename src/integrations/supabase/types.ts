@@ -14,7 +14,84 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      leads: {
+        Row: {
+          admin_notes: string | null
+          assigned_to: string | null
+          budget: string | null
+          business_name: string
+          business_size: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          current_problems: string | null
+          email: string
+          full_name: string
+          id: string
+          industry: string | null
+          last_contacted: string | null
+          online_presence: string[] | null
+          phone: string | null
+          preferred_contact: string | null
+          project_goals: string[] | null
+          services_required: string[] | null
+          status: string
+          timeline: string | null
+          website: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          assigned_to?: string | null
+          budget?: string | null
+          business_name: string
+          business_size?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          current_problems?: string | null
+          email: string
+          full_name: string
+          id?: string
+          industry?: string | null
+          last_contacted?: string | null
+          online_presence?: string[] | null
+          phone?: string | null
+          preferred_contact?: string | null
+          project_goals?: string[] | null
+          services_required?: string[] | null
+          status?: string
+          timeline?: string | null
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          assigned_to?: string | null
+          budget?: string | null
+          business_name?: string
+          business_size?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          current_problems?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          industry?: string | null
+          last_contacted?: string | null
+          online_presence?: string[] | null
+          phone?: string | null
+          preferred_contact?: string | null
+          project_goals?: string[] | null
+          services_required?: string[] | null
+          status?: string
+          timeline?: string | null
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
