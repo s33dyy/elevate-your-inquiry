@@ -708,7 +708,6 @@ type StepProps = {
   toggleArr: (key: keyof FormState, value: string) => void;
   errors: Record<string, string>;
 };
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 function StepBusiness({ data, update, toggleArr, errors }: StepProps) {
   return (
