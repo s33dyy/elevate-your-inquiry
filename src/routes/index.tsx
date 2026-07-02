@@ -1344,7 +1344,7 @@ function CardSelect({
       onClick={onClick}
       whileHover={{ y: -2, transition: { duration: 0.2 } }}
       className={cn(
-        "group relative border p-6 text-left transition-all duration-200 rounded-xl",
+        "group relative border p-3 sm:p-6 text-left transition-all duration-200 rounded-xl h-full",
         active
           ? "border-primary/40 bg-primary/8 text-white"
           : "border-border bg-transparent text-foreground hover:border-white/12 hover:bg-white/[0.02]",
@@ -1355,15 +1355,15 @@ function CardSelect({
           : undefined
       }
     >
-      <div className="flex items-center justify-between">
-        <span className="font-display text-xl tracking-tight">{children}</span>
+      <div className="flex h-full flex-col-reverse justify-between gap-3 sm:flex-row sm:items-center sm:gap-0">
+        <span className="font-display text-xs leading-[1.15] tracking-tight sm:text-xl">{children}</span>
         <span
           className={cn(
-            "grid h-5 w-5 shrink-0 place-items-center rounded-full border transition-all duration-200",
+            "grid h-4 w-4 shrink-0 place-items-center rounded-full border transition-all duration-200 self-end sm:h-5 sm:w-5 sm:self-auto",
             active ? "border-primary bg-primary" : "border-border",
           )}
         >
-          {active && <Check className="h-3 w-3 text-white" />}
+          {active && <Check className="h-2.5 w-2.5 text-white sm:h-3 sm:w-3" />}
         </span>
       </div>
     </motion.button>
@@ -1472,7 +1472,7 @@ function StepProject({ data, toggleArr, errors }: StepProps) {
         title="What do you need?"
         subtitle="Pick everything relevant — we scope tightly after the discovery call."
       />
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-3">
         {SERVICES.map((s) => (
           <CardSelect
             key={s}
@@ -1552,7 +1552,7 @@ function StepBudget({ data, update, errors }: StepProps) {
         title="What's your budget?"
         subtitle="We work best when scope and budget are honestly matched."
       />
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-3">
         {BUDGETS.map((b) => (
           <CardSelect
             key={b}
@@ -1580,7 +1580,7 @@ function StepTimeline({ data, update, errors }: StepProps) {
         title="When do you want to start?"
         subtitle="Rough is fine. We block calendar slots per week."
       />
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3">
         {TIMELINES.map((t) => (
           <CardSelect
             key={t}
