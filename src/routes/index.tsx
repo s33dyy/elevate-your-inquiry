@@ -578,31 +578,31 @@ function FormSection({
 function StickyProgress({ step, progress }: { step: number; progress: number }) {
   return (
     <div className="sticky top-4 z-30">
-      <div className="glass rounded-2xl px-4 py-3">
+      <div className="border border-border bg-background/90 px-5 py-3 backdrop-blur">
         <div className="mb-3 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-1.5 overflow-x-auto text-xs">
+          <div className="flex items-center gap-2 overflow-x-auto section-index">
             {STEPS.map((s, i) => (
-              <div key={s.key} className="flex items-center gap-1.5">
+              <div key={s.key} className="flex items-center gap-2">
                 <span
                   className={cn(
-                    "whitespace-nowrap rounded-full px-2.5 py-1 font-mono uppercase tracking-wider transition",
+                    "whitespace-nowrap transition",
                     i < step && "text-gold",
-                    i === step && "bg-primary/15 text-primary ring-1 ring-primary/30",
-                    i > step && "text-muted-foreground/60",
+                    i === step && "text-foreground",
+                    i > step && "text-muted-foreground/50",
                   )}
                 >
-                  {s.label}
+                  0{i + 1} {s.label}
                 </span>
                 {i < STEPS.length - 1 && (
-                  <span className="text-muted-foreground/40">/</span>
+                  <span className="text-muted-foreground/30">·</span>
                 )}
               </div>
             ))}
           </div>
         </div>
-        <div className="h-0.5 overflow-hidden rounded-full bg-secondary">
+        <div className="h-px overflow-hidden bg-border">
           <motion.div
-            className="h-full bg-gradient-to-r from-primary to-[color:var(--gold)]"
+            className="h-full bg-gold"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.4, ease: "easeOut" }}
@@ -612,6 +612,7 @@ function StickyProgress({ step, progress }: { step: number; progress: number }) 
     </div>
   );
 }
+
 
 /* ---------------- Shared field bits ---------------- */
 
