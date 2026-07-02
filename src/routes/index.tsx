@@ -492,10 +492,10 @@ function FormSection({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="rounded-3xl border border-border bg-card/40 p-10 text-center backdrop-blur"
+            className="border border-border p-10 text-center"
           >
             <p className="text-sm text-muted-foreground">
-              Scroll or press <kbd className="rounded bg-secondary px-1.5 py-0.5 text-xs">Start</kbd> above to begin your application.
+              Press <kbd className="mx-1 rounded border border-border px-1.5 py-0.5 font-mono text-xs">Begin</kbd> above to open the intake.
             </p>
           </motion.div>
         ) : (
@@ -504,15 +504,16 @@ function FormSection({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            className="mx-auto max-w-4xl"
           >
             <StickyProgress step={step} progress={progress} />
 
-            <div className="glass mt-6 rounded-3xl p-6 sm:p-10">
-              <div className="mb-8 flex items-baseline justify-between">
-                <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-gold">
-                  Step {step + 1} / {STEPS.length}
+            <div className="mt-6 border border-border bg-card/40 p-6 sm:p-12">
+              <div className="mb-10 flex items-baseline justify-between border-b border-border pb-5">
+                <span className="section-index text-gold">
+                  Step 0{step + 1} — {STEPS[step].label}
                 </span>
-                <span className="text-xs text-muted-foreground">Autosaved</span>
+                <span className="section-index">Autosaved</span>
               </div>
 
               <AnimatePresence mode="wait">
@@ -533,7 +534,7 @@ function FormSection({
                 </motion.div>
               </AnimatePresence>
 
-              <div className="mt-10 flex items-center justify-between border-t border-border pt-6">
+              <div className="mt-12 flex items-center justify-between border-t border-border pt-6">
                 <Button
                   type="button"
                   variant="ghost"
@@ -547,8 +548,9 @@ function FormSection({
                   type="button"
                   onClick={next}
                   disabled={submitting}
-                  className="group h-11 rounded-full bg-primary px-6 hover:bg-primary/90"
+                  className="group h-12 rounded-full bg-primary px-7 text-primary-foreground hover:bg-primary/90"
                 >
+
                   {submitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting
