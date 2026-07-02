@@ -499,12 +499,12 @@ function FormSection({
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 >
                   {step === 0 && <StepBusiness data={data} update={update} toggleArr={toggleArr} errors={errors} />}
-                  {step === 1 && <StepProject data={data} toggleArr={toggleArr} errors={errors} />}
-                  {step === 2 && <StepGoals data={data} toggleArr={toggleArr} errors={errors} />}
-                  {step === 3 && <StepProblems data={data} update={update} errors={errors} />}
-                  {step === 4 && <StepBudget data={data} update={update} errors={errors} />}
-                  {step === 5 && <StepTimeline data={data} update={update} errors={errors} />}
-                  {step === 6 && <StepContact data={data} update={update} errors={errors} />}
+                  {step === 1 && <StepProject data={data} update={update} toggleArr={toggleArr} errors={errors} />}
+                  {step === 2 && <StepGoals data={data} update={update} toggleArr={toggleArr} errors={errors} />}
+                  {step === 3 && <StepProblems data={data} update={update} toggleArr={toggleArr} errors={errors} />}
+                  {step === 4 && <StepBudget data={data} update={update} toggleArr={toggleArr} errors={errors} />}
+                  {step === 5 && <StepTimeline data={data} update={update} toggleArr={toggleArr} errors={errors} />}
+                  {step === 6 && <StepContact data={data} update={update} toggleArr={toggleArr} errors={errors} />}
                 </motion.div>
               </AnimatePresence>
 
