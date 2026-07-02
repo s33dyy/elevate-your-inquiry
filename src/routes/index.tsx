@@ -1118,6 +1118,3 @@ function Footer() {
     </footer>
   );
 }
-
-  );
-}
