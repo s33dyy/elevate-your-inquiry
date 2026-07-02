@@ -216,7 +216,7 @@ function LeadPage() {
   return (
     <main className="relative min-h-screen overflow-hidden">
       <Toaster theme="dark" position="top-center" richColors />
-      <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />
+      <div className="pointer-events-none fixed inset-0 bg-grid opacity-60" />
       <Nav />
       <Hero onCta={scrollToForm} />
       <TrustStrip />
@@ -237,24 +237,23 @@ function LeadPage() {
 
 function Nav() {
   return (
-    <header className="relative z-20 mx-auto flex max-w-7xl items-center justify-between px-6 pt-8">
-      <div className="flex items-center gap-2">
-        <div className="grid h-8 w-8 place-items-center rounded-md bg-primary/15 ring-1 ring-primary/40">
-          <span className="font-display text-lg italic text-primary">T</span>
-        </div>
-        <span className="text-sm font-medium tracking-tight">Techilla</span>
-      </div>
-      <div className="hidden items-center gap-8 text-sm text-muted-foreground sm:flex">
+    <header className="relative z-20 mx-auto flex max-w-[1400px] items-center justify-between px-6 pt-6 sm:px-10">
+      <a href="/" className="flex items-baseline gap-1 font-display text-2xl italic leading-none tracking-tight">
+        <span>Techilla</span>
+        <span className="text-muted-foreground/50">Techilla</span>
+      </a>
+      <nav className="hidden items-center gap-10 section-index sm:flex">
         <a href="#trust" className="transition hover:text-foreground">
-          What we do
+          <span className="mr-2 text-foreground/40">01</span>Practice
+        </a>
+        <a href="#apply" className="transition hover:text-foreground">
+          <span className="mr-2 text-foreground/40">02</span>Apply
         </a>
         <a href="#faq" className="transition hover:text-foreground">
-          FAQ
+          <span className="mr-2 text-foreground/40">03</span>FAQ
         </a>
-      </div>
-      <span className="hidden text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground sm:block">
-        Est. Studio
-      </span>
+      </nav>
+      <span className="hidden section-index sm:block">Est. Studio</span>
     </header>
   );
 }
@@ -263,43 +262,52 @@ function Nav() {
 
 function Hero({ onCta }: { onCta: () => void }) {
   return (
-    <section className="relative z-10 mx-auto max-w-7xl px-6 pt-24 pb-20 sm:pt-32 sm:pb-32">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto max-w-3xl text-center"
-      >
-        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-4 py-1.5 text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_12px] shadow-primary" />
-          Now accepting Q1 projects
-        </div>
+    <section className="relative z-10 mx-auto max-w-[1400px] px-6 pt-24 pb-24 sm:px-10 sm:pt-36 sm:pb-36">
+      <div className="mb-16 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">00 / Introduction</span>
+        <span className="section-index hidden sm:block">Now accepting Q1 · 2026</span>
+      </div>
 
-        <h1 className="font-display text-5xl leading-[1.05] tracking-tight text-foreground sm:text-7xl">
-          Let's build something{" "}
-          <span className="italic text-gold">that grows</span> your business.
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="max-w-5xl"
+      >
+        <h1 className="font-display text-[13vw] leading-[0.92] tracking-[-0.03em] sm:text-[9.5rem]">
+          Websites &amp; software
+          <br />
+          that <span className="italic text-gold">earn</span> their keep.
         </h1>
 
-        <p className="mx-auto mt-8 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Whether you need a high-converting website, custom software, or AI automation —
-          tell us about your business. We'll review your requirements and respond within
-          24 hours.
-        </p>
+        <div className="mt-14 grid gap-10 sm:grid-cols-12">
+          <div className="sm:col-span-5">
+            <p className="text-compressed text-3xl leading-[0.95] text-foreground/90 sm:text-5xl">
+              BoutiqueStudioSinceDay1
+            </p>
+          </div>
+          <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:col-span-6 sm:col-start-7 sm:text-lg">
+            Techilla is a boutique studio for founders who need more than a template.
+            We build high-conversion websites, custom internal software, and AI automation
+            for teams that actually ship. Tell us about your business — we respond within
+            twenty-four hours.
+          </p>
+        </div>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <div className="mt-16 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
           <Button
             size="lg"
             onClick={onCta}
-            className="group h-12 rounded-full bg-primary px-7 text-base font-medium ring-glow hover:bg-primary/90"
+            className="group h-14 rounded-full bg-primary px-8 text-base font-medium text-primary-foreground hover:bg-primary/90"
           >
-            Start your project
-            <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            Begin application
+            <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
           <a
             href="#faq"
-            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            className="section-index transition hover:text-foreground"
           >
-            Read our FAQ
+            → Read FAQ first
           </a>
         </div>
       </motion.div>
@@ -308,15 +316,15 @@ function Hero({ onCta }: { onCta: () => void }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 1 }}
-        className="mt-24 flex flex-col items-center gap-2 text-muted-foreground"
+        className="mt-28 flex items-center gap-3 text-muted-foreground"
       >
-        <span className="text-[10px] font-mono uppercase tracking-[0.3em]">Scroll</span>
         <motion.div
-          animate={{ y: [0, 8, 0] }}
+          animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
           <ChevronDown className="h-4 w-4" />
         </motion.div>
+        <span className="section-index">Scroll</span>
       </motion.div>
     </section>
   );
@@ -326,30 +334,36 @@ function Hero({ onCta }: { onCta: () => void }) {
 
 function TrustStrip() {
   return (
-    <section id="trust" className="relative z-10 mx-auto max-w-7xl px-6 pb-24">
-      <div className="mb-6 flex items-center gap-3">
-        <div className="h-px flex-1 bg-border" />
-        <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground">
-          What every project ships with
-        </span>
-        <div className="h-px flex-1 bg-border" />
+    <section id="trust" className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 sm:px-10">
+      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">01 / Practice</span>
+        <span className="section-index hidden sm:block">What every project ships with</span>
       </div>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+
+      <h2 className="mb-16 max-w-4xl font-display text-5xl leading-[0.98] tracking-[-0.02em] sm:text-7xl">
+        A small studio,
+        <br />
+        <span className="italic text-gold">deliberately.</span>
+      </h2>
+
+      <div className="grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
         {TRUST.map((t, i) => (
           <motion.div
             key={t.label}
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ delay: i * 0.06, duration: 0.5 }}
-            className="glass group flex flex-col items-start gap-3 rounded-2xl p-4 transition hover:border-primary/40"
+            transition={{ delay: i * 0.05, duration: 0.5 }}
+            className="group flex items-start gap-5 p-8 transition hover:bg-white/[0.02] sm:min-h-[180px]"
           >
-            <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20 transition group-hover:bg-primary/20">
-              <t.icon className="h-4 w-4" />
-            </div>
-            <div className="flex items-center gap-1.5 text-sm font-medium">
-              <Check className="h-3.5 w-3.5 text-gold" />
-              {t.label}
+            <span className="section-index shrink-0 pt-1">
+              0{i + 1}
+            </span>
+            <div className="flex-1">
+              <t.icon className="mb-6 h-5 w-5 text-gold" strokeWidth={1.5} />
+              <div className="font-display text-2xl leading-tight tracking-tight">
+                {t.label}
+              </div>
             </div>
           </motion.div>
         ))}
@@ -357,6 +371,7 @@ function TrustStrip() {
     </section>
   );
 }
+
 
 /* ---------------- Form ---------------- */
 
