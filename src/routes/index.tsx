@@ -216,7 +216,7 @@ function LeadPage() {
   return (
     <main className="relative min-h-screen overflow-hidden">
       <Toaster theme="dark" position="top-center" richColors />
-      <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />
+      <div className="pointer-events-none fixed inset-0 bg-grid opacity-60" />
       <Nav />
       <Hero onCta={scrollToForm} />
       <TrustStrip />
@@ -237,24 +237,23 @@ function LeadPage() {
 
 function Nav() {
   return (
-    <header className="relative z-20 mx-auto flex max-w-7xl items-center justify-between px-6 pt-8">
-      <div className="flex items-center gap-2">
-        <div className="grid h-8 w-8 place-items-center rounded-md bg-primary/15 ring-1 ring-primary/40">
-          <span className="font-display text-lg italic text-primary">T</span>
-        </div>
-        <span className="text-sm font-medium tracking-tight">Techilla</span>
-      </div>
-      <div className="hidden items-center gap-8 text-sm text-muted-foreground sm:flex">
+    <header className="relative z-20 mx-auto flex max-w-[1400px] items-center justify-between px-6 pt-6 sm:px-10">
+      <a href="/" className="flex items-baseline gap-1 font-display text-2xl italic leading-none tracking-tight">
+        <span>Techilla</span>
+        <span className="text-muted-foreground/50">Techilla</span>
+      </a>
+      <nav className="hidden items-center gap-10 section-index sm:flex">
         <a href="#trust" className="transition hover:text-foreground">
-          What we do
+          <span className="mr-2 text-foreground/40">01</span>Practice
+        </a>
+        <a href="#apply" className="transition hover:text-foreground">
+          <span className="mr-2 text-foreground/40">02</span>Apply
         </a>
         <a href="#faq" className="transition hover:text-foreground">
-          FAQ
+          <span className="mr-2 text-foreground/40">03</span>FAQ
         </a>
-      </div>
-      <span className="hidden text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground sm:block">
-        Est. Studio
-      </span>
+      </nav>
+      <span className="hidden section-index sm:block">Est. Studio</span>
     </header>
   );
 }
@@ -263,43 +262,52 @@ function Nav() {
 
 function Hero({ onCta }: { onCta: () => void }) {
   return (
-    <section className="relative z-10 mx-auto max-w-7xl px-6 pt-24 pb-20 sm:pt-32 sm:pb-32">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto max-w-3xl text-center"
-      >
-        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-4 py-1.5 text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_12px] shadow-primary" />
-          Now accepting Q1 projects
-        </div>
+    <section className="relative z-10 mx-auto max-w-[1400px] px-6 pt-24 pb-24 sm:px-10 sm:pt-36 sm:pb-36">
+      <div className="mb-16 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">00 / Introduction</span>
+        <span className="section-index hidden sm:block">Now accepting Q1 · 2026</span>
+      </div>
 
-        <h1 className="font-display text-5xl leading-[1.05] tracking-tight text-foreground sm:text-7xl">
-          Let's build something{" "}
-          <span className="italic text-gold">that grows</span> your business.
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="max-w-5xl"
+      >
+        <h1 className="font-display text-[13vw] leading-[0.92] tracking-[-0.03em] sm:text-[9.5rem]">
+          Websites &amp; software
+          <br />
+          that <span className="italic text-gold">earn</span> their keep.
         </h1>
 
-        <p className="mx-auto mt-8 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Whether you need a high-converting website, custom software, or AI automation —
-          tell us about your business. We'll review your requirements and respond within
-          24 hours.
-        </p>
+        <div className="mt-14 grid gap-10 sm:grid-cols-12">
+          <div className="sm:col-span-5">
+            <p className="text-compressed text-3xl leading-[0.95] text-foreground/90 sm:text-5xl">
+              BoutiqueStudioSinceDay1
+            </p>
+          </div>
+          <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:col-span-6 sm:col-start-7 sm:text-lg">
+            Techilla is a boutique studio for founders who need more than a template.
+            We build high-conversion websites, custom internal software, and AI automation
+            for teams that actually ship. Tell us about your business — we respond within
+            twenty-four hours.
+          </p>
+        </div>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <div className="mt-16 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
           <Button
             size="lg"
             onClick={onCta}
-            className="group h-12 rounded-full bg-primary px-7 text-base font-medium ring-glow hover:bg-primary/90"
+            className="group h-14 rounded-full bg-primary px-8 text-base font-medium text-primary-foreground hover:bg-primary/90"
           >
-            Start your project
-            <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            Begin application
+            <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
           <a
             href="#faq"
-            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            className="section-index transition hover:text-foreground"
           >
-            Read our FAQ
+            → Read FAQ first
           </a>
         </div>
       </motion.div>
@@ -308,15 +316,15 @@ function Hero({ onCta }: { onCta: () => void }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 1 }}
-        className="mt-24 flex flex-col items-center gap-2 text-muted-foreground"
+        className="mt-28 flex items-center gap-3 text-muted-foreground"
       >
-        <span className="text-[10px] font-mono uppercase tracking-[0.3em]">Scroll</span>
         <motion.div
-          animate={{ y: [0, 8, 0] }}
+          animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
           <ChevronDown className="h-4 w-4" />
         </motion.div>
+        <span className="section-index">Scroll</span>
       </motion.div>
     </section>
   );
@@ -326,30 +334,36 @@ function Hero({ onCta }: { onCta: () => void }) {
 
 function TrustStrip() {
   return (
-    <section id="trust" className="relative z-10 mx-auto max-w-7xl px-6 pb-24">
-      <div className="mb-6 flex items-center gap-3">
-        <div className="h-px flex-1 bg-border" />
-        <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground">
-          What every project ships with
-        </span>
-        <div className="h-px flex-1 bg-border" />
+    <section id="trust" className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 sm:px-10">
+      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">01 / Practice</span>
+        <span className="section-index hidden sm:block">What every project ships with</span>
       </div>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+
+      <h2 className="mb-16 max-w-4xl font-display text-5xl leading-[0.98] tracking-[-0.02em] sm:text-7xl">
+        A small studio,
+        <br />
+        <span className="italic text-gold">deliberately.</span>
+      </h2>
+
+      <div className="grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
         {TRUST.map((t, i) => (
           <motion.div
             key={t.label}
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ delay: i * 0.06, duration: 0.5 }}
-            className="glass group flex flex-col items-start gap-3 rounded-2xl p-4 transition hover:border-primary/40"
+            transition={{ delay: i * 0.05, duration: 0.5 }}
+            className="group flex items-start gap-5 p-8 transition hover:bg-white/[0.02] sm:min-h-[180px]"
           >
-            <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20 transition group-hover:bg-primary/20">
-              <t.icon className="h-4 w-4" />
-            </div>
-            <div className="flex items-center gap-1.5 text-sm font-medium">
-              <Check className="h-3.5 w-3.5 text-gold" />
-              {t.label}
+            <span className="section-index shrink-0 pt-1">
+              0{i + 1}
+            </span>
+            <div className="flex-1">
+              <t.icon className="mb-6 h-5 w-5 text-gold" strokeWidth={1.5} />
+              <div className="font-display text-2xl leading-tight tracking-tight">
+                {t.label}
+              </div>
             </div>
           </motion.div>
         ))}
@@ -357,6 +371,7 @@ function TrustStrip() {
     </section>
   );
 }
+
 
 /* ---------------- Form ---------------- */
 
@@ -459,18 +474,28 @@ function FormSection({
   const progress = useMemo(() => ((step + 1) / STEPS.length) * 100, [step]);
 
   return (
-    <section className="relative z-10 mx-auto max-w-4xl px-6 pb-24">
+    <section id="apply" className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 sm:px-10">
+      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">02 / Apply</span>
+        <span className="section-index hidden sm:block">Seven steps · ~4 minutes</span>
+      </div>
+      <h2 className="mb-14 max-w-4xl font-display text-5xl leading-[0.98] tracking-[-0.02em] sm:text-7xl">
+        Tell us what you're
+        <br />
+        <span className="italic text-gold">building.</span>
+      </h2>
       <AnimatePresence mode="wait">
+
         {!active ? (
           <motion.div
             key="teaser"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="rounded-3xl border border-border bg-card/40 p-10 text-center backdrop-blur"
+            className="border border-border p-10 text-center"
           >
             <p className="text-sm text-muted-foreground">
-              Scroll or press <kbd className="rounded bg-secondary px-1.5 py-0.5 text-xs">Start</kbd> above to begin your application.
+              Press <kbd className="mx-1 rounded border border-border px-1.5 py-0.5 font-mono text-xs">Begin</kbd> above to open the intake.
             </p>
           </motion.div>
         ) : (
@@ -479,15 +504,16 @@ function FormSection({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            className="mx-auto max-w-4xl"
           >
             <StickyProgress step={step} progress={progress} />
 
-            <div className="glass mt-6 rounded-3xl p-6 sm:p-10">
-              <div className="mb-8 flex items-baseline justify-between">
-                <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-gold">
-                  Step {step + 1} / {STEPS.length}
+            <div className="mt-6 border border-border bg-card/40 p-6 sm:p-12">
+              <div className="mb-10 flex items-baseline justify-between border-b border-border pb-5">
+                <span className="section-index text-gold">
+                  Step 0{step + 1} — {STEPS[step].label}
                 </span>
-                <span className="text-xs text-muted-foreground">Autosaved</span>
+                <span className="section-index">Autosaved</span>
               </div>
 
               <AnimatePresence mode="wait">
@@ -508,7 +534,7 @@ function FormSection({
                 </motion.div>
               </AnimatePresence>
 
-              <div className="mt-10 flex items-center justify-between border-t border-border pt-6">
+              <div className="mt-12 flex items-center justify-between border-t border-border pt-6">
                 <Button
                   type="button"
                   variant="ghost"
@@ -522,8 +548,9 @@ function FormSection({
                   type="button"
                   onClick={next}
                   disabled={submitting}
-                  className="group h-11 rounded-full bg-primary px-6 hover:bg-primary/90"
+                  className="group h-12 rounded-full bg-primary px-7 text-primary-foreground hover:bg-primary/90"
                 >
+
                   {submitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting
@@ -551,31 +578,31 @@ function FormSection({
 function StickyProgress({ step, progress }: { step: number; progress: number }) {
   return (
     <div className="sticky top-4 z-30">
-      <div className="glass rounded-2xl px-4 py-3">
+      <div className="border border-border bg-background/90 px-5 py-3 backdrop-blur">
         <div className="mb-3 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-1.5 overflow-x-auto text-xs">
+          <div className="flex items-center gap-2 overflow-x-auto section-index">
             {STEPS.map((s, i) => (
-              <div key={s.key} className="flex items-center gap-1.5">
+              <div key={s.key} className="flex items-center gap-2">
                 <span
                   className={cn(
-                    "whitespace-nowrap rounded-full px-2.5 py-1 font-mono uppercase tracking-wider transition",
+                    "whitespace-nowrap transition",
                     i < step && "text-gold",
-                    i === step && "bg-primary/15 text-primary ring-1 ring-primary/30",
-                    i > step && "text-muted-foreground/60",
+                    i === step && "text-foreground",
+                    i > step && "text-muted-foreground/50",
                   )}
                 >
-                  {s.label}
+                  0{i + 1} {s.label}
                 </span>
                 {i < STEPS.length - 1 && (
-                  <span className="text-muted-foreground/40">/</span>
+                  <span className="text-muted-foreground/30">·</span>
                 )}
               </div>
             ))}
           </div>
         </div>
-        <div className="h-0.5 overflow-hidden rounded-full bg-secondary">
+        <div className="h-px overflow-hidden bg-border">
           <motion.div
-            className="h-full bg-gradient-to-r from-primary to-[color:var(--gold)]"
+            className="h-full bg-gold"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.4, ease: "easeOut" }}
@@ -585,6 +612,7 @@ function StickyProgress({ step, progress }: { step: number; progress: number }) 
     </div>
   );
 }
+
 
 /* ---------------- Shared field bits ---------------- */
 
@@ -620,14 +648,14 @@ function Field({
 
 function StepHeader({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle?: string }) {
   return (
-    <div className="mb-8">
-      <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground">
+    <div className="mb-10">
+      <span className="section-index">
         {eyebrow}
       </span>
-      <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight sm:text-4xl">
+      <h2 className="mt-4 font-display text-4xl leading-[1.02] tracking-[-0.02em] sm:text-5xl">
         {title}
       </h2>
-      {subtitle && <p className="mt-2 text-sm text-muted-foreground">{subtitle}</p>}
+      {subtitle && <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">{subtitle}</p>}
     </div>
   );
 }
@@ -646,16 +674,16 @@ function ChipToggle({
       type="button"
       onClick={onClick}
       className={cn(
-        "group relative flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition",
+        "group relative flex items-center gap-2 border px-4 py-2 text-sm transition",
         active
-          ? "border-primary/50 bg-primary/15 text-foreground"
-          : "border-border bg-card/40 text-muted-foreground hover:border-primary/30 hover:text-foreground",
+          ? "border-foreground bg-foreground text-background"
+          : "border-border bg-transparent text-muted-foreground hover:border-foreground/60 hover:text-foreground",
       )}
     >
       <span
         className={cn(
-          "grid h-4 w-4 place-items-center rounded-full border transition",
-          active ? "border-primary bg-primary text-primary-foreground" : "border-border",
+          "grid h-3.5 w-3.5 place-items-center border transition",
+          active ? "border-background bg-background text-foreground" : "border-border",
         )}
       >
         {active && <Check className="h-2.5 w-2.5" />}
@@ -679,18 +707,19 @@ function CardSelect({
       type="button"
       onClick={onClick}
       className={cn(
-        "group relative rounded-2xl border p-5 text-left transition",
+        "group relative border p-6 text-left transition",
         active
-          ? "border-primary/60 bg-primary/10 ring-glow"
-          : "border-border bg-card/40 hover:border-primary/30 hover:bg-card/70",
+          ? "border-foreground bg-white/[0.04]"
+          : "border-border bg-transparent hover:border-foreground/50 hover:bg-white/[0.02]",
       )}
     >
       <div className="flex items-center justify-between">
-        <span className="font-medium">{children}</span>
+        <span className="font-display text-xl tracking-tight">{children}</span>
         <span
           className={cn(
-            "grid h-5 w-5 place-items-center rounded-full border transition",
-            active ? "border-primary bg-primary text-primary-foreground" : "border-border",
+            "grid h-5 w-5 place-items-center border transition",
+            active ? "border-foreground bg-foreground text-background" : "border-border",
+
           )}
         >
           {active && <Check className="h-3 w-3" />}
@@ -980,45 +1009,40 @@ function StepContact({ data, update, errors }: StepProps) {
 
 function SuccessScreen() {
   return (
-    <section className="relative z-10 mx-auto max-w-3xl px-6 pb-32 pt-4">
+    <section className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 pt-8 sm:px-10">
+      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index text-gold">02 / Received</span>
+        <span className="section-index hidden sm:block">Reply within 24 hours</span>
+      </div>
       <motion.div
-        initial={{ opacity: 0, y: 30, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="glass overflow-hidden rounded-3xl p-10 text-center sm:p-16"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="max-w-4xl"
       >
-        <motion.div
-          initial={{ scale: 0, rotate: -30 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ delay: 0.2, type: "spring", stiffness: 180, damping: 14 }}
-          className="mx-auto mb-8 grid h-20 w-20 place-items-center rounded-full bg-primary/15 ring-1 ring-primary/40"
-        >
-          <Check className="h-9 w-9 text-primary" strokeWidth={2.5} />
-        </motion.div>
-
-        <h2 className="font-display text-4xl leading-tight tracking-tight sm:text-5xl">
-          Application <span className="italic text-gold">submitted.</span>
+        <h2 className="font-display text-6xl leading-[0.98] tracking-[-0.02em] sm:text-8xl">
+          Application
+          <br />
+          <span className="italic text-gold">received.</span>
         </h2>
-        <p className="mx-auto mt-5 max-w-lg text-balance text-muted-foreground">
-          Thanks for telling us about your project. We'll review your requirements and get
-          back to you within 24 hours. If it's a good fit, we'll schedule a free discovery
-          call.
+        <p className="mt-10 max-w-xl text-lg leading-relaxed text-muted-foreground">
+          Thanks for the detail. A partner will personally review your intake and reply
+          within twenty-four hours. If it's a fit, we'll schedule a discovery call to scope
+          the build.
         </p>
 
-        <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-          <a href="/">
-            <Button variant="outline" className="h-11 rounded-full px-6">
-              Back home
-            </Button>
-          </a>
+        <div className="mt-12 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
           <a
             href="https://cal.com"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground ring-glow transition hover:bg-primary/90"
+            className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-8 text-base font-medium text-primary-foreground transition hover:bg-primary/90"
           >
             Book discovery call
-            <ExternalLink className="h-3.5 w-3.5" />
+            <ExternalLink className="h-4 w-4" />
+          </a>
+          <a href="/" className="section-index transition hover:text-foreground">
+            ← Back to home
           </a>
         </div>
       </motion.div>
@@ -1030,35 +1054,46 @@ function SuccessScreen() {
 
 function FAQSection() {
   return (
-    <section id="faq" className="relative z-10 mx-auto max-w-3xl px-6 pb-32">
-      <div className="mb-10 flex items-baseline justify-between">
-        <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground">
-          FAQ
-        </span>
-        <span className="text-xs text-muted-foreground">
+    <section id="faq" className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 sm:px-10">
+      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">03 / FAQ</span>
+        <span className="section-index hidden sm:block">
           Still curious?{" "}
-          <a href="#" className="text-foreground underline-offset-4 hover:underline">
+          <a href="mailto:hello@techilla.studio" className="text-foreground hover:text-gold">
             hello@techilla.studio
           </a>
         </span>
       </div>
-      <h2 className="font-display text-4xl leading-tight tracking-tight sm:text-5xl">
-        Questions <span className="italic text-gold">worth</span> answering.
-      </h2>
-      <Accordion type="single" collapsible className="mt-10 space-y-3">
-        {FAQS.map((f, i) => (
-          <AccordionItem
-            key={i}
-            value={`item-${i}`}
-            className="glass rounded-2xl border-none px-5"
-          >
-            <AccordionTrigger className="text-left text-base font-medium hover:no-underline">
-              {f.q}
-            </AccordionTrigger>
-            <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+
+      <div className="grid gap-12 sm:grid-cols-12">
+        <h2 className="font-display text-5xl leading-[0.98] tracking-[-0.02em] sm:col-span-5 sm:text-7xl">
+          Questions
+          <br />
+          <span className="italic text-gold">worth</span>
+          <br />
+          answering.
+        </h2>
+
+        <Accordion type="single" collapsible className="sm:col-span-7">
+          {FAQS.map((f, i) => (
+            <AccordionItem
+              key={i}
+              value={`item-${i}`}
+              className="border-b border-border first:border-t"
+            >
+              <AccordionTrigger className="py-6 text-left font-display text-xl tracking-tight hover:no-underline sm:text-2xl">
+                <span className="flex items-baseline gap-4">
+                  <span className="section-index shrink-0">0{i + 1}</span>
+                  {f.q}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="pb-6 pl-12 text-base leading-relaxed text-muted-foreground">
+                {f.a}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
     </section>
   );
 }
@@ -1068,16 +1103,17 @@ function FAQSection() {
 function Footer() {
   return (
     <footer className="relative z-10 border-t border-border">
-      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-6 py-10 text-sm text-muted-foreground sm:flex-row sm:items-center">
-        <div className="flex items-center gap-2">
-          <div className="grid h-7 w-7 place-items-center rounded-md bg-primary/15 ring-1 ring-primary/30">
-            <span className="font-display text-base italic text-primary">T</span>
-          </div>
-          <span>Techilla — Studio for web, software & AI</span>
+      <div className="mx-auto max-w-[1400px] px-6 py-16 sm:px-10">
+        <div className="text-compressed text-[16vw] leading-[0.85] tracking-[-0.04em] sm:text-[13rem]">
+          Techilla<span className="text-muted-foreground/40">Techilla</span>
         </div>
-        <span className="text-xs font-mono uppercase tracking-[0.2em]">
-          © {new Date().getFullYear()}
-        </span>
+        <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-border pt-6 section-index sm:flex-row sm:items-center">
+          <span>Studio · Web · Software · AI</span>
+          <a href="mailto:hello@techilla.studio" className="hover:text-foreground">
+            hello@techilla.studio
+          </a>
+          <span>© {new Date().getFullYear()} — All rights reserved</span>
+        </div>
       </div>
     </footer>
   );

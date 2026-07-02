@@ -32,6 +32,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-gold: var(--gold);
+  --color-cream: var(--cream);
 
   --font-display: "Instrument Serif", ui-serif, Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -39,29 +40,30 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.5rem;
 
-  /* Techilla dark theme */
-  --background: oklch(0.145 0 0);         /* #0D0D0D */
-  --foreground: oklch(1 0 0);
-  --card: oklch(0.18 0 0);                /* #171717 */
-  --card-foreground: oklch(1 0 0);
-  --popover: oklch(0.18 0 0);
-  --popover-foreground: oklch(1 0 0);
-  --primary: oklch(0.53 0.24 293);        /* #7C3AED */
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.22 0 0);
-  --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.22 0 0);
-  --muted-foreground: oklch(0.72 0.01 286);  /* #A1A1AA */
-  --accent: oklch(0.22 0 0);
-  --accent-foreground: oklch(1 0 0);
+  /* Editorial black theme — Dragonfly-inspired */
+  --background: oklch(0 0 0);              /* pure black */
+  --foreground: oklch(0.96 0.01 85);       /* warm cream */
+  --card: oklch(0.08 0 0);
+  --card-foreground: oklch(0.96 0.01 85);
+  --popover: oklch(0.08 0 0);
+  --popover-foreground: oklch(0.96 0.01 85);
+  --primary: oklch(0.96 0.01 85);          /* cream (buttons on black) */
+  --primary-foreground: oklch(0 0 0);
+  --secondary: oklch(0.14 0 0);
+  --secondary-foreground: oklch(0.96 0.01 85);
+  --muted: oklch(0.12 0 0);
+  --muted-foreground: oklch(0.62 0.01 85);
+  --accent: oklch(0.14 0 0);
+  --accent-foreground: oklch(0.96 0.01 85);
   --destructive: oklch(0.65 0.22 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.27 0 0);              /* #2A2A2A */
-  --input: oklch(0.22 0 0);
-  --ring: oklch(0.53 0.24 293);
-  --gold: oklch(0.78 0.13 82);            /* #D4A844 */
+  --border: oklch(0.20 0 0);
+  --input: oklch(0.12 0 0);
+  --ring: oklch(0.96 0.01 85);
+  --gold: oklch(0.82 0.13 78);             /* editorial warm ochre */
+  --cream: oklch(0.96 0.01 85);
 }
 
 @layer base {
@@ -76,24 +78,24 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    background-image:
-      radial-gradient(ellipse 80% 60% at 50% -10%, oklch(0.53 0.24 293 / 0.18), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 100% 100%, oklch(0.53 0.24 293 / 0.10), transparent 70%);
-    background-attachment: fixed;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--gold);
+    color: #000;
   }
 }
 
-/* Subtle grid texture overlay */
+/* Faint page grain / grid, extremely subtle */
 @utility bg-grid {
   background-image:
-    linear-gradient(to right, oklch(1 0 0 / 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, oklch(1 0 0 / 0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
+    linear-gradient(to right, oklch(1 0 0 / 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(1 0 0 / 0.02) 1px, transparent 1px);
+  background-size: 96px 96px;
 }
 
 @utility glass {
-  background: linear-gradient(180deg, oklch(1 0 0 / 0.04), oklch(1 0 0 / 0.01));
-  backdrop-filter: blur(16px);
+  background: oklch(1 0 0 / 0.02);
   border: 1px solid oklch(1 0 0 / 0.08);
 }
 
@@ -102,5 +104,22 @@
 }
 
 @utility ring-glow {
-  box-shadow: 0 0 0 1px oklch(0.53 0.24 293 / 0.4), 0 10px 40px -10px oklch(0.53 0.24 293 / 0.35);
+  box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.15);
+}
+
+/* Signature Dragonfly-style compressed no-space wordmark */
+@utility text-compressed {
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  word-spacing: -0.5em;
+  font-style: italic;
+}
+
+/* Numbered section marker */
+@utility section-index {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
 }
