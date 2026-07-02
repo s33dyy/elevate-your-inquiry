@@ -474,8 +474,18 @@ function FormSection({
   const progress = useMemo(() => ((step + 1) / STEPS.length) * 100, [step]);
 
   return (
-    <section className="relative z-10 mx-auto max-w-4xl px-6 pb-24">
+    <section id="apply" className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 sm:px-10">
+      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">02 / Apply</span>
+        <span className="section-index hidden sm:block">Seven steps · ~4 minutes</span>
+      </div>
+      <h2 className="mb-14 max-w-4xl font-display text-5xl leading-[0.98] tracking-[-0.02em] sm:text-7xl">
+        Tell us what you're
+        <br />
+        <span className="italic text-gold">building.</span>
+      </h2>
       <AnimatePresence mode="wait">
+
         {!active ? (
           <motion.div
             key="teaser"
