@@ -746,7 +746,7 @@ function Hero({ onCta }: { onCta: () => void }) {
           }}
           className="hidden items-center justify-center lg:flex"
         >
-          <HeroSculpture />
+          <HeroSculptureSlot />
         </motion.div>
       </div>
 
