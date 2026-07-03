@@ -645,8 +645,24 @@ function Nav() {
 }
 
 /* ============================================================ */
+/*  Hero Sculpture Slot — WebGL with CSS fallback               */
+/* ============================================================ */
+
+function HeroSculptureSlot() {
+  const webgl = useWebGLEnabled();
+  if (!webgl) return <HeroSculpture />;
+  return (
+    <Suspense fallback={<HeroSculpture />}>
+      <HeroSculpture3D />
+    </Suspense>
+  );
+}
+
+/* ============================================================ */
 /*  Hero                                                         */
 /* ============================================================ */
+
+
 
 function Hero({ onCta }: { onCta: () => void }) {
   return (
