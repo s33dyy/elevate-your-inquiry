@@ -129,6 +129,30 @@ const STEPS = [
   { key: "timeline", label: "Timeline" },
   { key: "contact", label: "Contact" },
 ] as const;
+/* ============================================================ */
+/*  GlowingText                                                  */
+/* ============================================================ */
+function GlowingText({ children, className = "" }: { children: string; className?: string }) {
+  const words = children.split(" ");
+  return (
+    <p className={className}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ color: "rgba(255, 255, 255, 0.55)", textShadow: "none" }}
+          whileInView={{ 
+            color: "#ffffff",
+            textShadow: "0 0 10px rgba(255, 255, 255, 0.3), 0 0 20px rgba(139, 125, 255, 0.4)"
+          }}
+          transition={{ duration: 0.8, delay: i * 0.04, ease: "easeOut" }}
+          viewport={{ once: false, margin: "-100px" }}
+        >
+          {word}{" "}
+        </motion.span>
+      ))}
+    </p>
+  );
+}
 
 const BUSINESS_SIZES = ["Solo", "2–10", "11–50", "51+"];
 const ONLINE_PRESENCE = [
@@ -308,241 +332,7 @@ const fadeUp = {
   },
 };
 
-/* ============================================================ */
-/*  Ambient Background                                           */
-/* ============================================================ */
-
-function AmbientBackground() {
-  return (
-    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      {/* Grid */}
-      <div className="absolute inset-0 bg-grid opacity-100" />
-
-      {/* Blob A — top-right, behind hero */}
-      <div
-        className="animate-blob-a absolute -right-60 -top-60 hidden h-[900px] w-[900px] rounded-full sm:block"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139,125,255,0.09) 0%, transparent 65%)",
-          filter: "blur(90px)",
-        }}
-      />
-
-      {/* Blob B — left-center, behind form */}
-      <div
-        className="animate-blob-b absolute -left-60 top-[45%] hidden h-[700px] w-[700px] rounded-full sm:block"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(110,120,255,0.07) 0%, transparent 65%)",
-          filter: "blur(90px)",
-        }}
-      />
-
-      {/* Noise */}
-      <div
-        className="absolute inset-0 hidden opacity-[0.28] sm:block"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E")`,
-          backgroundSize: "256px 256px",
-        }}
-      />
-
-      {/* Vignette */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 38%, rgba(0,0,0,0.55) 100%)",
-        }}
-      />
-    </div>
-  );
-}
-
-/* ============================================================ */
-/*  Cursor Glow                                                  */
-/* ============================================================ */
-
-function CursorGlow() {
-  const x = useMotionValue(-500);
-  const y = useMotionValue(-500);
-  const sx = useSpring(x, { stiffness: 180, damping: 40 });
-  const sy = useSpring(y, { stiffness: 180, damping: 40 });
-
-  useEffect(() => {
-    const move = (e: MouseEvent) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
-    };
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
-  }, [x, y]);
-
-  return (
-    <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-[9998] hidden sm:block"
-      style={{ x: sx, y: sy, translateX: "-50%", translateY: "-50%" }}
-    >
-      <div
-        className="h-[480px] w-[480px] rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139,125,255,0.048) 0%, transparent 65%)",
-        }}
-      />
-    </motion.div>
-  );
-}
-
-/* ============================================================ */
-/*  Hero Sculpture — glass sphere + orbital rings               */
-/* ============================================================ */
-
-function HeroSculpture() {
-  const mx = useMotionValue(0.5);
-  const my = useMotionValue(0.5);
-  const rawX = useTransform(mx, [0, 1], [-18, 18]);
-  const rawY = useTransform(my, [0, 1], [-12, 12]);
-  const spx = useSpring(rawX, { stiffness: 45, damping: 22 });
-  const spy = useSpring(rawY, { stiffness: 45, damping: 22 });
-
-  useEffect(() => {
-    const move = (e: MouseEvent) => {
-      mx.set(e.clientX / window.innerWidth);
-      my.set(e.clientY / window.innerHeight);
-    };
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
-  }, [mx, my]);
-
-  return (
-    <div
-      className="relative flex h-[380px] w-[380px] items-center justify-center"
-      style={{ perspective: "1200px" }}
-    >
-      {/* Ambient halo */}
-      <div
-        className="animate-pulse-halo absolute inset-0 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139,125,255,0.18) 0%, transparent 62%)",
-          filter: "blur(50px)",
-        }}
-      />
-
-      {/* Parallax wrapper */}
-      <motion.div
-        style={{ x: spx, y: spy }}
-        className="relative flex items-center justify-center"
-      >
-        {/* Float wrapper */}
-        <motion.div
-          animate={{ y: [-10, 10, -10] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-          className="relative flex items-center justify-center"
-        >
-          {/* Central glass sphere */}
-          <div
-            className="absolute rounded-full"
-            style={{
-              width: 148,
-              height: 148,
-              background:
-                "radial-gradient(circle at 36% 30%, rgba(180,168,255,0.20) 0%, rgba(139,125,255,0.08) 48%, rgba(15,15,22,0.04) 100%)",
-              border: "1px solid rgba(139,125,255,0.22)",
-              boxShadow:
-                "0 0 80px rgba(139,125,255,0.13), inset 0 0 50px rgba(139,125,255,0.05), 0 30px 80px rgba(0,0,0,0.55)",
-            }}
-          />
-
-          {/* Specular highlight */}
-          <div
-            className="absolute rounded-full"
-            style={{
-              width: 52,
-              height: 52,
-              background:
-                "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)",
-              top: -36,
-              left: -38,
-            }}
-          />
-
-          {/* Ring 1 — primary orbit */}
-          <motion.div
-            initial={{ rotateX: 70, rotateZ: 0 }}
-            animate={{ rotateZ: 360 }}
-            transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-            className="absolute rounded-full"
-            style={{
-              width: 216,
-              height: 216,
-              border: "1px solid rgba(139,125,255,0.22)",
-              boxShadow: "0 0 14px rgba(139,125,255,0.08)",
-            }}
-          />
-
-          {/* Ring 2 — secondary orbit */}
-          <motion.div
-            initial={{ rotateX: 52, rotateY: 28, rotateZ: 0 }}
-            animate={{ rotateZ: -360 }}
-            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-            className="absolute rounded-full"
-            style={{
-              width: 296,
-              height: 296,
-              border: "1px solid rgba(110,120,255,0.11)",
-            }}
-          />
-
-          {/* Orbiting dot 1 (ring 1 speed) */}
-          <motion.div
-            initial={{ rotate: 0 }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-            className="absolute"
-            style={{ width: 216, height: 216 }}
-          >
-            <div
-              className="absolute rounded-full"
-              style={{
-                width: 7,
-                height: 7,
-                top: "0%",
-                left: "50%",
-                transform: "translateX(-50%) translateY(-50%)",
-                background: "rgba(139,125,255,0.8)",
-                boxShadow:
-                  "0 0 14px rgba(139,125,255,0.65), 0 0 5px rgba(139,125,255,0.95)",
-              }}
-            />
-          </motion.div>
-
-          {/* Orbiting dot 2 (ring 2 speed) */}
-          <motion.div
-            initial={{ rotate: 100 }}
-            animate={{ rotate: -260 }}
-            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-            className="absolute"
-            style={{ width: 296, height: 296 }}
-          >
-            <div
-              className="absolute rounded-full"
-              style={{
-                width: 4,
-                height: 4,
-                bottom: "10%",
-                right: "6%",
-                background: "rgba(110,120,255,0.65)",
-                boxShadow: "0 0 8px rgba(110,120,255,0.5)",
-              }}
-            />
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    </div>
-  );
-}
+/* Old CSS-based visual elements removed for WebGL transition */
 
 /* ============================================================ */
 /*  Nav                                                          */
@@ -648,20 +438,6 @@ function Nav() {
 }
 
 /* ============================================================ */
-/*  Hero Sculpture Slot — WebGL with CSS fallback               */
-/* ============================================================ */
-
-function HeroSculptureSlot() {
-  const webgl = useWebGLEnabled();
-  if (!webgl) return <HeroSculpture />;
-  return (
-    <Suspense fallback={<HeroSculpture />}>
-      <HeroSculpture3D />
-    </Suspense>
-  );
-}
-
-/* ============================================================ */
 /*  Hero                                                         */
 /* ============================================================ */
 
@@ -669,13 +445,13 @@ function HeroSculptureSlot() {
 
 function Hero({ onCta }: { onCta: () => void }) {
   return (
-    <section className="relative z-10 mx-auto max-w-[1400px] px-6 pb-32 pt-20 sm:px-10 sm:pt-28 sm:pb-40">
+    <section className="pointer-events-none relative z-10 mx-auto max-w-[1400px] px-6 pb-12 pt-20 sm:px-10 sm:pt-28 sm:pb-16">
       {/* Section label row */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.1 }}
-        className="mb-16 flex items-baseline justify-between border-t border-border pt-6"
+        className="pointer-events-auto mb-16 flex items-baseline justify-between border-t border-border pt-6"
       >
         <span className="section-index">00 / Introduction</span>
         <span className="section-index hidden sm:block">
@@ -683,25 +459,15 @@ function Hero({ onCta }: { onCta: () => void }) {
         </span>
       </motion.div>
 
-      {/* Content + Sculpture grid */}
-      <div className="grid items-center gap-12 lg:grid-cols-[1fr_400px]">
-        {/* Left column */}
+      {/* Content grid */}
+      <div className="grid items-center gap-12 lg:grid-cols-1">
+        {/* Main column */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
         >
-          {/* Ambient behind headline */}
           <div className="relative">
-            <div
-              className="pointer-events-none absolute -inset-20 -z-10 rounded-full"
-              style={{
-                background:
-                  "radial-gradient(circle at 30% 50%, rgba(139,125,255,0.09) 0%, transparent 65%)",
-                filter: "blur(40px)",
-              }}
-            />
-
             <h1 className="font-display leading-[0.92] tracking-[-0.03em] text-[clamp(2.6rem,11vw,8.8rem)]">
               Websites &amp; software
               <br />
@@ -720,16 +486,16 @@ function Hero({ onCta }: { onCta: () => void }) {
                 SinceDay1
               </p>
             </div>
-            <p className="max-w-xl text-sm leading-relaxed text-muted-foreground sm:col-span-6 sm:col-start-7 sm:text-lg">
+            <GlowingText className="max-w-xl text-sm leading-relaxed sm:col-span-6 sm:col-start-7 sm:text-lg">
               Techilla is a boutique studio for founders who need more than a
               template. We build high-conversion websites, custom software, and
               AI automation for teams that actually ship. Tell us about your
               business — we respond within twenty-four hours.
-            </p>
+            </GlowingText>
           </div>
 
           {/* CTA row */}
-          <div className="mt-14 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+          <div className="pointer-events-auto mt-14 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
             <motion.button
               onClick={onCta}
               whileHover={{
@@ -753,20 +519,6 @@ function Hero({ onCta }: { onCta: () => void }) {
             </a>
           </div>
         </motion.div>
-
-        {/* Right column — sculpture */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.88 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            duration: 1.3,
-            ease: [0.22, 1, 0.36, 1],
-            delay: 0.3,
-          }}
-          className="hidden items-center justify-center lg:flex"
-        >
-          <HeroSculptureSlot />
-        </motion.div>
       </div>
 
       {/* Scroll indicator */}
@@ -774,7 +526,7 @@ function Hero({ onCta }: { onCta: () => void }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6, duration: 1 }}
-        className="mt-24 flex items-center gap-3 text-muted-foreground"
+        className="mt-24 flex items-center gap-3 text-white/70"
       >
         <motion.div
           animate={{ y: [0, 6, 0] }}
@@ -796,19 +548,9 @@ function TrustStrip() {
   return (
     <section
       id="trust"
-      className="relative z-10 mx-auto max-w-[1400px] px-6 pb-36 sm:px-10"
+      className="pointer-events-none relative z-10 mx-auto max-w-[1400px] px-6 pb-20 sm:px-10"
     >
-      {/* Section ambient */}
-      <div
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139,125,255,0.06) 0%, transparent 65%)",
-          filter: "blur(80px)",
-        }}
-      />
-
-      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
+      <div className="pointer-events-auto mb-14 flex items-baseline justify-between border-t border-border pt-6">
         <span className="section-index">01 / Practice</span>
         <span className="section-index hidden sm:block">
           What every project ships with
@@ -902,27 +644,22 @@ function LeadPage() {
         }}
       >
         <Toaster theme="dark" position="top-center" richColors />
-        <CursorGlow />
-        <AmbientBackground />
-        {webgl && !reduced && (
-          <Suspense fallback={null}>
-            <PerspectiveGrid />
-          </Suspense>
-        )}
+        
+        {/* Scene 1: The Cinematic Background */}
+        <Suspense fallback={null}>
+          <HeroSculpture3D />
+        </Suspense>
+
         <Nav />
         <Hero onCta={scrollToForm} />
 
         <TrustStrip />
+        <PortfolioSection />
+        <PricingSection onCta={scrollToForm} />
 
-        {webgl && !reduced && (
-          <div className="relative z-10 my-4 hidden sm:block">
-            <Suspense fallback={null}>
-              <SectionOrb shape="torus" />
-            </Suspense>
-          </div>
-        )}
+        {/* Old SectionOrb removed for WebGL transition */}
 
-        <div ref={formRef}>
+        <div ref={formRef} className="pointer-events-auto mt-12">
           {submitted ? (
             <SuccessScreen />
           ) : (
@@ -934,18 +671,375 @@ function LeadPage() {
           )}
         </div>
 
-        {webgl && !reduced && (
-          <div className="relative z-10 my-4 hidden sm:block">
-            <Suspense fallback={null}>
-              <SectionOrb shape="prism" />
-            </Suspense>
-          </div>
-        )}
+        {/* Old SectionOrb removed for WebGL transition */}
 
         <FAQSection />
         <Footer />
       </motion.main>
     </>
+  );
+}
+
+/* ============================================================ */
+/*  Portfolio Section                                            */
+/* ============================================================ */
+
+const projects = [
+  {
+    title: "Sports Storytelling Studio",
+    tags: "WebGL · Headless CMS",
+    description: "WebGL-enhanced homepage with scroll-tied 3D motion and interactive campaign story modules. Internal teams now launch campaign pages in hours.",
+    link: "podium.global ↗",
+    url: "https://podium.global"
+  },
+  {
+    title: "Energy Drink Brand Launch",
+    tags: "Three.js · Mobile-first",
+    description: "Bold mobile-first landing with animated 3D can renders, a flavor carousel, and analytics events for conversion tracking on low-end devices.",
+    link: "ciaoenergy.com ↗",
+    url: "https://ciaoenergy.com"
+  },
+  {
+    title: "Pahari Art Exhibition",
+    tags: "Next.js · GSAP · Zustand",
+    description: "Scroll-based narrative, navigable 3D gallery, and contextual tooltips celebrating Pahari miniature art. Visitors average several minutes exploring each scene.",
+    link: "pahari.vercel.app ↗",
+    url: "https://pahari.vercel.app"
+  },
+  {
+    title: "Crypto Investment Fund",
+    tags: "MDX · Faceted Search",
+    description: "MDX-driven research portal with faceted portfolio search by sector, stage, and geography, plus AI-powered TL;DR summaries for deep-research posts.",
+    link: "dragonfly.xyz ↗",
+    url: "https://dragonfly.xyz"
+  }
+];
+
+function PortfolioSection() {
+  return (
+    <section
+      id="portfolio"
+      className="pointer-events-none relative z-10 mx-auto max-w-[1400px] px-6 pb-20 sm:px-10"
+    >
+      <div className="pointer-events-auto mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">02 / Portfolio</span>
+        <span className="section-index hidden sm:block">
+          Selected Web Experiences
+        </span>
+      </div>
+
+      <div className="pointer-events-auto">
+        <h2 className="mb-6 max-w-4xl font-display text-5xl leading-[0.97] tracking-[-0.025em] sm:text-7xl">
+          Selected Web Experiences
+        </h2>
+        <GlowingText className="mb-16 max-w-2xl text-lg leading-relaxed">
+          We collaborate quietly with sports studios, energy brands, art initiatives, crypto funds, and SaaS platforms to ship opinionated interfaces — and 50+ clients trust us with their web presence.
+        </GlowingText>
+
+        <div className="grid grid-cols-2 gap-4 sm:gap-6">
+          {projects.map((project, i) => (
+            <motion.div
+              key={i}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ delay: i * 0.1 }}
+              className="group flex flex-col justify-between rounded-2xl border border-white/5 bg-white/5 p-4 backdrop-blur-sm transition-colors hover:border-white/10 hover:bg-white/10 sm:p-10"
+            >
+              <div>
+                <div className="mb-3 text-[10px] sm:mb-4 sm:text-xs font-mono tracking-wider text-white/70 uppercase">
+                  {project.tags}
+                </div>
+                <h3 className="mb-2 font-display text-lg leading-tight sm:mb-6 sm:text-3xl text-white group-hover:text-primary transition-colors">
+                  {project.title}
+                </h3>
+                <p className="hidden text-sm leading-relaxed text-white/70/90 sm:block">
+                  {project.description}
+                </p>
+              </div>
+              <div className="mt-auto pt-3 border-t border-white/10 sm:mt-10 sm:pt-6">
+                <a 
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-sm font-medium tracking-wide text-white/80 transition-colors hover:text-primary group-hover:text-white"
+                >
+                  {project.link}
+                </a>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================ */
+/*  Pricing Section                                              */
+/* ============================================================ */
+
+function PricingSection({ onCta }: { onCta: () => void }) {
+  return (
+    <section
+      id="pricing"
+      className="pointer-events-none relative z-10 mx-auto max-w-[1400px] px-6 pb-20 sm:px-10"
+    >
+      <div className="pointer-events-auto mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">03 / Pricing</span>
+        <span className="section-index hidden sm:block">
+          Clear scope, honest pricing
+        </span>
+      </div>
+
+      <div className="pointer-events-auto">
+        <h2 className="mb-6 max-w-4xl font-display text-5xl leading-[0.97] tracking-[-0.025em] sm:text-7xl">
+          Pricing &amp; Packages
+        </h2>
+        <GlowingText className="mb-16 max-w-2xl text-lg leading-relaxed">
+          Two ways to get a website live — pick the one that fits, and everything below is included from day one.
+        </GlowingText>
+
+        <h3 className="mb-8 font-display text-3xl tracking-tight text-white/90">Website Packages</h3>
+        <div className="mb-24 grid grid-cols-2 gap-4 sm:gap-6 lg:gap-10">
+          {/* Web Plan 1 */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ delay: 0 }}
+            className="flex flex-col justify-between rounded-2xl border border-[rgba(139,125,255,0.15)] bg-card/10 p-5 backdrop-blur-md sm:p-10 transition-colors hover:border-[rgba(139,125,255,0.3)]"
+          >
+            <div>
+              <h3 className="font-display text-2xl sm:text-3xl">No Domain</h3>
+              <p className="hidden mt-3 min-h-[3rem] text-sm text-white/70 sm:block">
+                Bring your own domain later — we build and host on ours to start.
+              </p>
+
+              <div className="my-3 border-y border-white/10 py-3 sm:my-8 sm:py-8">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-display text-2xl tracking-tight sm:text-6xl" style={purpleText(false)}>
+                    ₹499
+                  </span>
+                  <span className="text-white/70 text-xs sm:text-base">/ mo</span>
+                </div>
+                <div className="mt-1 sm:mt-2 text-[10px] sm:text-xs uppercase tracking-wider text-white/70/80 font-mono">
+                  Setup fee: ₹1,499 one-time
+                </div>
+              </div>
+
+              <ul className="mb-5 space-y-2 sm:mb-10 sm:space-y-4">
+                {[
+                  "Hosting up to 10k visitors/mo",
+                  "1 major + 2 minor updates/month",
+                  "Uptime monitoring",
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary sm:h-4 sm:w-4" />
+                    <span className="text-[10px] leading-tight sm:text-sm text-white/70">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <motion.button
+              onClick={onCta}
+              whileHover={{ y: -2, ...G.primaryBtnHover }}
+              whileTap={{ y: 0, scale: 0.98 }}
+              className="w-full rounded-xl py-2 sm:py-4 text-[11px] sm:text-sm font-medium text-white transition-all"
+              style={{
+                background: "rgba(139,125,255,0.12)",
+                border: "1px solid rgba(139,125,255,0.25)",
+              }}
+            >
+              Start This Plan
+            </motion.button>
+          </motion.div>
+
+          {/* Web Plan 2 */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ delay: 0.15 }}
+            className="relative flex flex-col justify-between rounded-2xl border border-primary/40 bg-primary/5 p-5 backdrop-blur-md sm:p-10"
+            style={{ boxShadow: "0 0 40px rgba(139,125,255,0.05)" }}
+          >
+            <div className="absolute -top-3 right-8 rounded-full bg-primary px-3 py-1 text-[10px] font-bold tracking-wider text-white">
+              MOST CHOSEN
+            </div>
+            
+            <div>
+              <h3 className="font-display text-2xl sm:text-3xl">With Domain</h3>
+              <p className="hidden mt-3 min-h-[3rem] text-sm text-white/70 sm:block">
+                Full setup on your own domain, live and indexed from launch.
+              </p>
+
+              <div className="my-3 border-y border-white/10 py-3 sm:my-8 sm:py-8">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-display text-2xl tracking-tight sm:text-6xl" style={purpleText(false)}>
+                    ₹499
+                  </span>
+                  <span className="text-white/70 text-xs sm:text-base">/ mo</span>
+                </div>
+                <div className="mt-1 sm:mt-2 text-[10px] sm:text-xs uppercase tracking-wider text-white/70/80 font-mono">
+                  Setup fee: ₹2,999 one-time
+                </div>
+              </div>
+
+              <ul className="mb-5 space-y-2 sm:mb-10 sm:space-y-4">
+                {[
+                  "Hosting up to 10k visitors/mo",
+                  "1 major + 2 minor updates/month",
+                  "Uptime monitoring",
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary sm:h-4 sm:w-4" />
+                    <span className="text-[10px] leading-tight sm:text-sm text-white/70">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <motion.button
+              onClick={onCta}
+              whileHover={{ y: -2, ...G.primaryBtnHover }}
+              whileTap={{ y: 0, scale: 0.98 }}
+              className="w-full rounded-xl py-2 sm:py-4 text-[11px] sm:text-sm font-medium text-white transition-all"
+              style={G.primaryBtn}
+            >
+              Start This Plan
+            </motion.button>
+          </motion.div>
+        </div>
+
+        <h3 className="mb-8 font-display text-3xl tracking-tight text-white/90">Custom Software &amp; AI Builds</h3>
+        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:gap-10">
+          {/* Plan 1 */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ delay: 0 }}
+            className="flex flex-col justify-between rounded-2xl border border-[rgba(139,125,255,0.15)] bg-card/10 p-5 backdrop-blur-md sm:p-10 transition-colors hover:border-[rgba(139,125,255,0.3)]"
+          >
+            <div>
+              <h3 className="font-display text-2xl sm:text-3xl">One-Time Build</h3>
+              <p className="hidden mt-3 min-h-[3rem] text-sm text-white/70 sm:block">
+                The one-time build — planning, development, and getting it live in your stack.
+              </p>
+
+              <div className="my-3 border-y border-white/10 py-3 sm:my-8 sm:py-8">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-display text-2xl tracking-tight sm:text-6xl" style={purpleText(false)}>
+                    ₹4,999 – ₹1L
+                  </span>
+                </div>
+                <div className="mt-1 sm:mt-2 text-[10px] sm:text-xs uppercase tracking-wider text-white/70/80 font-mono">
+                  Priced after Discovery
+                </div>
+              </div>
+
+              <ul className="mb-5 space-y-2 sm:mb-10 sm:space-y-4">
+                {[
+                  "Hosting up to 10k visitors/mo",
+                  "Clear documentation, so you're never locked in",
+                  "NDA on request",
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary sm:h-4 sm:w-4" />
+                    <span className="text-[10px] leading-tight sm:text-sm text-white/70">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <motion.button
+              onClick={onCta}
+              whileHover={{ y: -2, ...G.primaryBtnHover }}
+              whileTap={{ y: 0, scale: 0.98 }}
+              className="w-full rounded-xl py-2 sm:py-4 text-[11px] sm:text-sm font-medium text-white transition-all"
+              style={{
+                background: "rgba(139,125,255,0.12)",
+                border: "1px solid rgba(139,125,255,0.25)",
+              }}
+            >
+              Apply to Work Together
+            </motion.button>
+          </motion.div>
+
+          {/* Plan 2 */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ delay: 0.15 }}
+            className="relative flex flex-col justify-between rounded-2xl border border-primary/40 bg-primary/5 p-5 backdrop-blur-md sm:p-10"
+            style={{ boxShadow: "0 0 40px rgba(139,125,255,0.05)" }}
+          >
+            <div className="absolute -top-3 right-8 rounded-full bg-primary px-3 py-1 text-[10px] font-bold tracking-wider text-white">
+              ONGOING
+            </div>
+            
+            <div>
+              <h3 className="font-display text-2xl sm:text-3xl">Maintenance Subscription</h3>
+              <p className="hidden mt-3 min-h-[3rem] text-sm text-white/70 sm:block">
+                Monitoring and hands-on management of what's live, month to month.
+              </p>
+
+              <div className="my-3 border-y border-white/10 py-3 sm:my-8 sm:py-8">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-display text-2xl tracking-tight sm:text-6xl" style={purpleText(false)}>
+                    ₹999 – ₹10K
+                  </span>
+                  <span className="text-white/70 text-xs sm:text-base">/ mo</span>
+                </div>
+                <div className="mt-2 text-xs uppercase tracking-wider text-white/70/80 font-mono">
+                  Scales with what you're running
+                </div>
+              </div>
+
+              <ul className="mb-5 space-y-2 sm:mb-10 sm:space-y-4">
+                {[
+                  "Uptime & monitoring included",
+                  "Bug fixes & stability checks",
+                  "New feature work quoted separately",
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary sm:h-4 sm:w-4" />
+                    <span className="text-[10px] leading-tight sm:text-sm text-white/70">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <motion.button
+              onClick={onCta}
+              whileHover={{ y: -2, ...G.primaryBtnHover }}
+              whileTap={{ y: 0, scale: 0.98 }}
+              className="w-full rounded-xl py-2 sm:py-4 text-[11px] sm:text-sm font-medium text-white transition-all"
+              style={G.primaryBtn}
+            >
+              Apply to Work Together
+            </motion.button>
+          </motion.div>
+        </div>
+        
+        <div className="mt-12 flex flex-col items-center gap-4 text-center">
+          <p className="text-sm text-white/70">
+            Free, always: Hosting · Uptime monitoring · Changelog — included with every plan, no extra line item.
+          </p>
+          <p className="text-xs text-white/70/60 section-index">
+            Pricing is set after Discovery, based on scope · NDA available on request.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -1061,20 +1155,10 @@ function FormSection({
   return (
     <section
       id="apply"
-      className="relative z-10 mx-auto max-w-[1400px] px-6 pb-36 sm:px-10"
+      className="pointer-events-none relative z-10 mx-auto max-w-[1400px] px-6 pb-36 sm:px-10"
     >
-      {/* Section ambient */}
-      <div
-        className="pointer-events-none absolute right-0 top-1/3 h-[500px] w-[500px] -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139,125,255,0.07) 0%, transparent 65%)",
-          filter: "blur(80px)",
-        }}
-      />
-
-      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
-        <span className="section-index">02 / Apply</span>
+      <div className="pointer-events-auto mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">04 / Apply</span>
         <span className="section-index hidden sm:block">
           Seven steps · ~4 minutes
         </span>
@@ -1094,7 +1178,7 @@ function FormSection({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="glass-card rounded-2xl px-6 py-14 sm:px-16 sm:py-20"
+            className="pointer-events-auto glass-card rounded-2xl px-6 py-14 sm:px-16 sm:py-20"
           >
             <div className="mx-auto flex max-w-lg flex-col items-center gap-7 text-center">
               {/* Decorative rule */}
@@ -1102,13 +1186,9 @@ function FormSection({
                 className="h-px w-12 rounded-full"
                 style={{ background: G.purple, opacity: 0.5 }}
               />
-              <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                We don't build websites. We build digital products that{" "}
-                <span style={{ color: "rgba(255,255,255,0.75)" }}>
-                  generate leads, automate operations, and help your business
-                  grow.
-                </span>
-              </p>
+              <GlowingText className="text-base leading-relaxed sm:text-lg">
+                We don't build websites. We build digital products that generate leads, automate operations, and help your business grow.
+              </GlowingText>
               <motion.button
                 onClick={onActivate}
                 whileHover={{ y: -2, ...G.primaryBtnHover }}
@@ -1129,7 +1209,7 @@ function FormSection({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="mx-auto max-w-4xl"
+            className="pointer-events-auto mx-auto max-w-4xl"
           >
             <StickyProgress step={step} progress={progress} />
 
@@ -1219,7 +1299,7 @@ function FormSection({
                   variant="ghost"
                   onClick={back}
                   disabled={step === 0 || submitting}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-white/70 hover:text-foreground"
                 >
                   <ArrowLeft className="mr-1 h-4 w-4" /> Back
                 </Button>
@@ -1290,13 +1370,13 @@ function StickyProgress({
                   "whitespace-nowrap transition-colors duration-200",
                   i < step && "text-primary/60",
                   i === step && "text-white",
-                  i > step && "text-muted-foreground/40",
+                  i > step && "text-white/70/40",
                 )}
               >
                 0{i + 1} {s.label}
               </span>
               {i < STEPS.length - 1 && (
-                <span className="text-muted-foreground/25">·</span>
+                <span className="text-white/70/25">·</span>
               )}
             </div>
           ))}
@@ -1346,13 +1426,13 @@ function Field({
         <Label className="text-lg font-medium text-foreground sm:text-sm">
           {label}
           {optional && (
-            <span className="ml-1.5 text-xs font-normal text-muted-foreground">
+            <span className="ml-1.5 text-xs font-normal text-white/70">
               (optional)
             </span>
           )}
         </Label>
         {hint && (
-          <span className="text-[11px] text-muted-foreground">{hint}</span>
+          <span className="text-[11px] text-white/70">{hint}</span>
         )}
       </div>
       {children}
@@ -1381,7 +1461,7 @@ function StepHeader({
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+        <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/70">
           {subtitle}
         </p>
       )}
@@ -1406,7 +1486,7 @@ function ChipToggle({
         "group relative flex min-h-[44px] items-center gap-2 rounded-full border px-4 py-2 text-sm transition-all duration-200",
         active
           ? "border-primary/45 bg-primary/10 text-white"
-          : "border-border text-muted-foreground hover:border-white/15 hover:bg-white/[0.03] hover:text-white",
+          : "border-border text-white/70 hover:border-white/15 hover:bg-white/[0.03] hover:text-white",
       )}
       style={
         active
@@ -1543,7 +1623,7 @@ function StepBusiness({ data, update, toggleArr, errors }: StepProps) {
       </div>
       <div className="mt-8">
         <Label className="text-sm font-medium">Current online presence</Label>
-        <p className="mb-3 mt-1 text-xs text-muted-foreground">
+        <p className="mb-3 mt-1 text-xs text-white/70">
           Select all that apply.
         </p>
         <div className="flex flex-wrap gap-2">
@@ -1766,23 +1846,13 @@ function StepContact({ data, update, errors }: StepProps) {
 
 function SuccessScreen() {
   return (
-    <section className="relative z-10 mx-auto max-w-[1400px] px-6 pb-36 pt-8 sm:px-10">
-      {/* Ambient */}
-      <div
-        className="animate-pulse-halo pointer-events-none absolute inset-x-0 top-0 h-[600px] rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle at 40% 40%, rgba(139,125,255,0.10) 0%, transparent 65%)",
-          filter: "blur(80px)",
-        }}
-      />
-
-      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
+    <section className="pointer-events-none relative z-10 mx-auto max-w-[1400px] px-6 pb-36 pt-8 sm:px-10">
+      <div className="pointer-events-auto mb-14 flex items-baseline justify-between border-t border-border pt-6">
         <span
           className="section-index"
           style={{ color: "rgba(139,125,255,0.7)" }}
         >
-          02 / Received
+          03 / Received
         </span>
         <span className="section-index hidden sm:block">
           Reply within 24 hours
@@ -1801,13 +1871,13 @@ function SuccessScreen() {
           <span style={purpleText(true)}>received.</span>
         </h2>
 
-        <p className="mt-10 max-w-xl text-lg leading-relaxed text-muted-foreground">
+        <GlowingText className="mt-10 max-w-xl text-lg leading-relaxed">
           Thanks for the detail. A partner will personally review your intake
           and reply within twenty-four hours. If it's a fit, we'll schedule a
           discovery call to scope the build.
-        </p>
+        </GlowingText>
 
-        <div className="mt-12 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+        <div className="pointer-events-auto mt-12 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
           <motion.a
             href="https://cal.com"
             target="_blank"
@@ -1841,20 +1911,10 @@ function FAQSection() {
   return (
     <section
       id="faq"
-      className="relative z-10 mx-auto max-w-[1400px] px-6 pb-36 sm:px-10"
+      className="pointer-events-none relative z-10 mx-auto max-w-[1400px] px-6 pb-36 sm:px-10"
     >
-      {/* Ambient */}
-      <div
-        className="pointer-events-none absolute left-1/4 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(110,120,255,0.06) 0%, transparent 65%)",
-          filter: "blur(80px)",
-        }}
-      />
-
-      <div className="mb-14 flex items-baseline justify-between border-t border-border pt-6">
-        <span className="section-index">03 / FAQ</span>
+      <div className="pointer-events-auto mb-14 flex items-baseline justify-between border-t border-border pt-6">
+        <span className="section-index">05 / FAQ</span>
         <span className="section-index hidden sm:block">
           Still curious?{" "}
           <a
@@ -1885,7 +1945,7 @@ function FAQSection() {
         <Accordion
           type="single"
           collapsible
-          className="sm:col-span-7"
+          className="pointer-events-auto sm:col-span-7"
         >
           {FAQS.map((f, i) => (
             <AccordionItem
@@ -1904,7 +1964,7 @@ function FAQSection() {
                   {f.q}
                 </span>
               </AccordionTrigger>
-              <AccordionContent className="pb-6 pl-12 text-base leading-relaxed text-muted-foreground">
+              <AccordionContent className="pb-6 pl-12 text-base leading-relaxed text-white/70">
                 {f.a}
               </AccordionContent>
             </AccordionItem>
@@ -1921,33 +1981,44 @@ function FAQSection() {
 
 function Footer() {
   return (
-    <footer className="relative z-10 border-t border-border">
-      <div className="mx-auto max-w-[1400px] px-6 py-20 sm:px-10">
+    <footer className="pointer-events-none relative z-10 border-t border-border">
+      <div className="pointer-events-auto mx-auto max-w-[1400px] px-6 py-20 sm:px-10">
         {/* Large editorial wordmark */}
         <div className="overflow-hidden">
           <div className="text-compressed text-[16vw] leading-[0.85] tracking-[-0.04em] sm:text-[13rem]">
             <span>Techilla</span>
-            <span className="text-muted-foreground/22">Techilla</span>
+            <span className="text-white/70/22">Techilla</span>
           </div>
         </div>
 
         {/* Meta row */}
         <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-border pt-6 section-index sm:flex-row sm:items-center">
-          <span>Studio · Web · Software · AI</span>
-          <a
-            href="mailto:hello@techilla.studio"
-            className="transition-colors"
-            style={{ color: "rgba(139,125,255,0.7)" }}
-            onMouseEnter={(e) =>
-              ((e.currentTarget as HTMLAnchorElement).style.color = "#8B7DFF")
-            }
-            onMouseLeave={(e) =>
-              ((e.currentTarget as HTMLAnchorElement).style.color =
-                "rgba(139,125,255,0.7)")
-            }
-          >
-            hello@techilla.studio
-          </a>
+          <div className="flex gap-4">
+            <span>Studio · Web · Software · AI</span>
+          </div>
+          <div className="flex gap-4 sm:gap-6 items-center">
+            <a
+              href="mailto:hello@techilla.studio"
+              className="transition-colors"
+              style={{ color: "rgba(139,125,255,0.7)" }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLAnchorElement).style.color = "#8B7DFF")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLAnchorElement).style.color =
+                  "rgba(139,125,255,0.7)")
+              }
+            >
+              hello@techilla.studio
+            </a>
+            <span className="hidden sm:inline-block text-white/70/30">|</span>
+            <button 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="transition-colors hover:text-white uppercase tracking-wider text-white/70"
+            >
+              Back to Top ↑
+            </button>
+          </div>
           <span>© {new Date().getFullYear()} — All rights reserved</span>
         </div>
       </div>
