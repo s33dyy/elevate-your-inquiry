@@ -872,6 +872,7 @@ function TrustStrip() {
 function LeadPage() {
   const [showForm, setShowForm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(true);
   const formRef = useRef<HTMLDivElement>(null);
 
   const scrollToForm = () => {
@@ -885,34 +886,69 @@ function LeadPage() {
   const reduced = useReducedMotion();
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      <Toaster theme="dark" position="top-center" richColors />
-      <CursorGlow />
-      <AmbientBackground />
-      {webgl && !reduced && (
-        <Suspense fallback={null}>
-          <PerspectiveGrid />
-        </Suspense>
-      )}
-      <Nav />
-      <Hero onCta={scrollToForm} />
+    <>
+      <Suspense fallback={null}>
+        {loading && <Preloader onDone={() => setLoading(false)} />}
+      </Suspense>
 
-      <TrustStrip />
-      <div ref={formRef}>
-        {submitted ? (
-          <SuccessScreen />
-        ) : (
-          <FormSection
-            active={showForm}
-            onSubmitted={() => setSubmitted(true)}
-            onActivate={scrollToForm}
-          />
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: loading ? 0 : 1 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="relative min-h-[100dvh] overflow-hidden"
+        style={{
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
+        }}
+      >
+        <Toaster theme="dark" position="top-center" richColors />
+        <CursorGlow />
+        <AmbientBackground />
+        {webgl && !reduced && (
+          <Suspense fallback={null}>
+            <PerspectiveGrid />
+          </Suspense>
         )}
-      </div>
-      <FAQSection />
-      <Footer />
-    </main>
+        <Nav />
+        <Hero onCta={scrollToForm} />
+
+        <TrustStrip />
+
+        {webgl && !reduced && (
+          <div className="relative z-10 my-4 hidden sm:block">
+            <Suspense fallback={null}>
+              <SectionOrb shape="torus" />
+            </Suspense>
+          </div>
+        )}
+
+        <div ref={formRef}>
+          {submitted ? (
+            <SuccessScreen />
+          ) : (
+            <FormSection
+              active={showForm}
+              onSubmitted={() => setSubmitted(true)}
+              onActivate={scrollToForm}
+            />
+          )}
+        </div>
+
+        {webgl && !reduced && (
+          <div className="relative z-10 my-4 hidden sm:block">
+            <Suspense fallback={null}>
+              <SectionOrb shape="prism" />
+            </Suspense>
+          </div>
+        )}
+
+        <FAQSection />
+        <Footer />
+      </motion.main>
+    </>
   );
+}
+
 }
 
 /* ============================================================ */
