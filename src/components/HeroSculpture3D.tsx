@@ -89,13 +89,9 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
     let baseZ = Math.sin(state.clock.elapsedTime * 0.2) * 0.05 + explodeProgress * Math.PI * 0.15;
     baseZ = THREE.MathUtils.lerp(baseZ, 0, structureProgress);
 
-    // Add cursor responsiveness
-    const cursorParallaxX = state.pointer.x * 0.15;
-    const cursorParallaxY = -state.pointer.y * 0.15;
-
-    group.current.rotation.y = baseY + cursorParallaxX;
-    group.current.rotation.x = cursorParallaxY;
+    group.current.rotation.y = baseY;
     group.current.rotation.z = baseZ;
+    // (We removed the cursor parallax responsiveness as it was too intense)
 
     // Camera movement pipeline
     const zBase = THREE.MathUtils.lerp(8, 22, explodeProgress);
