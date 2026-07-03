@@ -55,32 +55,32 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
     smoothScroll.current = THREE.MathUtils.lerp(smoothScroll.current, scrollRef.current, delta * 5);
     const s = smoothScroll.current;
     
-    // Phase 1 (0 to 0.08): Monolith shatters radially
-    const explodeProgress = Math.min(s / 0.08, 1);
+    // Phase 1 (0 to 0.04): Monolith shatters radially
+    const explodeProgress = Math.min(s / 0.04, 1);
     
-    // Phase 2 (0.08 to 0.22): Fragments align into a tunnel/gallery
-    const structureProgress = Math.max(0, Math.min((s - 0.08) / 0.14, 1));
+    // Phase 2 (0.04 to 0.10): Fragments align into a tunnel/gallery
+    const structureProgress = Math.max(0, Math.min((s - 0.04) / 0.06, 1));
 
-    // Phase 3 (0.30 to 0.45): Camera flies through the gallery
-    const flyProgress = Math.max(0, Math.min((s - 0.30) / 0.15, 1));
+    // Phase 3 (0.10 to 0.30): Camera flies through the gallery (01 / Practice)
+    const flyProgress = Math.max(0, Math.min((s - 0.10) / 0.20, 1));
     
-    // Phase 4 (0.45 to 0.55): Gallery morphs into 3D Dashboard/Bar Chart
-    const dashProgress = Math.max(0, Math.min((s - 0.45) / 0.10, 1));
+    // Phase 4 (0.30 to 0.40): Gallery morphs into 3D Dashboard/Bar Chart
+    const dashProgress = Math.max(0, Math.min((s - 0.30) / 0.10, 1));
     
-    // Phase 5 (0.55 to 0.65): Camera pushes into the Dashboard
-    const dashFlyProgress = Math.max(0, Math.min((s - 0.55) / 0.10, 1));
+    // Phase 5 (0.40 to 0.55): Camera pushes into the Dashboard
+    const dashFlyProgress = Math.max(0, Math.min((s - 0.40) / 0.15, 1));
 
-    // Phase 6 (0.65 to 0.75): Dashboard morphs into the Floating Museum
-    const museumProgress = Math.max(0, Math.min((s - 0.65) / 0.10, 1));
+    // Phase 6 (0.55 to 0.65): Dashboard morphs into the Floating Museum
+    const museumProgress = Math.max(0, Math.min((s - 0.55) / 0.10, 1));
 
-    // Phase 7 (0.75 to 0.85): Camera flies through the Floating Museum
-    const museumFlyProgress = Math.max(0, Math.min((s - 0.75) / 0.10, 1));
+    // Phase 7 (0.65 to 0.75): Camera flies through the Floating Museum
+    const museumFlyProgress = Math.max(0, Math.min((s - 0.65) / 0.10, 1));
 
-    // Phase 8 (0.85 to 0.92): Pricing Pedestal
-    const pedestalProgress = Math.max(0, Math.min((s - 0.85) / 0.07, 1));
+    // Phase 8 (0.75 to 0.85): Pricing Pedestal
+    const pedestalProgress = Math.max(0, Math.min((s - 0.75) / 0.10, 1));
 
-    // Phase 9 (0.92 to 1.00): Contact Ring
-    const ringProgress = Math.max(0, Math.min((s - 0.92) / 0.08, 1));
+    // Phase 9 (0.85 to 0.95): Contact Ring
+    const ringProgress = Math.max(0, Math.min((s - 0.85) / 0.10, 1));
     
     // Calculate base rotation
     let baseY = state.clock.elapsedTime * 0.05 + explodeProgress * Math.PI * 0.25;
