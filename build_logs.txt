@@ -1,0 +1,315 @@
+scheduling build on Metal builder "builder-vyqqdf"
+[INFO] unpacking archive
+using build driver nixpacks-v1.41.0
+[INFO] uploading snapshot
+
+╔═════════════════════ Nixpacks v1.41.0 ═════════════════════╗
+║ setup      │ nodejs_22, bun                                ║
+║────────────────────────────────────────────────────────────║
+║ caddy      │ pkgs: caddy                                   ║
+║            │ cmds: caddy fmt --overwrite /assets/Caddyfile ║
+║────────────────────────────────────────────────────────────║
+║ install    │ bun i --no-save                               ║
+║────────────────────────────────────────────────────────────║
+║ build      │ bun run build                                 ║
+║────────────────────────────────────────────────────────────║
+║ start      │ bun run .output/server/index.mjs              ║
+╚════════════════════════════════════════════════════════════╝
+
+
+Saved output to:
+  snapshot-target-unpack
+[INFO] [internal] load build definition from Dockerfile
+[INFO] [internal] load build definition from Dockerfile
+[INFO] [internal] load build definition from Dockerfile
+[INFO] [internal] load build definition from Dockerfile
+[INFO] [internal] load metadata for ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+[INFO] [internal] load metadata for ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+[INFO] [internal] load .dockerignore
+[INFO] [internal] load .dockerignore
+[INFO] [internal] load .dockerignore
+[INFO] [internal] load .dockerignore
+[WARN] UndefinedVar: Usage of undefined variable '$NIXPACKS_PATH' (line 24)(https://docs.docker.com/go/dockerfile/rule/undefined-var/)
+ details: Variables should be defined before their use
+
+[INFO] [stage-0  9/15] RUN  caddy fmt --overwrite /assets/Caddyfile
+[INFO] [stage-0  8/15] COPY . /app/.
+[INFO] [stage-0  7/15] COPY .nixpacks/assets /assets/
+[INFO] [stage-0 12/15] COPY . /app/.
+[INFO] [stage-0  5/15] COPY .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix
+[INFO] [stage-0 11/15] RUN --mount=type=cache,id=s/5078c1c0-a8a4-4c92-a832-ab285df85ada-/root/bun,target=/root/.bun bun i --no-save
+[INFO] [stage-0  3/15] COPY .nixpacks/nixpkgs-31fb21469e34b6b5c7be77b9a35bae43d0c598e9.nix .nixpacks/nixpkgs-31fb21469e34b6b5c7be77b9a35bae43d0c598e9.nix
+[INFO] [internal] load build context
+[INFO] [stage-0 13/15] RUN --mount=type=cache,id=s/5078c1c0-a8a4-4c92-a832-ab285df85ada-node_modules/cache,target=/app/node_modules/.cache bun run build
+[INFO] [stage-0 14/15] RUN printf '\nPATH=/app/node_modules/.bin:$PATH' >> /root/.profile
+[INFO] [stage-0 15/15] COPY . /app
+[INFO] [stage-0 10/15] COPY . /app/.
+[INFO] [stage-0  4/15] RUN nix-env -if .nixpacks/nixpkgs-31fb21469e34b6b5c7be77b9a35bae43d0c598e9.nix && nix-collect-garbage -d
+[INFO] [stage-0  6/15] RUN nix-env -if .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix && nix-collect-garbage -d
+[INFO] [stage-0  1/10] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+[INFO] [stage-0  1/10] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+[INFO] [stage-0  2/10] WORKDIR /app/
+[INFO] [stage-0  2/10] WORKDIR /app/
+[INFO] [internal] load build context
+[INFO] [internal] load build context
+[INFO] [internal] load build context
+[INFO] [stage-0  3/15] COPY .nixpacks/nixpkgs-31fb21469e34b6b5c7be77b9a35bae43d0c598e9.nix .nixpacks/nixpkgs-31fb21469e34b6b5c7be77b9a35bae43d0c598e9.nix
+[INFO] [stage-0  4/15] RUN nix-env -if .nixpacks/nixpkgs-31fb21469e34b6b5c7be77b9a35bae43d0c598e9.nix && nix-collect-garbage -d
+[INFO] [stage-0  5/15] COPY .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix
+[INFO] [stage-0  6/15] RUN nix-env -if .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix && nix-collect-garbage -d
+[INFO] [stage-0  7/15] COPY .nixpacks/assets /assets/
+[INFO] [stage-0  7/15] COPY .nixpacks/assets /assets/
+[INFO] [stage-0  8/15] COPY . /app/.
+[INFO] [stage-0  8/15] COPY . /app/.
+[INFO] [stage-0  9/15] RUN  caddy fmt --overwrite /assets/Caddyfile
+[INFO] [stage-0  9/15] RUN  caddy fmt --overwrite /assets/Caddyfile
+[INFO] [stage-0 10/15] COPY . /app/.
+[INFO] [stage-0 10/15] COPY . /app/.
+[INFO] [stage-0 11/15] RUN --mount=type=cache,id=s/5078c1c0-a8a4-4c92-a832-ab285df85ada-/root/bun,target=/root/.bun bun i --no-save
+[INFO] [0.05ms] ".env"
+
+[INFO] bun install v1.3.0 (b0a6feca)
+
+[INFO] 
++ @eslint/js@9.39.4
++ @lovable.dev/vite-tanstack-config@2.6.4
++ @types/node@22.19.17
++ @types/react@19.2.14
++ @types/react-dom@19.2.3
++ @types/three@0.185.0
++ @vitejs/plugin-react@5.2.0
++ eslint@9.39.4
++ eslint-config-prettier@10.1.8
++ eslint-plugin-prettier@5.5.5
++ eslint-plugin-react-hooks@5.2.0
++ eslint-plugin-react-refresh@0.4.26
++ globals@15.15.0
++ nitro@3.0.260603-beta
++ prettier@3.8.3
++ typescript@5.9.3
++ typescript-eslint@8.59.0
++ vite@8.0.16
++ @hookform/resolvers@5.4.0
++ @radix-ui/react-accordion@1.2.12
++ @radix-ui/react-alert-dialog@1.1.15
++ @radix-ui/react-aspect-ratio@1.1.8
++ @radix-ui/react-avatar@1.1.11
++ @radix-ui/react-checkbox@1.3.3
++ @radix-ui/react-collapsible@1.1.12
++ @radix-ui/react-context-menu@2.2.16
++ @radix-ui/react-dialog@1.1.15
++ @radix-ui/react-dropdown-menu@2.1.16
++ @radix-ui/react-hover-card@1.1.15
++ @radix-ui/react-label@2.1.8
++ @radix-ui/react-menubar@1.1.16
++ @radix-ui/react-navigation-menu@1.2.14
++ @radix-ui/react-popover@1.1.15
++ @radix-ui/react-progress@1.1.8
++ @radix-ui/react-radio-group@1.3.8
++ @radix-ui/react-scroll-area@1.2.10
++ @radix-ui/react-select@2.2.6
++ @radix-ui/react-separator@1.1.8
++ @radix-ui/react-slider@1.3.6
++ @radix-ui/react-slot@1.2.4
++ @radix-ui/react-switch@1.2.6
++ @radix-ui/react-tabs@1.1.13
++ @radix-ui/react-toggle@1.1.10
++ @radix-ui/react-toggle-group@1.1.11
++ @radix-ui/react-tooltip@1.2.8
++ @react-three/drei@10.7.7
++ @react-three/fiber@9.6.1
++ @react-three/postprocessing@3.0.4
++ @supabase/supabase-js@2.110.0
++ @tailwindcss/vite@4.2.4
++ @tanstack/react-query@5.101.1
++ @tanstack/react-router@1.170.16
++ @tanstack/react-start@1.168.26
++ @tanstack/router-plugin@1.168.18
++ class-variance-authority@0.7.1
++ clsx@2.1.1
++ cmdk@1.1.1
++ date-fns@4.1.0
++ embla-carousel-react@8.6.0
++ framer-motion@12.42.2
++ gsap@3.15.0
++ input-otp@1.4.2
++ lenis@1.3.25
++ lucide-react@0.575.0
++ react@19.2.5
++ react-day-picker@9.14.0
++ react-dom@19.2.5
++ react-hook-form@7.80.0
++ react-resizable-panels@4.10.0
++ recharts@2.15.4
++ simplex-noise@4.0.3
++ sonner@2.0.7
++ tailwind-merge@3.5.0
++ tailwindcss@4.2.4
++ three@0.185.1
++ three-stdlib@2.36.1
++ tw-animate-css@1.4.0
++ vaul@1.1.2
++ vite-tsconfig-paths@6.1.1
++ zod@4.4.3
+
+542 packages installed [7.29s]
+
+[INFO] [stage-0 11/15] RUN --mount=type=cache,id=s/5078c1c0-a8a4-4c92-a832-ab285df85ada-/root/bun,target=/root/.bun bun i --no-save
+[INFO] [stage-0 12/15] COPY . /app/.
+[INFO] [stage-0 12/15] COPY . /app/.
+[INFO] [stage-0 13/15] RUN --mount=type=cache,id=s/5078c1c0-a8a4-4c92-a832-ab285df85ada-node_modules/cache,target=/app/node_modules/.cache bun run build
+[INFO] $ vite build
+
+[INFO] [33mThe plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the [1mresolve.tsconfigPaths[22m option. You can remove the plugin and set [1mresolve.tsconfigPaths: true[22m in your Vite config instead.[39m
+
+[INFO] [36mvite v8.0.16 [32mbuilding client environment for production...[36m[39m
+
+[INFO] [2Ktransforming...
+[INFO] ✓ 3064 modules transformed.
+
+[INFO] rendering chunks...
+
+[INFO] computing gzip size...
+
+[INFO] .output/public/assets/styles-C7AkXsSG.css                 86.45 kB │ gzip:  14.62 kB
+.output/public/assets/PerspectiveGrid-ByH4UlQi.js          1.09 kB │ gzip:   0.62 kB
+.output/public/assets/SectionOrb-DzbXnL0D.js               1.72 kB │ gzip:   0.94 kB
+.output/public/assets/Preloader-D8iK_tXj.js                2.63 kB │ gzip:   1.20 kB
+.output/public/assets/Environment-ChUUCmQe.js             51.46 kB │ gzip:  18.39 kB
+.output/public/assets/HeroSculpture3D-CiFofQU7.js         81.76 kB │ gzip:  21.11 kB
+.output/public/assets/proxy-Dei_ftsa.js                  124.87 kB │ gzip:  40.69 kB
+.output/public/assets/routes-DoSUB9nZ.js                 257.63 kB │ gzip:  74.44 kB
+.output/public/assets/index-DLFkHNWd.js                  569.91 kB │ gzip: 166.48 kB
+.output/public/assets/react-three-fiber.esm-Ckif7uHv.js  880.83 kB │ gzip: 234.02 kB
+
+
+[INFO] [32m✓ built in 1.49s[39m
+
+[INFO] [33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+
+[INFO] [36mvite v8.0.16 [32mbuilding ssr environment for production...[36m[39m
+
+[INFO] [2Ktransforming...
+[INFO] ✓ 71 modules transformed.
+
+[INFO] rendering chunks...
+
+[INFO] computing gzip size...
+
+[INFO] node_modules/.nitro/vite/services/ssr/assets/styles-C7AkXsSG.css                     86.45 kB │ gzip: 14.62 kB
+node_modules/.nitro/vite/services/ssr/assets/empty-plugin-adapters-D9UWiqvJ.js        0.22 kB │ gzip:  0.16 kB
+node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-C34ik4a5.js   0.49 kB │ gzip:  0.29 kB
+node_modules/.nitro/vite/services/ssr/assets/start-C-DucusP.js                        1.07 kB │ gzip:  0.56 kB
+node_modules/.nitro/vite/services/ssr/assets/client-DBhZVqQM.js                       1.56 kB │ gzip:  0.85 kB
+node_modules/.nitro/vite/services/ssr/assets/createStart-Dt05N14y.js                  1.65 kB │ gzip:  0.57 kB
+node_modules/.nitro/vite/services/ssr/assets/PerspectiveGrid-B6cJlVhU.js              1.70 kB │ gzip:  0.84 kB
+node_modules/.nitro/vite/services/ssr/assets/SectionOrb-BIVAvJi5.js                   2.69 kB │ gzip:  1.21 kB
+node_modules/.nitro/vite/services/ssr/index.js                                        3.41 kB │ gzip:  1.46 kB
+node_modules/.nitro/vite/services/ssr/assets/Preloader-BL2ZVSKF.js                    4.31 kB │ gzip:  1.68 kB
+node_modules/.nitro/vite/services/ssr/assets/router-CblWHlGv.js                       7.27 kB │ gzip:  2.37 kB
+node_modules/.nitro/vite/services/ssr/assets/HeroSculpture3D-CtCggNtf.js             13.50 kB │ gzip:  3.52 kB
+node_modules/.nitro/vite/services/ssr/assets/server-0M1wwgLn.js                      58.69 kB │ gzip: 15.11 kB
+node_modules/.nitro/vite/services/ssr/assets/routes-cqgE5RK0.js                      75.71 kB │ gzip: 16.16 kB
+
+
+[INFO] [32m✓ built in 578ms[39m
+
+[INFO] [start] [nitro] Building [Nitro] (preset: `node-server`, compatibility: `2026-07-03`)
+
+[INFO] [success] [nitro] Generated public .output/public
+
+[INFO] [36mvite v8.0.16 [32mbuilding nitro environment for production...[36m[39m
+
+[INFO] [2Ktransforming...
+[INFO] ✓ 3103 modules transformed.
+
+[INFO] [info] Tracing dependencies:
+- `tslib` (2.8.1)
+
+[INFO] [success] Traced 1 dependencies (4 files) in 56ms.
+
+[INFO] [info] Ensure your production environment matches the builder OS and architecture (`linux-x64`) to avoid native module issues.
+
+[INFO] rendering chunks...
+
+[INFO] computing gzip size...
+
+[INFO] .output/server/_libs/radix-ui__number.mjs                             0.17 kB │ gzip:   0.15 kB
+.output/server/_ssr/empty-plugin-adapters-D9UWiqvJ.mjs                0.23 kB │ gzip:   0.16 kB
+.output/server/_libs/babel__runtime.mjs                               0.39 kB │ gzip:   0.26 kB
+.output/server/_libs/radix-ui__primitive.mjs                          0.42 kB │ gzip:   0.23 kB
+.output/server/_tanstack-start-manifest_v-C34ik4a5.mjs                0.54 kB │ gzip:   0.33 kB
+.output/server/_chunks/ssr-renderer.mjs                               0.60 kB │ gzip:   0.36 kB
+.output/server/_libs/tanstack__react-query.mjs                        0.78 kB │ gzip:   0.38 kB
+.output/server/_libs/radix-ui__react-arrow.mjs                        0.93 kB │ gzip:   0.49 kB
+.output/server/_ssr/start-C-DucusP.mjs                                1.06 kB │ gzip:   0.57 kB
+.output/server/_libs/radix-ui__react-portal.mjs                       1.09 kB │ gzip:   0.52 kB
+.output/server/_libs/radix-ui__react-focus-guards.mjs                 1.10 kB │ gzip:   0.52 kB
+.output/server/_ssr/createStart-Dt05N14y.mjs                          1.56 kB │ gzip:   0.57 kB
+.output/server/_ssr/client-DBhZVqQM.mjs                               1.61 kB │ gzip:   0.89 kB
+.output/server/_runtime.mjs                                           1.79 kB │ gzip:   0.81 kB
+.output/server/_ssr/PerspectiveGrid-B6cJlVhU.mjs                      2.15 kB │ gzip:   0.98 kB
+.output/server/_libs/ufo.mjs                                          2.21 kB │ gzip:   0.72 kB
+.output/server/_libs/class-variance-authority+clsx.mjs                3.17 kB │ gzip:   1.24 kB
+.output/server/_ssr/SectionOrb-BIVAvJi5.mjs                           3.34 kB │ gzip:   1.35 kB
+.output/server/_ssr/ssr.mjs                                           3.34 kB │ gzip:   1.46 kB
+.output/server/_ssr/Preloader-BL2ZVSKF.mjs                            4.94 kB │ gzip:   1.82 kB
+.output/server/_libs/@radix-ui/react-label+[...].mjs                  5.70 kB │ gzip:   1.78 kB
+.output/server/_libs/radix-ui__react-focus-scope.mjs                  7.50 kB │ gzip:   2.27 kB
+.output/server/_ssr/router-CblWHlGv.mjs                               8.06 kB │ gzip:   2.49 kB
+.output/server/_libs/@radix-ui/react-dismissable-layer+[...].mjs      9.07 kB │ gzip:   2.22 kB
+.output/server/_libs/lucide-react.mjs                                 9.43 kB │ gzip:   2.27 kB
+.output/server/_libs/@radix-ui/react-popper+[...].mjs                10.54 kB │ gzip:   3.20 kB
+.output/server/_libs/supabase__functions-js.mjs                      12.08 kB │ gzip:   3.29 kB
+.output/server/_libs/tanstack__history.mjs                           12.09 kB │ gzip:   3.48 kB
+.output/server/index.mjs                                             12.61 kB │ gzip:   4.18 kB
+.output/server/_ssr/HeroSculpture3D-CtCggNtf.mjs                     14.05 kB │ gzip:   3.68 kB
+.output/server/_libs/h3-v2+srvx.mjs                                  18.42 kB │ gzip:   5.20 kB
+.output/server/_libs/@floating-ui/dom+[...].mjs                      25.85 kB │ gzip:   6.56 kB
+.output/server/_libs/@floating-ui/core+[...].mjs                     25.89 kB │ gzip:   6.36 kB
+.output/server/_libs/@floating-ui/react-dom+[...].mjs                31.16 kB │ gzip:   7.96 kB
+.output/server/_libs/supabase__supabase-js.mjs                       33.97 kB │ gzip:   9.89 kB
+.output/server/_libs/lenis.mjs                                       35.68 kB │ gzip:   9.07 kB
+.output/server/_libs/@radix-ui/react-accordion+[...].mjs             36.92 kB │ gzip:   7.79 kB
+.output/server/_libs/h3+rou3+srvx.mjs                                40.33 kB │ gzip:  10.92 kB
+.output/server/_libs/tanstack__query-core.mjs                        47.92 kB │ gzip:  10.65 kB
+.output/server/_libs/supabase__phoenix.mjs                           49.12 kB │ gzip:  12.36 kB
+.output/server/_libs/sonner.mjs                                      51.91 kB │ gzip:  11.77 kB
+.output/server/_ssr/server-0M1wwgLn.mjs                              56.89 kB │ gzip:  14.95 kB
+.output/server/_libs/@radix-ui/react-select+[...].mjs                76.08 kB │ gzip:  17.70 kB
+.output/server/_libs/supabase__realtime-js.mjs                       77.75 kB │ gzip:  19.83 kB
+.output/server/_libs/@tanstack/router-core+[...].mjs                 79.22 kB │ gzip:  19.92 kB
+.output/server/_ssr/routes-cqgE5RK0.mjs                              84.57 kB │ gzip:  16.53 kB
+.output/server/_libs/tailwind-merge.mjs                              85.65 kB │ gzip:  15.21 kB
+.output/server/_libs/supabase__postgrest-js.mjs                     105.41 kB │ gzip:  21.66 kB
+.output/server/_libs/zod.mjs                                        115.36 kB │ gzip:  22.78 kB
+.output/server/_libs/@supabase/storage-js+[...].mjs                 118.89 kB │ gzip:  22.06 kB
+.output/server/_libs/@react-three/postprocessing+[...].mjs          160.61 kB │ gzip:  31.07 kB
+.output/server/_libs/supabase__auth-js.mjs                          300.75 kB │ gzip:  59.85 kB
+.output/server/_libs/@react-three/drei+[...].mjs                    345.40 kB │ gzip:  86.02 kB
+.output/server/_libs/framer-motion.mjs                              350.47 kB │ gzip:  91.82 kB
+.output/server/_libs/@tanstack/react-router+[...].mjs               656.92 kB │ gzip: 137.16 kB
+.output/server/_libs/monogrid__gainmap-js+three.mjs               1,903.92 kB │ gzip: 375.76 kB
+
+
+[INFO] [32m✓ built in 822ms[39m
+
+[INFO] [info] Generated .output/nitro.json
+
+[INFO] [success] [nitro] You can preview this build using `npx vite preview`
+
+[INFO] [stage-0 13/15] RUN --mount=type=cache,id=s/5078c1c0-a8a4-4c92-a832-ab285df85ada-node_modules/cache,target=/app/node_modules/.cache bun run build
+[INFO] [stage-0 14/15] RUN printf '\nPATH=/app/node_modules/.bin:$PATH' >> /root/.profile
+[INFO] [stage-0 14/15] RUN printf '\nPATH=/app/node_modules/.bin:$PATH' >> /root/.profile
+[INFO] [stage-0 15/15] COPY . /app
+[INFO] [stage-0 15/15] COPY . /app
+[INFO] exporting to docker image format
+[INFO] exporting to docker image format
+containerimage.config.digest: sha256:db859c121a12545d17512b6e6a106e7c0986139051f5f46a20f5162243fda22e
+containerimage.digest: sha256:c6e772f4fe16fa6a9ecf5da67079ac5a66fb7fb069c02753ddd5fd5af02190ab
+containerimage.descriptor: eyJtZWRpYVR5cGUiOiJhcHBsaWNhdGlvbi92bmQub2NpLmltYWdlLm1hbmlmZXN0LnYxK2pzb24iLCJkaWdlc3QiOiJzaGEyNTY6YzZlNzcyZjRmZTE2ZmE2YTllY2Y1ZGE2NzA3OWFjNWE2NmZiN2ZiMDY5YzAyNzUzZGRkNWZkNWFmMDIxOTBhYiIsInNpemUiOjM3MTAsImFubm90YXRpb25zIjp7Im9yZy5vcGVuY29udGFpbmVycy5pbWFnZS5jcmVhdGVkIjoiMjAyNi0wNy0wM1QxNToyODoyNVoifSwicGxhdGZvcm0iOnsiYXJjaGl0ZWN0dXJlIjoiYW1kNjQiLCJvcyI6ImxpbnV4In19
+[INFO] image push

@@ -196,7 +196,7 @@
   animation: gentle-float 9s ease-in-out infinite;
 }
 
-@utility .radix-accordion-content-open {
+.radix-accordion-content-open {
   animation: slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1);
 }
 .radix-accordion-content-closed {
