@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+
 import {
   motion,
   AnimatePresence,
@@ -47,6 +48,39 @@ import {
 export const Route = createFileRoute("/")({
   component: LeadPage,
 });
+
+const HeroSculpture3D = lazy(() => import("@/components/HeroSculpture3D"));
+const PerspectiveGrid = lazy(() => import("@/components/PerspectiveGrid"));
+
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const on = () => setReduced(mq.matches);
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
+  return reduced;
+}
+
+function useWebGLEnabled() {
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!isDesktop || reduced) return;
+    try {
+      const c = document.createElement("canvas");
+      const gl = c.getContext("webgl2") || c.getContext("webgl");
+      if (gl) setEnabled(true);
+    } catch {
+      /* no webgl */
+    }
+  }, []);
+  return enabled;
+}
+
 
 /* ============================================================ */
 /*  Design tokens (inline helpers)                               */
@@ -611,8 +645,24 @@ function Nav() {
 }
 
 /* ============================================================ */
+/*  Hero Sculpture Slot — WebGL with CSS fallback               */
+/* ============================================================ */
+
+function HeroSculptureSlot() {
+  const webgl = useWebGLEnabled();
+  if (!webgl) return <HeroSculpture />;
+  return (
+    <Suspense fallback={<HeroSculpture />}>
+      <HeroSculpture3D />
+    </Suspense>
+  );
+}
+
+/* ============================================================ */
 /*  Hero                                                         */
 /* ============================================================ */
+
+
 
 function Hero({ onCta }: { onCta: () => void }) {
   return (
@@ -712,7 +762,7 @@ function Hero({ onCta }: { onCta: () => void }) {
           }}
           className="hidden items-center justify-center lg:flex"
         >
-          <HeroSculpture />
+          <HeroSculptureSlot />
         </motion.div>
       </div>
 
@@ -828,13 +878,22 @@ function LeadPage() {
     );
   };
 
+  const webgl = useWebGLEnabled();
+  const reduced = useReducedMotion();
+
   return (
     <main className="relative min-h-screen overflow-hidden">
       <Toaster theme="dark" position="top-center" richColors />
       <CursorGlow />
       <AmbientBackground />
+      {webgl && !reduced && (
+        <Suspense fallback={null}>
+          <PerspectiveGrid />
+        </Suspense>
+      )}
       <Nav />
       <Hero onCta={scrollToForm} />
+
       <TrustStrip />
       <div ref={formRef}>
         {submitted ? (
