@@ -53,6 +53,7 @@ const HeroSculpture3D = lazy(() => import("@/components/HeroSculpture3D"));
 const PerspectiveGrid = lazy(() => import("@/components/PerspectiveGrid"));
 const SectionOrb = lazy(() => import("@/components/SectionOrb"));
 const Preloader = lazy(() => import("@/components/Preloader"));
+import { Magnetic } from "@/components/cursor/Magnetic";
 
 
 function useReducedMotion() {
@@ -415,23 +416,25 @@ function Nav() {
         </motion.a>
 
         {/* Desktop CTA */}
-        <motion.a
-          href="#apply"
-          whileHover={{
-            y: -1,
-            boxShadow: "0 0 18px rgba(139,125,255,0.25)",
-          }}
-          transition={{ duration: 0.2 }}
-          className="hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-white"
-          style={{
-            background: "rgba(139,125,255,0.10)",
-            border: "1px solid rgba(139,125,255,0.25)",
-            boxShadow: "0 0 10px rgba(139,125,255,0.08)",
-          }}
-        >
-          Apply now
-          <ArrowRight className="h-3.5 w-3.5" />
-        </motion.a>
+        <Magnetic cursor="button">
+          <motion.a
+            href="#apply"
+            whileHover={{
+              y: -1,
+              boxShadow: "0 0 18px rgba(139,125,255,0.25)",
+            }}
+            transition={{ duration: 0.2 }}
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-white"
+            style={{
+              background: "rgba(139,125,255,0.10)",
+              border: "1px solid rgba(139,125,255,0.25)",
+              boxShadow: "0 0 10px rgba(139,125,255,0.08)",
+            }}
+          >
+            Apply now
+            <ArrowRight className="h-3.5 w-3.5" />
+          </motion.a>
+        </Magnetic>
       </div>
     </motion.header>
   );
@@ -496,20 +499,22 @@ function Hero({ onCta }: { onCta: () => void }) {
 
           {/* CTA row */}
           <div className="pointer-events-auto mt-14 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-            <motion.button
-              onClick={onCta}
-              whileHover={{
-                y: -2,
-                ...G.primaryBtnHover,
-              }}
-              whileTap={{ y: 0, scale: 0.98 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="group inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium text-white"
-              style={G.primaryBtn}
-            >
-              Begin application
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </motion.button>
+            <Magnetic cursor="button">
+              <motion.button
+                onClick={onCta}
+                whileHover={{
+                  y: -2,
+                  ...G.primaryBtnHover,
+                }}
+                whileTap={{ y: 0, scale: 0.98 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium text-white"
+                style={G.primaryBtn}
+              >
+                Begin application
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </motion.button>
+            </Magnetic>
 
             <a
               href="#faq"
@@ -566,16 +571,16 @@ function TrustStrip() {
       {/* Glass cards grid */}
       <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         {TRUST.map((t, i) => (
-          <motion.div
-            key={t.label}
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: i * 0.07 }}
-            whileHover={{ y: -4, transition: { duration: 0.25 } }}
-            className="glass-card group flex h-full flex-col justify-between rounded-xl p-3 transition-colors duration-300 hover:border-[rgba(139,125,255,0.14)] sm:rounded-2xl sm:p-8"
-          >
+          <Magnetic key={t.label} cursor="card" action="parallax">
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ delay: i * 0.07 }}
+              whileHover={{ y: -4, transition: { duration: 0.25 } }}
+              className="glass-card cursor-spotlight group flex h-full flex-col justify-between rounded-xl p-3 transition-colors duration-300 hover:border-[rgba(139,125,255,0.14)] sm:rounded-2xl sm:p-8"
+            >
             <div className="mb-3 flex flex-col-reverse justify-between gap-2 sm:mb-6 sm:flex-row sm:items-center sm:gap-0">
               <span
                 className="section-index text-[10px] sm:text-xs"
@@ -601,6 +606,7 @@ function TrustStrip() {
               }}
             />
           </motion.div>
+          </Magnetic>
         ))}
       </div>
     </section>
@@ -738,15 +744,15 @@ function PortfolioSection() {
 
         <div className="grid grid-cols-2 gap-4 sm:gap-6">
           {projects.map((project, i) => (
-            <motion.div
-              key={i}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ delay: i * 0.1 }}
-              className="group flex flex-col justify-between rounded-2xl border border-white/5 bg-white/5 p-4 backdrop-blur-sm transition-colors hover:border-white/10 hover:bg-white/10 sm:p-10"
-            >
+            <Magnetic key={i} cursor="card" action="parallax">
+              <motion.div
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ delay: i * 0.1 }}
+                className="group flex h-full flex-col justify-between rounded-2xl border border-white/5 bg-white/5 p-4 backdrop-blur-sm transition-colors hover:border-white/10 hover:bg-white/10 sm:p-10 cursor-spotlight"
+              >
               <div>
                 <div className="mb-3 text-[10px] sm:mb-4 sm:text-xs font-mono tracking-wider text-white/70 uppercase">
                   {project.tags}
@@ -768,7 +774,8 @@ function PortfolioSection() {
                   {project.link}
                 </a>
               </div>
-            </motion.div>
+              </motion.div>
+            </Magnetic>
           ))}
         </div>
       </div>
@@ -1178,7 +1185,7 @@ function FormSection({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="pointer-events-auto glass-card rounded-2xl px-6 py-14 sm:px-16 sm:py-20"
+            className="pointer-events-auto glass-card cursor-spotlight rounded-2xl px-6 py-14 sm:px-16 sm:py-20"
           >
             <div className="mx-auto flex max-w-lg flex-col items-center gap-7 text-center">
               {/* Decorative rule */}
@@ -1186,20 +1193,22 @@ function FormSection({
                 className="h-px w-12 rounded-full"
                 style={{ background: G.purple, opacity: 0.5 }}
               />
-              <GlowingText className="text-base leading-relaxed sm:text-lg">
+              <GlowingText className="mx-auto mb-10 max-w-xl text-lg leading-relaxed text-white/70">
                 We don't build websites. We build digital products that generate leads, automate operations, and help your business grow.
               </GlowingText>
-              <motion.button
-                onClick={onActivate}
-                whileHover={{ y: -2, ...G.primaryBtnHover }}
-                whileTap={{ y: 0, scale: 0.98 }}
-                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium text-white"
-                style={G.primaryBtn}
-              >
-                Begin application
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </motion.button>
+              <Magnetic cursor="button">
+                <motion.button
+                  onClick={onActivate}
+                  whileHover={{ y: -2, ...G.primaryBtnHover }}
+                  whileTap={{ y: 0, scale: 0.98 }}
+                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                  className="group inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium text-white"
+                  style={G.primaryBtn}
+                >
+                  Begin application
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </motion.button>
+              </Magnetic>
               <span className="section-index">Seven steps · ~4 minutes · Autosaved</span>
             </div>
           </motion.div>

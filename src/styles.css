@@ -196,6 +196,39 @@
   animation: gentle-float 9s ease-in-out infinite;
 }
 
+@utility .radix-accordion-content-open {
+  animation: slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1);
+}
+.radix-accordion-content-closed {
+  animation: slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+/* Cursor Spotlight Effect */
+.cursor-spotlight {
+  position: relative;
+  overflow: hidden;
+}
+
+.cursor-spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    300px circle at var(--mouse-x) var(--mouse-y),
+    rgba(139, 125, 255, 0.1),
+    transparent 100%
+  );
+  background-attachment: fixed;
+  z-index: 1;
+  transition: opacity 0.5s;
+  opacity: 0;
+}
+
+.cursor-spotlight:hover::before {
+  opacity: 1;
+}
+
 @utility animate-blob-a {
   animation: blob-a 26s ease-in-out infinite;
 }

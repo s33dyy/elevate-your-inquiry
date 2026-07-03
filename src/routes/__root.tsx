@@ -131,6 +131,8 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 import { ReactLenis } from 'lenis/react';
+import { CursorProvider } from '../components/cursor/CursorContext';
+import { Cursor } from '../components/cursor/Cursor';
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -138,9 +140,15 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactLenis root>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
+        <CursorProvider>
+          <div className="min-h-screen md:cursor-none">
+            <Cursor />
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </div>
+        </CursorProvider>
       </ReactLenis>
     </QueryClientProvider>
   );
 }
+
