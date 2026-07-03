@@ -55,11 +55,11 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
     smoothScroll.current = THREE.MathUtils.lerp(smoothScroll.current, scrollRef.current, delta * 5);
     const s = smoothScroll.current;
     
-    // Phase 1 (0 to 0.15): Monolith shatters radially
-    const explodeProgress = Math.min(s / 0.15, 1);
+    // Phase 1 (0 to 0.08): Monolith shatters radially
+    const explodeProgress = Math.min(s / 0.08, 1);
     
-    // Phase 2 (0.15 to 0.30): Fragments align into a tunnel/gallery
-    const structureProgress = Math.max(0, Math.min((s - 0.15) / 0.15, 1));
+    // Phase 2 (0.08 to 0.22): Fragments align into a tunnel/gallery
+    const structureProgress = Math.max(0, Math.min((s - 0.08) / 0.14, 1));
 
     // Phase 3 (0.30 to 0.45): Camera flies through the gallery
     const flyProgress = Math.max(0, Math.min((s - 0.30) / 0.15, 1));
@@ -82,12 +82,20 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
     // Phase 9 (0.92 to 1.00): Contact Ring
     const ringProgress = Math.max(0, Math.min((s - 0.92) / 0.08, 1));
     
-    // Rotate entire group slowly (mostly in phase 1)
-    group.current.rotation.y = state.clock.elapsedTime * 0.05 + explodeProgress * Math.PI * 1.5;
-    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, 0, structureProgress);
+    // Calculate base rotation
+    let baseY = state.clock.elapsedTime * 0.05 + explodeProgress * Math.PI * 0.25;
+    baseY = THREE.MathUtils.lerp(baseY, 0, structureProgress);
     
-    group.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.2) * 0.05 + explodeProgress * Math.PI * 0.5;
-    group.current.rotation.z = THREE.MathUtils.lerp(group.current.rotation.z, 0, structureProgress);
+    let baseZ = Math.sin(state.clock.elapsedTime * 0.2) * 0.05 + explodeProgress * Math.PI * 0.15;
+    baseZ = THREE.MathUtils.lerp(baseZ, 0, structureProgress);
+
+    // Add cursor responsiveness
+    const cursorParallaxX = state.pointer.x * 0.15;
+    const cursorParallaxY = -state.pointer.y * 0.15;
+
+    group.current.rotation.y = baseY + cursorParallaxX;
+    group.current.rotation.x = cursorParallaxY;
+    group.current.rotation.z = baseZ;
 
     // Camera movement pipeline
     const zBase = THREE.MathUtils.lerp(8, 22, explodeProgress);
@@ -201,9 +209,9 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
       child.position.z = THREE.MathUtils.lerp(child.position.z, targetZ, delta * 10);
 
       // Rotations
-      const rotX = piece.offset[0] * explodeProgress * 4;
-      const rotY = piece.offset[1] * explodeProgress * 4;
-      const rotZ = piece.offset[2] * explodeProgress * 4;
+      const rotX = piece.offset[0] * explodeProgress * 1;
+      const rotY = piece.offset[1] * explodeProgress * 1;
+      const rotZ = piece.offset[2] * explodeProgress * 1;
       
       const structRotX = 0;
       const structRotY = side > 0 ? -0.2 : 0.2; 
