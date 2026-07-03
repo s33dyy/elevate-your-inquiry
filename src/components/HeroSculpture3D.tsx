@@ -128,9 +128,10 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
       const piece = pieces[i];
       
       // Target 1: Explode position
-      const pushX = piece.offset[0] * 12 * explodeProgress;
-      const pushY = piece.offset[1] * 12 * explodeProgress;
-      const pushZ = piece.offset[2] * 12 * explodeProgress;
+      const spreadMulti = window.innerWidth < 768 ? 5 : 12;
+      const pushX = piece.offset[0] * spreadMulti * explodeProgress;
+      const pushY = piece.offset[1] * spreadMulti * explodeProgress;
+      const pushZ = piece.offset[2] * spreadMulti * explodeProgress;
       
       const explodeX = piece.position[0] + pushX;
       const explodeY = piece.position[1] + pushY;
@@ -142,7 +143,8 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
       const height = ((i % 5) - 2) * 1.5;
       const depth = -i * 2 + 10; // Z spreads from 10 backwards to -44
 
-      const structureX = side * 6;
+      const structSpread = window.innerWidth < 768 ? 3 : 6;
+      const structureX = side * structSpread;
       const structureY = height;
       const structureZ = depth;
 
