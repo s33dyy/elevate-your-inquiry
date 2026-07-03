@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, MeshTransmissionMaterial, Float, Sparkles, ContactShadows } from "@react-three/drei";
+import { Environment, MeshTransmissionMaterial, Float, Sparkles, ContactShadows, useTexture } from "@react-three/drei";
 import { EffectComposer, Bloom, DepthOfField, Noise, Vignette } from "@react-three/postprocessing";
 import { useEffect, useRef, useState, useMemo } from "react";
 import * as THREE from "three";
@@ -11,7 +11,15 @@ import { gsap } from "gsap";
 
 function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) {
   const group = useRef<THREE.Group>(null);
+  const matRefs = useRef<(THREE.MeshBasicMaterial | null)[]>([]);
   const smoothScroll = useRef(0);
+  
+  // Load textures
+  const tex1 = useTexture('/ai_ui_1.jpg');
+  const tex2 = useTexture('/ai_ui_2.jpg');
+  const tex3 = useTexture('/ai_ui_3.jpg');
+  const tex4 = useTexture('/ai_ui_4.jpg');
+  const textures = useMemo(() => [tex1, tex2, tex3, tex4], [tex1, tex2, tex3, tex4]);
   
   // 27 pieces (3x3x3 grid)
   const pieces = useMemo(() => {
@@ -31,7 +39,8 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
             position: [px, py, pz],
             scale: [w, h, d],
             offset: [px, py, pz],
-            isTShape
+            isTShape,
+            textureIndex: Math.floor(Math.random() * 4)
           });
         }
       }
@@ -100,6 +109,15 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
     // Camera rotation X (look down slightly for pedestal)
     state.camera.rotation.x = THREE.MathUtils.lerp(0, -0.15, pedestalProgress);
     state.camera.rotation.x = THREE.MathUtils.lerp(state.camera.rotation.x, 0, ringProgress);
+
+    // Calculate target opacity for AI UIs
+    // Appears during gallery phase (structureProgress), disappears for dashboard phase (dashProgress)
+    const targetOpacity = Math.max(0, structureProgress - dashProgress);
+    matRefs.current.forEach(mat => {
+      if (mat) {
+        mat.opacity = THREE.MathUtils.lerp(mat.opacity, targetOpacity, delta * 10);
+      }
+    });
 
     // Animate each fragment
     group.current.children.forEach((child, i) => {
@@ -280,19 +298,32 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
     <Float speed={0.8} rotationIntensity={0.2} floatIntensity={0.5}>
       <group ref={group}>
         {pieces.map((piece, i) => (
-          <mesh key={i}>
-            <boxGeometry args={[piece.scale[0] * 0.98, piece.scale[1] * 0.98, piece.scale[2] * 0.98]} />
-            <meshPhysicalMaterial 
-              transmission={1} 
-              roughness={piece.isTShape ? 0.15 : 0.05} 
-              thickness={2} 
-              ior={1.5} 
-              color="#ffffff"
-              emissive={piece.isTShape ? "#8B7DFF" : "#2a1c6a"}
-              emissiveIntensity={piece.isTShape ? 2.5 : 1.0}
-              envMapIntensity={1.5}
-            />
-          </mesh>
+          <group key={i}>
+            <mesh>
+              <boxGeometry args={[piece.scale[0] * 0.98, piece.scale[1] * 0.98, piece.scale[2] * 0.98]} />
+              <meshPhysicalMaterial 
+                transmission={1} 
+                roughness={piece.isTShape ? 0.15 : 0.05} 
+                thickness={2} 
+                ior={1.5} 
+                color="#ffffff"
+                emissive={piece.isTShape ? "#8B7DFF" : "#2a1c6a"}
+                emissiveIntensity={piece.isTShape ? 2.5 : 1.0}
+                envMapIntensity={1.5}
+              />
+            </mesh>
+            {/* The floating AI dashboard screenshot */}
+            <mesh position={[0, 0, (piece.scale[2] * 0.98) / 2 + 0.01]}>
+              <planeGeometry args={[piece.scale[0] * 0.98, piece.scale[1] * 0.98]} />
+              <meshBasicMaterial 
+                ref={(el) => { matRefs.current[i] = el; }} 
+                map={textures[piece.textureIndex]} 
+                transparent 
+                opacity={0} 
+                depthWrite={false}
+              />
+            </mesh>
+          </group>
         ))}
       </group>
     </Float>
