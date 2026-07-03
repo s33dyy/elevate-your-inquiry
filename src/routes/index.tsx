@@ -878,13 +878,22 @@ function LeadPage() {
     );
   };
 
+  const webgl = useWebGLEnabled();
+  const reduced = useReducedMotion();
+
   return (
     <main className="relative min-h-screen overflow-hidden">
       <Toaster theme="dark" position="top-center" richColors />
       <CursorGlow />
       <AmbientBackground />
+      {webgl && !reduced && (
+        <Suspense fallback={null}>
+          <PerspectiveGrid />
+        </Suspense>
+      )}
       <Nav />
       <Hero onCta={scrollToForm} />
+
       <TrustStrip />
       <div ref={formRef}>
         {submitted ? (
