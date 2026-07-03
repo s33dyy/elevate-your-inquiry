@@ -51,6 +51,9 @@ export const Route = createFileRoute("/")({
 
 const HeroSculpture3D = lazy(() => import("@/components/HeroSculpture3D"));
 const PerspectiveGrid = lazy(() => import("@/components/PerspectiveGrid"));
+const SectionOrb = lazy(() => import("@/components/SectionOrb"));
+const Preloader = lazy(() => import("@/components/Preloader"));
+
 
 function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
