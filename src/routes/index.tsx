@@ -49,6 +49,39 @@ export const Route = createFileRoute("/")({
   component: LeadPage,
 });
 
+const HeroSculpture3D = lazy(() => import("@/components/HeroSculpture3D"));
+const PerspectiveGrid = lazy(() => import("@/components/PerspectiveGrid"));
+
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const on = () => setReduced(mq.matches);
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
+  return reduced;
+}
+
+function useWebGLEnabled() {
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!isDesktop || reduced) return;
+    try {
+      const c = document.createElement("canvas");
+      const gl = c.getContext("webgl2") || c.getContext("webgl");
+      if (gl) setEnabled(true);
+    } catch {
+      /* no webgl */
+    }
+  }, []);
+  return enabled;
+}
+
+
 /* ============================================================ */
 /*  Design tokens (inline helpers)                               */
 /* ============================================================ */
