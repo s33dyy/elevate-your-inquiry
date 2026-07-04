@@ -201,7 +201,7 @@ const TIMELINES = [
   "Within 1 Month",
   "Flexible",
 ];
-const CONTACT_METHODS = ["Phone", "WhatsApp", "Email", "Meeting"];
+const CONTACT_METHODS = ["Phone", "WhatsApp", "Meeting"];
 
 const TRUST = [
   { icon: Zap, label: "5–7 Day Prototype" },
@@ -257,7 +257,7 @@ type FormState = {
   budget: string;
   timeline: string;
   full_name: string;
-  email: string;
+
   phone: string;
   whatsapp: string;
   preferred_contact: string;
@@ -277,7 +277,7 @@ const INITIAL: FormState = {
   budget: "",
   timeline: "",
   full_name: "",
-  email: "",
+
   phone: "",
   whatsapp: "",
   preferred_contact: "",
@@ -312,7 +312,7 @@ const stepSchemas = [
   z.object({ timeline: z.string().min(1, "Select a timeline") }),
   z.object({
     full_name: z.string().trim().min(2, "Full name is required").max(120),
-    email: z.string().trim().email("Enter a valid email").max(160),
+
     phone: z.string().trim().max(40).optional().or(z.literal("")),
     whatsapp: z.string().trim().max(40).optional().or(z.literal("")),
     preferred_contact: z.string().min(1, "Choose one"),
@@ -1140,6 +1140,7 @@ function FormSection({
     try {
       const payload = {
         ...data,
+        email: "not-provided@example.com",
         website: data.website || null,
         phone: data.phone || null,
         whatsapp: data.whatsapp || null,
@@ -1803,14 +1804,7 @@ function StepContact({ data, update, errors }: StepProps) {
             placeholder="Priya Sharma"
           />
         </Field>
-        <Field label="Email" error={errors.email}>
-          <Input
-            type="email"
-            value={data.email}
-            onChange={(e) => update("email", e.target.value)}
-            placeholder="you@company.com"
-          />
-        </Field>
+
         <Field label="Phone" optional error={errors.phone}>
           <Input
             value={data.phone}
@@ -1927,11 +1921,19 @@ function FAQSection() {
         <span className="section-index hidden sm:block">
           Still curious?{" "}
           <a
-            href="mailto:hello@techilla.studio"
+            href="tel:+919123374792"
             className="transition-colors hover:text-white"
             style={{ color: "rgba(139,125,255,0.7)" }}
           >
-            hello@techilla.studio
+            +91 91233 74792
+          </a>
+          {" "}·{" "}
+          <a
+            href="tel:+918777021228"
+            className="transition-colors hover:text-white"
+            style={{ color: "rgba(139,125,255,0.7)" }}
+          >
+            +91 87770 21228
           </a>
         </span>
       </div>
@@ -2007,7 +2009,7 @@ function Footer() {
           </div>
           <div className="flex gap-4 sm:gap-6 items-center">
             <a
-              href="mailto:hello@techilla.studio"
+              href="tel:+919123374792"
               className="transition-colors"
               style={{ color: "rgba(139,125,255,0.7)" }}
               onMouseEnter={(e) =>
@@ -2018,7 +2020,22 @@ function Footer() {
                   "rgba(139,125,255,0.7)")
               }
             >
-              hello@techilla.studio
+              +91 91233 74792
+            </a>
+            <span className="hidden sm:inline-block text-white/70/30">|</span>
+            <a
+              href="tel:+918777021228"
+              className="transition-colors"
+              style={{ color: "rgba(139,125,255,0.7)" }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLAnchorElement).style.color = "#8B7DFF")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLAnchorElement).style.color =
+                  "rgba(139,125,255,0.7)")
+              }
+            >
+              +91 87770 21228
             </a>
             <span className="hidden sm:inline-block text-white/70/30">|</span>
             <button 
