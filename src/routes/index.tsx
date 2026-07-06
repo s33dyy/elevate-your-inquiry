@@ -2022,7 +2022,7 @@ function Footer() {
           <div className="flex gap-4">
             <span>Studio · Web · Software · AI</span>
           </div>
-          <div className="flex gap-4 sm:gap-6 items-center">
+          <div className="flex flex-wrap gap-4 sm:gap-6 items-center">
             <a
               href="tel:+919123374792"
               className="transition-colors"
@@ -2051,6 +2051,21 @@ function Footer() {
               }
             >
               +91 87770 21228
+            </a>
+            <span className="hidden sm:inline-block text-white/70/30">|</span>
+            <a
+              href="mailto:hello@techilla.online"
+              className="transition-colors"
+              style={{ color: "rgba(139,125,255,0.7)" }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLAnchorElement).style.color = "#8B7DFF")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLAnchorElement).style.color =
+                  "rgba(139,125,255,0.7)")
+              }
+            >
+              hello@techilla.online
             </a>
             <span className="hidden sm:inline-block text-white/70/30">|</span>
             <button 
