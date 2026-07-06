@@ -380,7 +380,18 @@ function CursorLight({ pointer }: { pointer: React.MutableRefObject<{ x: number;
   );
 }
 
-export default function HeroSculpture3D() {
+function ReadySignal({ onReady }: { onReady: () => void }) {
+  const fired = useRef(false);
+  useFrame(() => {
+    if (fired.current) return;
+    fired.current = true;
+    // Defer to next tick so first real frame has rendered
+    setTimeout(onReady, 0);
+  });
+  return null;
+}
+
+export default function HeroSculpture3D({ onReady }: { onReady?: () => void } = {}) {
   const pointer = useRef({ x: 0, y: 0 });
   const scrollRef = useRef(0);
 
@@ -425,6 +436,7 @@ export default function HeroSculpture3D() {
 
         {/* The Monolith */}
         <Monolith scrollRef={scrollRef} />
+        {onReady && <ReadySignal onReady={onReady} />}
 
         {/* Cinematic Particles */}
         <Sparkles count={300} scale={20} size={2} speed={0.2} opacity={0.15} color="#ffffff" />

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const PHASES = [
   "Initializing Experience",
@@ -16,13 +16,17 @@ const PHASES = [
 export default function Preloader({
   onDone,
   duration = 1700,
+  ready = true,
 }: {
   onDone: () => void;
   duration?: number;
+  ready?: boolean;
 }) {
   const [phase, setPhase] = useState(0);
   const [progress, setProgress] = useState(0);
   const [visible, setVisible] = useState(true);
+  const readyRef = useRef(ready);
+  readyRef.current = ready;
 
   useEffect(() => {
     const reduced =
@@ -32,22 +36,29 @@ export default function Preloader({
 
     const start = performance.now();
     let raf = 0;
+    let finished = false;
     const tick = (now: number) => {
-      const p = Math.min(1, (now - start) / total);
-      // Ease-out cubic
-      const eased = 1 - Math.pow(1 - p, 3);
+      const elapsed = now - start;
+      const rawP = Math.min(1, elapsed / total);
+      // Cap visible progress at 90% until scene is ready
+      const cappedP = readyRef.current ? rawP : Math.min(rawP, 0.9);
+      const eased = 1 - Math.pow(1 - cappedP, 3);
       setProgress(eased);
       const idx = Math.min(PHASES.length - 1, Math.floor(eased * PHASES.length));
       setPhase(idx);
-      if (p < 1) raf = requestAnimationFrame(tick);
-      else {
-        setTimeout(() => setVisible(false), 180);
-        setTimeout(onDone, 620);
+      if (readyRef.current && rawP >= 1) {
+        if (!finished) {
+          finished = true;
+          setTimeout(() => setVisible(false), 180);
+          setTimeout(onDone, 620);
+        }
+        return;
       }
+      raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [duration, onDone]);
+  }, [duration, onDone, readyRef]);
 
   return (
     <AnimatePresence>
