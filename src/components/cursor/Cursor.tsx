@@ -121,7 +121,7 @@ export function Cursor() {
           scaleY: cursorType === "default" ? scaleY : 1,
           opacity: isVisible ? 1 : 0,
         }}
-        animate={variants[cursorType]}
+        animate={variants[cursorType] as never}
       >
         {/* Inner dot for default state */}
         <motion.div
