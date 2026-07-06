@@ -621,6 +621,7 @@ function LeadPage() {
   const [showForm, setShowForm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [sceneReady, setSceneReady] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
 
   const scrollToForm = () => {
@@ -633,10 +634,23 @@ function LeadPage() {
   const webgl = useWebGLEnabled();
   const reduced = useReducedMotion();
 
+  // If WebGL is disabled, don't wait for the 3D scene
+  useEffect(() => {
+    if (!webgl) setSceneReady(true);
+  }, [webgl]);
+
+  // Safety timeout so preloader never hangs indefinitely
+  useEffect(() => {
+    const t = setTimeout(() => setSceneReady(true), 8000);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <>
       <Suspense fallback={null}>
-        {loading && <Preloader onDone={() => setLoading(false)} />}
+        {loading && (
+          <Preloader ready={sceneReady} onDone={() => setLoading(false)} />
+        )}
       </Suspense>
 
       <motion.main
@@ -653,8 +667,9 @@ function LeadPage() {
         
         {/* Scene 1: The Cinematic Background */}
         <Suspense fallback={null}>
-          <HeroSculpture3D />
+          <HeroSculpture3D onReady={() => setSceneReady(true)} />
         </Suspense>
+
 
         <Nav />
         <Hero onCta={scrollToForm} />
