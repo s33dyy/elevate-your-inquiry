@@ -380,6 +380,17 @@ function CursorLight({ pointer }: { pointer: React.MutableRefObject<{ x: number;
   );
 }
 
+function ReadySignal({ onReady }: { onReady: () => void }) {
+  const fired = useRef(false);
+  useFrame(() => {
+    if (fired.current) return;
+    fired.current = true;
+    // Defer to next tick so first real frame has rendered
+    setTimeout(onReady, 0);
+  });
+  return null;
+}
+
 export default function HeroSculpture3D({ onReady }: { onReady?: () => void } = {}) {
   const pointer = useRef({ x: 0, y: 0 });
   const scrollRef = useRef(0);
