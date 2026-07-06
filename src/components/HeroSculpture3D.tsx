@@ -380,7 +380,7 @@ function CursorLight({ pointer }: { pointer: React.MutableRefObject<{ x: number;
   );
 }
 
-export default function HeroSculpture3D() {
+export default function HeroSculpture3D({ onReady }: { onReady?: () => void } = {}) {
   const pointer = useRef({ x: 0, y: 0 });
   const scrollRef = useRef(0);
 
