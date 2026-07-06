@@ -414,6 +414,23 @@ export default function HeroSculpture3D({ onReady }: { onReady?: () => void } = 
   }, []);
 
   useEffect(() => {
+    if (!textures || !onReady) return;
+
+    let frameOne = 0;
+    let frameTwo = 0;
+    frameOne = requestAnimationFrame(() => {
+      frameTwo = requestAnimationFrame(() => {
+        onReady();
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(frameOne);
+      cancelAnimationFrame(frameTwo);
+    };
+  }, [onReady, textures]);
+
+  useEffect(() => {
     const move = (e: MouseEvent) => {
       pointer.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       pointer.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
