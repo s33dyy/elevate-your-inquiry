@@ -61,7 +61,7 @@ export function Cursor() {
       border: "1px solid rgba(255, 255, 255, 0.2)",
       backdropFilter: "blur(6px) saturate(1.5)",
       boxShadow: "inset 0 0 10px rgba(255,255,255,0.1), 0 0 2px rgba(255,255,255,0.1)",
-      transition: { type: "spring", stiffness: 300, damping: 20 }
+      transition: { type: "spring" as const, stiffness: 300, damping: 20 }
     },
     button: {
       width: 48,
@@ -71,7 +71,7 @@ export function Cursor() {
       border: "1px solid rgba(255, 255, 255, 0.5)",
       backdropFilter: "blur(0px) saturate(1)",
       boxShadow: "inset 0 0 0px rgba(255,255,255,0), 0 0 0px rgba(255,255,255,0)",
-      transition: { type: "spring", stiffness: 300, damping: 20 }
+      transition: { type: "spring" as const, stiffness: 300, damping: 20 }
     },
     card: {
       width: 80,
@@ -81,7 +81,7 @@ export function Cursor() {
       border: "1px solid rgba(255, 255, 255, 0.1)",
       backdropFilter: "blur(12px) brightness(1.2) saturate(1.5)",
       boxShadow: "inset 0 0 20px rgba(255,255,255,0.1), 0 20px 40px rgba(0,0,0,0.2)",
-      transition: { type: "spring", stiffness: 200, damping: 20 }
+      transition: { type: "spring" as const, stiffness: 200, damping: 20 }
     },
     hidden: {
       width: 0,
@@ -121,7 +121,7 @@ export function Cursor() {
           scaleY: cursorType === "default" ? scaleY : 1,
           opacity: isVisible ? 1 : 0,
         }}
-        animate={variants[cursorType]}
+        animate={variants[cursorType] as never}
       >
         {/* Inner dot for default state */}
         <motion.div

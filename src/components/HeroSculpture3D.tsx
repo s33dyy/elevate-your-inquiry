@@ -372,8 +372,7 @@ function CursorLight({ pointer }: { pointer: React.MutableRefObject<{ x: number;
       penumbra={1}
       distance={25}
       angle={0.7}
-      attenuation={5}
-      anglePower={4}
+      decay={2}
       intensity={12}
       color="#ffffff"
       castShadow
@@ -434,7 +433,7 @@ export default function HeroSculpture3D() {
         <Environment preset="city" environmentIntensity={0.1} />
 
         {/* Post Processing */}
-        <EffectComposer disableNormalPass>
+        <EffectComposer enableNormalPass={false}>
           <Bloom luminanceThreshold={0.2} mipmapBlur intensity={0.8} />
           <Noise opacity={0.03} />
           <Vignette eskil={false} offset={0.1} darkness={1.1} />
