@@ -433,7 +433,7 @@ export default function HeroSculpture3D() {
         <Environment preset="city" environmentIntensity={0.1} />
 
         {/* Post Processing */}
-        <EffectComposer disableNormalPass>
+        <EffectComposer enableNormalPass={false}>
           <Bloom luminanceThreshold={0.2} mipmapBlur intensity={0.8} />
           <Noise opacity={0.03} />
           <Vignette eskil={false} offset={0.1} darkness={1.1} />
