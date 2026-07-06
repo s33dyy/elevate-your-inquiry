@@ -372,8 +372,7 @@ function CursorLight({ pointer }: { pointer: React.MutableRefObject<{ x: number;
       penumbra={1}
       distance={25}
       angle={0.7}
-      attenuation={5}
-      anglePower={4}
+      decay={2}
       intensity={12}
       color="#ffffff"
       castShadow
