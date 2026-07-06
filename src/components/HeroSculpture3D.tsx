@@ -1,25 +1,28 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, MeshTransmissionMaterial, Float, Sparkles, ContactShadows, useTexture } from "@react-three/drei";
-import { EffectComposer, Bloom, DepthOfField, Noise, Vignette } from "@react-three/postprocessing";
+import { Environment, Float, Sparkles } from "@react-three/drei";
+import { EffectComposer, Bloom, Noise, Vignette } from "@react-three/postprocessing";
 import { useEffect, useRef, useState, useMemo } from "react";
 import * as THREE from "three";
-import { gsap } from "gsap";
 
 /**
  * Cinematic Scene 1 & 2: The Glass Monolith & Fragmentation
  */
 
-function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) {
+const TEXTURE_URLS = ['/ai_ui_1.jpg', '/ai_ui_2.jpg', '/ai_ui_3.jpg', '/ai_ui_4.jpg'] as const;
+
+function Monolith({
+  scrollRef,
+  onReady,
+  textures,
+}: {
+  scrollRef: React.MutableRefObject<number>;
+  onReady?: () => void;
+  textures: THREE.Texture[];
+}) {
   const group = useRef<THREE.Group>(null);
   const matRefs = useRef<(THREE.MeshBasicMaterial | null)[]>([]);
   const smoothScroll = useRef(0);
-  
-  // Load textures
-  const tex1 = useTexture('/ai_ui_1.jpg');
-  const tex2 = useTexture('/ai_ui_2.jpg');
-  const tex3 = useTexture('/ai_ui_3.jpg');
-  const tex4 = useTexture('/ai_ui_4.jpg');
-  const textures = useMemo(() => [tex1, tex2, tex3, tex4], [tex1, tex2, tex3, tex4]);
+  const readyFired = useRef(false);
   
   // 27 pieces (3x3x3 grid)
   const pieces = useMemo(() => {
@@ -40,7 +43,7 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
             scale: [w, h, d],
             offset: [px, py, pz],
             isTShape,
-            textureIndex: Math.floor(Math.random() * 4)
+            textureIndex: (x + y * 3 + z * 9) % 4,
           });
         }
       }
@@ -298,6 +301,11 @@ function Monolith({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) 
 
       child.scale.set(sX, sY, sZ);
     });
+
+    if (!readyFired.current && onReady && group.current.children.length === pieces.length) {
+      readyFired.current = true;
+      requestAnimationFrame(() => requestAnimationFrame(onReady));
+    }
   });
 
   return (
@@ -380,20 +388,47 @@ function CursorLight({ pointer }: { pointer: React.MutableRefObject<{ x: number;
   );
 }
 
-function ReadySignal({ onReady }: { onReady: () => void }) {
-  const fired = useRef(false);
-  useFrame(() => {
-    if (fired.current) return;
-    fired.current = true;
-    // Defer to next tick so first real frame has rendered
-    setTimeout(onReady, 0);
-  });
-  return null;
-}
-
 export default function HeroSculpture3D({ onReady }: { onReady?: () => void } = {}) {
   const pointer = useRef({ x: 0, y: 0 });
   const scrollRef = useRef(0);
+  const [textures, setTextures] = useState<THREE.Texture[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    let loadedTextures: THREE.Texture[] = [];
+    const loader = new THREE.TextureLoader();
+
+    Promise.all(TEXTURE_URLS.map((url) => loader.loadAsync(url))).then((nextTextures) => {
+      loadedTextures = nextTextures;
+      nextTextures.forEach((texture) => {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.needsUpdate = true;
+      });
+      if (!cancelled) setTextures(nextTextures);
+    });
+
+    return () => {
+      cancelled = true;
+      loadedTextures.forEach((texture) => texture.dispose());
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!textures || !onReady) return;
+
+    let frameOne = 0;
+    let frameTwo = 0;
+    frameOne = requestAnimationFrame(() => {
+      frameTwo = requestAnimationFrame(() => {
+        onReady();
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(frameOne);
+      cancelAnimationFrame(frameTwo);
+    };
+  }, [onReady, textures]);
 
   useEffect(() => {
     const move = (e: MouseEvent) => {
@@ -420,37 +455,41 @@ export default function HeroSculpture3D({ onReady }: { onReady?: () => void } = 
 
   return (
     <div className="fixed inset-0 z-0 h-screen w-screen bg-black">
-      <Canvas
-        dpr={[1, 1.5]}
-        gl={{ antialias: false, alpha: false, powerPreference: "high-performance", stencil: false, depth: false }}
-        camera={{ position: [0, 0, 8], fov: 45 }}
-      >
-        <color attach="background" args={["#000000"]} />
-        <fog attach="fog" args={["#000000", 8, 30]} />
-        
-        {/* Subtle ambient light just to see shapes faintly when light is away */}
-        <ambientLight intensity={0.02} />
-        
-        {/* The cursor light */}
-        <CursorLight pointer={pointer} />
+      {textures && (
+        <Canvas
+          dpr={[1, 1.5]}
+          gl={{ antialias: false, alpha: false, powerPreference: "high-performance", stencil: false, depth: false }}
+          camera={{ position: [0, 0, 8], fov: 45 }}
+          onCreated={() => {
+            requestAnimationFrame(() => requestAnimationFrame(() => onReady?.()));
+          }}
+        >
+          <color attach="background" args={["#000000"]} />
+          <fog attach="fog" args={["#000000", 8, 30]} />
+          
+          {/* Subtle ambient light just to see shapes faintly when light is away */}
+          <ambientLight intensity={0.02} />
+          
+          {/* The cursor light */}
+          <CursorLight pointer={pointer} />
 
-        {/* The Monolith */}
-        <Monolith scrollRef={scrollRef} />
-        {onReady && <ReadySignal onReady={onReady} />}
+          {/* The Monolith */}
+          <Monolith scrollRef={scrollRef} onReady={onReady} textures={textures} />
 
-        {/* Cinematic Particles */}
-        <Sparkles count={300} scale={20} size={2} speed={0.2} opacity={0.15} color="#ffffff" />
-        
-        {/* Environment Map for glass reflections */}
-        <Environment preset="city" environmentIntensity={0.1} />
+          {/* Cinematic Particles */}
+          <Sparkles count={300} scale={20} size={2} speed={0.2} opacity={0.15} color="#ffffff" />
+          
+          {/* Environment Map for glass reflections */}
+          <Environment preset="city" environmentIntensity={0.1} />
 
-        {/* Post Processing */}
-        <EffectComposer enableNormalPass={false}>
-          <Bloom luminanceThreshold={0.2} mipmapBlur intensity={0.8} />
-          <Noise opacity={0.03} />
-          <Vignette eskil={false} offset={0.1} darkness={1.1} />
-        </EffectComposer>
-      </Canvas>
+          {/* Post Processing */}
+          <EffectComposer enableNormalPass={false}>
+            <Bloom luminanceThreshold={0.2} mipmapBlur intensity={0.8} />
+            <Noise opacity={0.03} />
+            <Vignette eskil={false} offset={0.1} darkness={1.1} />
+          </EffectComposer>
+        </Canvas>
+      )}
     </div>
   );
 }
