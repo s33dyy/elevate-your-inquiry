@@ -425,6 +425,7 @@ export default function HeroSculpture3D({ onReady }: { onReady?: () => void } = 
 
         {/* The Monolith */}
         <Monolith scrollRef={scrollRef} />
+        {onReady && <ReadySignal onReady={onReady} />}
 
         {/* Cinematic Particles */}
         <Sparkles count={300} scale={20} size={2} speed={0.2} opacity={0.15} color="#ffffff" />
