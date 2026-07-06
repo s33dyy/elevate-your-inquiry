@@ -25,12 +25,8 @@ export default function Preloader({
   const [phase, setPhase] = useState(0);
   const [progress, setProgress] = useState(0);
   const [visible, setVisible] = useState(true);
-  const readyRef = (function () {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const r = useState({ current: ready })[0];
-    r.current = ready;
-    return r;
-  })();
+  const readyRef = useRef(ready);
+  readyRef.current = ready;
 
   useEffect(() => {
     const reduced =
