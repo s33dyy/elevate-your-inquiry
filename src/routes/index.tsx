@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   motion,
@@ -68,21 +68,24 @@ function useReducedMotion() {
   return reduced;
 }
 
-function useWebGLEnabled() {
-  const [enabled, setEnabled] = useState(false);
+function useWebGLStatus() {
+  const [status, setStatus] = useState<"checking" | "enabled" | "disabled">("checking");
   useEffect(() => {
     const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!isDesktop || reduced) return;
+    if (!isDesktop || reduced) {
+      setStatus("disabled");
+      return;
+    }
     try {
       const c = document.createElement("canvas");
       const gl = c.getContext("webgl2") || c.getContext("webgl");
-      if (gl) setEnabled(true);
+      setStatus(gl ? "enabled" : "disabled");
     } catch {
-      /* no webgl */
+      setStatus("disabled");
     }
   }, []);
-  return enabled;
+  return status;
 }
 
 
@@ -623,6 +626,8 @@ function LeadPage() {
   const [loading, setLoading] = useState(true);
   const [sceneReady, setSceneReady] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
+  const handleSceneReady = useCallback(() => setSceneReady(true), []);
+  const handlePreloaderDone = useCallback(() => setLoading(false), []);
 
   const scrollToForm = () => {
     setShowForm(true);
@@ -631,25 +636,20 @@ function LeadPage() {
     );
   };
 
-  const webgl = useWebGLEnabled();
+  const webglStatus = useWebGLStatus();
   const reduced = useReducedMotion();
 
-  // If WebGL is disabled, don't wait for the 3D scene
+  // If WebGL is unavailable, don't wait for a 3D scene that will not render.
+  // While WebGL is still being detected, keep the preloader active.
   useEffect(() => {
-    if (!webgl) setSceneReady(true);
-  }, [webgl]);
-
-  // Safety timeout so preloader never hangs indefinitely
-  useEffect(() => {
-    const t = setTimeout(() => setSceneReady(true), 8000);
-    return () => clearTimeout(t);
-  }, []);
+    if (webglStatus === "disabled") setSceneReady(true);
+  }, [webglStatus]);
 
   return (
     <>
       <Suspense fallback={null}>
         {loading && (
-          <Preloader ready={sceneReady} onDone={() => setLoading(false)} />
+          <Preloader ready={sceneReady} onDone={handlePreloaderDone} />
         )}
       </Suspense>
 
@@ -667,7 +667,7 @@ function LeadPage() {
         
         {/* Scene 1: The Cinematic Background */}
         <Suspense fallback={null}>
-          <HeroSculpture3D onReady={() => setSceneReady(true)} />
+          <HeroSculpture3D onReady={handleSceneReady} />
         </Suspense>
 
 
