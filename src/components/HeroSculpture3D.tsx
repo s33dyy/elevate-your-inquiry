@@ -443,6 +443,9 @@ export default function HeroSculpture3D({ onReady }: { onReady?: () => void } = 
           dpr={[1, 1.5]}
           gl={{ antialias: false, alpha: false, powerPreference: "high-performance", stencil: false, depth: false }}
           camera={{ position: [0, 0, 8], fov: 45 }}
+          onCreated={() => {
+            requestAnimationFrame(() => requestAnimationFrame(() => onReady?.()));
+          }}
         >
           <color attach="background" args={["#000000"]} />
           <fog attach="fog" args={["#000000", 8, 30]} />
