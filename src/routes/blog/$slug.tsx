@@ -47,7 +47,7 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function BlogPost() {
-  const { post } = Route.useLoaderData();
+  const { post } = Route.useLoaderData() as { post: NonNullable<ReturnType<typeof getPostBySlug>> };
 
   return (
     <div className="min-h-screen bg-background">
