@@ -384,6 +384,7 @@ function Nav() {
               ["#trust", "01", "Practice"],
               ["#apply", "02", "Apply"],
               ["#faq", "03", "FAQ"],
+              ["/blog", "04", "Blog"],
             ] as const
           ).map(([href, num, label]) => (
             <a
