@@ -23,6 +23,7 @@ import {
   Loader2,
   ExternalLink,
 } from "lucide-react";
+import { SocialLinks } from "@/components/SocialLinks";
 import { Toaster, toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
