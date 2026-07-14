@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { blogPosts } from "@/lib/blog-posts";
+import { SocialLinks } from "@/components/SocialLinks";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -66,6 +67,11 @@ function BlogIndex() {
               </div>
             </Link>
           ))}
+        </div>
+
+        <div className="mt-16 flex flex-col items-start gap-4 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <span className="section-index">Follow the studio</span>
+          <SocialLinks />
         </div>
       </main>
     </div>

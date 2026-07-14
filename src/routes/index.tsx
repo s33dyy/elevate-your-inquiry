@@ -23,6 +23,7 @@ import {
   Loader2,
   ExternalLink,
 } from "lucide-react";
+import { SocialLinks } from "@/components/SocialLinks";
 import { Toaster, toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -2077,6 +2078,11 @@ function Footer() {
             </button>
           </div>
           <span>© {new Date().getFullYear()} — All rights reserved</span>
+        </div>
+
+        <div className="mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <span className="section-index">Follow</span>
+          <SocialLinks />
         </div>
       </div>
     </footer>
