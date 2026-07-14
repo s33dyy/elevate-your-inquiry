@@ -28,6 +28,12 @@ export const Route = createFileRoute("/blog/$slug")({
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: post.title },
         { name: "twitter:description", content: post.excerpt },
+        ...(post.heroImage
+          ? [
+              { property: "og:image", content: post.heroImage },
+              { name: "twitter:image", content: post.heroImage },
+            ]
+          : []),
       ],
     };
   },
