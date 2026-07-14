@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { blogPosts } from "@/lib/blog-posts";
+import { SocialLinks } from "@/components/SocialLinks";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
