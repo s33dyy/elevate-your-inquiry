@@ -94,19 +94,35 @@ function BlogPost() {
           </div>
         </div>
 
+        {post.heroImage && (
+          <div className="mb-10 overflow-hidden rounded-2xl border border-border">
+            <img
+              src={post.heroImage}
+              alt={post.heroAlt ?? post.title}
+              width={1600}
+              height={900}
+              className="h-auto w-full"
+            />
+          </div>
+        )}
+
         <div className="prose-techilla space-y-6">
           {post.blocks.map((block, i) => (
             <Block key={i} block={block} />
           ))}
         </div>
 
-        <div className="mt-16 border-t border-border pt-8">
+        <div className="mt-16 flex flex-col gap-6 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
           <Link
             to="/blog"
             className="section-index inline-flex items-center gap-2 hover:text-white"
           >
             ← Back to all posts
           </Link>
+          <div className="flex items-center gap-4">
+            <span className="section-index">Follow</span>
+            <SocialLinks />
+          </div>
         </div>
       </article>
     </div>
