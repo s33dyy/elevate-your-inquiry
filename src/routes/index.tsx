@@ -2079,6 +2079,11 @@ function Footer() {
           </div>
           <span>© {new Date().getFullYear()} — All rights reserved</span>
         </div>
+
+        <div className="mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <span className="section-index">Follow</span>
+          <SocialLinks />
+        </div>
       </div>
     </footer>
   );
