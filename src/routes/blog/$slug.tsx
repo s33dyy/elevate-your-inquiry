@@ -187,5 +187,21 @@ function Block({ block }: { block: BlogBlock }) {
           />
         </div>
       );
+    case "image":
+      return (
+        <figure className="my-6 overflow-hidden rounded-2xl border border-border">
+          <img
+            src={block.src}
+            alt={block.alt ?? ""}
+            loading="lazy"
+            className="h-auto w-full"
+          />
+          {block.caption && (
+            <figcaption className="bg-card px-4 py-3 text-center text-sm text-muted-foreground">
+              {block.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
   }
 }
