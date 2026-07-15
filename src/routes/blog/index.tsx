@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { blogPosts } from "@/lib/blog-posts";
-import { SocialLinks } from "@/components/SocialLinks";
+import { BlogTopBar } from "@/components/BlogTopBar";
+import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -24,13 +25,15 @@ export const Route = createFileRoute("/blog/")({
 });
 
 function BlogIndex() {
+  const [featured, ...rest] = blogPosts;
+
   return (
     <div className="min-h-screen bg-background">
-      <TopBar />
-      <main className="mx-auto max-w-4xl px-6 pt-32 pb-24">
-        <div className="mb-16">
+      <BlogTopBar />
+      <main className="mx-auto max-w-6xl px-6 pt-28 pb-24 sm:pt-32">
+        <div className="mb-14">
           <span className="section-index">01 — Journal</span>
-          <h1 className="mt-6 font-display text-6xl leading-[0.95] tracking-tight text-foreground sm:text-7xl">
+          <h1 className="mt-6 font-display text-5xl leading-[0.95] tracking-tight text-foreground sm:text-7xl">
             Notes from the studio.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
@@ -38,71 +41,112 @@ function BlogIndex() {
           </p>
         </div>
 
-        <div className="space-y-px overflow-hidden rounded-2xl border border-border">
-          {blogPosts.map((post) => (
-            <Link
-              key={post.slug}
-              to="/blog/$slug"
-              params={{ slug: post.slug }}
-              className="group block bg-card p-8 transition-colors hover:bg-accent"
-            >
-              <div className="flex items-center gap-3 text-xs">
-                <span className="section-index">{post.date}</span>
-                <span className="text-muted-foreground">·</span>
-                <span className="section-index">{post.readingTime}</span>
-              </div>
-              <h2 className="mt-4 font-display text-3xl leading-tight tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-4xl">
-                {post.title}
-              </h2>
-              <p className="mt-4 text-muted-foreground">{post.excerpt}</p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {post.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </Link>
-          ))}
-        </div>
+        {featured && <FeatureCard post={featured} />}
 
-        <div className="mt-16 flex flex-col items-start gap-4 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <span className="section-index">Follow the studio</span>
-          <SocialLinks />
-        </div>
+        {rest.length > 0 && (
+          <div className="mt-10 grid gap-6 sm:grid-cols-2">
+            {rest.map((post) => (
+              <PostCard key={post.slug} post={post} />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
 }
 
-function TopBar() {
+type Post = (typeof blogPosts)[number];
+
+function FeatureCard({ post }: { post: Post }) {
   return (
-    <header className="glass-nav fixed inset-x-0 top-0 z-50">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-        <Link to="/" className="font-display text-2xl tracking-tight text-foreground">
-          Techilla
-        </Link>
-        <nav className="flex items-center gap-6 text-sm">
-          <Link
-            to="/blog"
-            className="section-index hover:text-white"
-            activeOptions={{ exact: true }}
-            activeProps={{ style: { color: "white" } }}
-          >
-            Blog
-          </Link>
-          <Link
-            to="/"
-            hash="apply"
-            className="rounded-full bg-primary px-4 py-2 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
-          >
-            Apply
-          </Link>
-        </nav>
+    <Link
+      to="/blog/$slug"
+      params={{ slug: post.slug }}
+      className="group grid overflow-hidden rounded-3xl border border-border bg-card transition-colors hover:border-primary/60 md:grid-cols-2"
+    >
+      {post.heroImage && (
+        <div className="aspect-[4/3] overflow-hidden md:aspect-auto">
+          <img
+            src={post.heroImage}
+            alt={post.heroAlt ?? post.title}
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+      )}
+      <div className="flex flex-col justify-between gap-6 p-8 sm:p-10">
+        <div>
+          <div className="flex items-center gap-3 text-xs">
+            <span className="section-index">Featured</span>
+            <span className="text-muted-foreground">·</span>
+            <span className="section-index">{post.date}</span>
+            <span className="text-muted-foreground">·</span>
+            <span className="section-index">{post.readingTime}</span>
+          </div>
+          <h2 className="mt-4 font-display text-3xl leading-tight tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-4xl">
+            {post.title}
+          </h2>
+          <p className="mt-4 text-muted-foreground">{post.excerpt}</p>
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap gap-2">
+            {post.tags.slice(0, 3).map((t) => (
+              <span
+                key={t}
+                className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+          <span className="inline-flex items-center gap-1 text-sm text-primary">
+            Read <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </span>
+        </div>
       </div>
-    </header>
+    </Link>
+  );
+}
+
+function PostCard({ post }: { post: Post }) {
+  return (
+    <Link
+      to="/blog/$slug"
+      params={{ slug: post.slug }}
+      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-primary/60"
+    >
+      {post.heroImage ? (
+        <div className="aspect-[16/9] overflow-hidden">
+          <img
+            src={post.heroImage}
+            alt={post.heroAlt ?? post.title}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+      ) : (
+        <div className="aspect-[16/9] bg-gradient-to-br from-primary/30 via-background to-background" />
+      )}
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex items-center gap-2 text-xs">
+          <span className="section-index">{post.date}</span>
+          <span className="text-muted-foreground">·</span>
+          <span className="section-index">{post.readingTime}</span>
+        </div>
+        <h2 className="mt-3 font-display text-2xl leading-tight tracking-tight text-foreground transition-colors group-hover:text-primary">
+          {post.title}
+        </h2>
+        <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">{post.excerpt}</p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          {post.tags.slice(0, 3).map((t) => (
+            <span
+              key={t}
+              className="rounded-full border border-border px-3 py-1 text-[10px] text-muted-foreground"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    </Link>
   );
 }

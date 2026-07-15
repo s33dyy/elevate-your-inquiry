@@ -345,6 +345,7 @@ const fadeUp = {
 
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50);
@@ -352,96 +353,183 @@ function Nav() {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  const NAV_LINKS = [
+    ["#trust", "01", "Practice"],
+    ["#apply", "02", "Apply"],
+    ["#faq", "03", "FAQ"],
+    ["/blog", "04", "Blog"],
+  ] as const;
+
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(
-        "sticky top-0 z-50 transition-all duration-500",
-        scrolled ? "glass-nav" : "",
-      )}
-    >
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
-        {/* Wordmark */}
-        <a
-          href="/"
-          className="flex items-center gap-2.5 font-display text-xl italic leading-none tracking-tight"
-        >
-          <span
-            className="h-2 w-2 shrink-0 rounded-full"
-            style={{
-              background: G.purple,
-              boxShadow: "0 0 10px rgba(139,125,255,0.6)",
-            }}
-          />
-          Techilla
-        </a>
+    <>
+      <motion.header
+        initial={{ opacity: 0, y: -14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className={cn(
+          "sticky top-0 z-50 transition-all duration-500",
+          scrolled ? "glass-nav" : "",
+        )}
+      >
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
+          <a
+            href="/"
+            className="flex items-center gap-2.5 font-display text-xl italic leading-none tracking-tight"
+          >
+            <span
+              className="h-2 w-2 shrink-0 rounded-full"
+              style={{
+                background: G.purple,
+                boxShadow: "0 0 10px rgba(139,125,255,0.6)",
+              }}
+            />
+            Techilla
+          </a>
 
-        {/* Links */}
-        <nav className="hidden items-center gap-8 sm:flex">
-          {(
-            [
-              ["#trust", "01", "Practice"],
-              ["#apply", "02", "Apply"],
-              ["#faq", "03", "FAQ"],
-              ["/blog", "04", "Blog"],
-            ] as const
-          ).map(([href, num, label]) => (
-            <a
-              key={href}
-              href={href}
-              className="section-index group flex items-center gap-2 transition-colors duration-200 hover:text-white"
-            >
-              <span
-                className="transition-colors duration-200"
-                style={{ color: "rgba(139,125,255,0.4)" }}
+          <nav className="hidden items-center gap-8 sm:flex">
+            {NAV_LINKS.map(([href, num, label]) => (
+              <a
+                key={href}
+                href={href}
+                className="section-index group flex items-center gap-2 transition-colors duration-200 hover:text-white"
               >
-                {num}
-              </span>
-              {label}
-            </a>
-          ))}
-        </nav>
+                <span
+                  className="transition-colors duration-200"
+                  style={{ color: "rgba(139,125,255,0.4)" }}
+                >
+                  {num}
+                </span>
+                {label}
+              </a>
+            ))}
+          </nav>
 
-        {/* Mobile CTA */}
-        <motion.a
-          href="#apply"
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          transition={{ duration: 0.15 }}
-          className="sm:hidden inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-white"
-          style={{
-            background: "rgba(139,125,255,0.12)",
-            border: "1px solid rgba(139,125,255,0.28)",
-          }}
-        >
-          Apply
-          <ArrowRight className="h-3 w-3" />
-        </motion.a>
+          <div className="hidden items-center gap-5 sm:flex">
+            <SocialLinks size={16} />
+            <Magnetic cursor="button">
+              <motion.a
+                href="#apply"
+                whileHover={{
+                  y: -1,
+                  boxShadow: "0 0 18px rgba(139,125,255,0.25)",
+                }}
+                transition={{ duration: 0.2 }}
+                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-white"
+                style={{
+                  background: "rgba(139,125,255,0.10)",
+                  border: "1px solid rgba(139,125,255,0.25)",
+                  boxShadow: "0 0 10px rgba(139,125,255,0.08)",
+                }}
+              >
+                Apply now
+                <ArrowRight className="h-3.5 w-3.5" />
+              </motion.a>
+            </Magnetic>
+          </div>
 
-        {/* Desktop CTA */}
-        <Magnetic cursor="button">
-          <motion.a
-            href="#apply"
-            whileHover={{
-              y: -1,
-              boxShadow: "0 0 18px rgba(139,125,255,0.25)",
-            }}
-            transition={{ duration: 0.2 }}
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-white"
+          <button
+            type="button"
+            aria-label="Open menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(true)}
+            className="sm:hidden inline-flex h-10 w-10 items-center justify-center rounded-full text-white"
             style={{
               background: "rgba(139,125,255,0.10)",
-              border: "1px solid rgba(139,125,255,0.25)",
-              boxShadow: "0 0 10px rgba(139,125,255,0.08)",
+              border: "1px solid rgba(139,125,255,0.28)",
             }}
           >
-            Apply now
-            <ArrowRight className="h-3.5 w-3.5" />
-          </motion.a>
-        </Magnetic>
-      </div>
-    </motion.header>
+            <span className="sr-only">Menu</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="4" y1="7" x2="20" y2="7" />
+              <line x1="4" y1="12" x2="20" y2="12" />
+              <line x1="4" y1="17" x2="20" y2="17" />
+            </svg>
+          </button>
+        </div>
+      </motion.header>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[60] flex flex-col bg-background/95 backdrop-blur-xl sm:hidden"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="flex items-center justify-between px-6 py-5">
+              <span className="font-display text-xl italic tracking-tight text-foreground">
+                Techilla
+              </span>
+              <button
+                type="button"
+                aria-label="Close menu"
+                onClick={() => setMenuOpen(false)}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white"
+                style={{
+                  background: "rgba(139,125,255,0.10)",
+                  border: "1px solid rgba(139,125,255,0.28)",
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                  <line x1="6" y1="18" x2="18" y2="6" />
+                </svg>
+              </button>
+            </div>
+
+            <nav className="flex flex-1 flex-col justify-center gap-6 px-8">
+              {NAV_LINKS.map(([href, num, label]) => (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-baseline gap-4"
+                >
+                  <span
+                    className="text-xs"
+                    style={{ color: "rgba(139,125,255,0.7)" }}
+                  >
+                    {num}
+                  </span>
+                  <span className="font-display text-4xl tracking-tight text-foreground">
+                    {label}
+                  </span>
+                </a>
+              ))}
+              <a
+                href="#apply"
+                onClick={() => setMenuOpen(false)}
+                className="mt-4 inline-flex items-center gap-2 self-start rounded-full px-6 py-3 text-base font-medium text-white"
+                style={{
+                  background: "rgba(139,125,255,0.15)",
+                  border: "1px solid rgba(139,125,255,0.35)",
+                }}
+              >
+                Apply now
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </nav>
+
+            <div className="border-t border-border px-8 py-6">
+              <div className="flex items-center justify-between">
+                <span className="section-index">Follow</span>
+                <SocialLinks size={22} />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -2080,10 +2168,6 @@ function Footer() {
           <span>© {new Date().getFullYear()} — All rights reserved</span>
         </div>
 
-        <div className="mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <span className="section-index">Follow</span>
-          <SocialLinks />
-        </div>
       </div>
     </footer>
   );

@@ -1,6 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getPostBySlug, type BlogBlock } from "@/lib/blog-posts";
-import { SocialLinks } from "@/components/SocialLinks";
+import { blogPosts, getPostBySlug, type BlogBlock } from "@/lib/blog-posts";
+import { BlogTopBar } from "@/components/BlogTopBar";
+import { BlogSidePanel } from "@/components/BlogSidePanel";
+import { BlogEngagement } from "@/components/BlogEngagement";
+import { Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
@@ -54,77 +57,106 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function BlogPost() {
-  const { post } = Route.useLoaderData() as { post: NonNullable<ReturnType<typeof getPostBySlug>> };
+  const { post } = Route.useLoaderData() as {
+    post: NonNullable<ReturnType<typeof getPostBySlug>>;
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="glass-nav fixed inset-x-0 top-0 z-50">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <Link to="/" className="font-display text-2xl tracking-tight text-foreground">
-            Techilla
-          </Link>
-          <Link to="/blog" className="section-index hover:text-white">
-            ← All posts
-          </Link>
-        </div>
-      </header>
+      <BlogTopBar />
 
-      <article className="mx-auto max-w-3xl px-6 pt-32 pb-24">
-        <div className="mb-10">
-          <div className="flex flex-wrap items-center gap-3 text-xs">
-            <span className="section-index">{post.date}</span>
-            <span className="text-muted-foreground">·</span>
-            <span className="section-index">{post.readingTime}</span>
-            <span className="text-muted-foreground">·</span>
-            <span className="section-index">{post.author}</span>
+      <div className="mx-auto grid max-w-6xl gap-10 px-6 pt-28 pb-24 sm:pt-32 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <article className="min-w-0">
+          <div className="mb-10">
+            <div className="flex flex-wrap items-center gap-3 text-xs">
+              <span className="section-index">{post.date}</span>
+              <span className="text-muted-foreground">·</span>
+              <span className="section-index">{post.readingTime}</span>
+              <span className="text-muted-foreground">·</span>
+              <span className="section-index">{post.author}</span>
+            </div>
+            <h1 className="mt-6 font-display text-4xl leading-[1.02] tracking-tight text-foreground sm:text-6xl">
+              {post.title}
+            </h1>
+            <p className="mt-6 text-lg text-muted-foreground">{post.excerpt}</p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {post.tags.map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
           </div>
-          <h1 className="mt-6 font-display text-5xl leading-[1.02] tracking-tight text-foreground sm:text-6xl">
-            {post.title}
-          </h1>
-          <p className="mt-6 text-lg text-muted-foreground">{post.excerpt}</p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {post.tags.map((t) => (
-              <span
-                key={t}
-                className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground"
-              >
-                {t}
-              </span>
+
+          {post.heroImage && (
+            <div className="mb-10 overflow-hidden rounded-2xl border border-border">
+              <img
+                src={post.heroImage}
+                alt={post.heroAlt ?? post.title}
+                width={1600}
+                height={900}
+                className="h-auto w-full"
+              />
+            </div>
+          )}
+
+          {post.tldr && post.tldr.length > 0 && (
+            <div
+              className="mb-12 rounded-2xl border p-6"
+              style={{
+                borderColor: "rgba(139,125,255,0.35)",
+                background:
+                  "linear-gradient(135deg, rgba(139,125,255,0.08), rgba(139,125,255,0.02))",
+              }}
+            >
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4" style={{ color: "#B4A9FF" }} />
+                <span className="section-index" style={{ color: "#B4A9FF" }}>
+                  AI TL;DR
+                </span>
+              </div>
+              <ul className="mt-4 space-y-2">
+                {post.tldr.map((line, i) => (
+                  <li
+                    key={i}
+                    className="flex gap-3 text-sm leading-relaxed text-foreground/90"
+                  >
+                    <span
+                      className="mt-2 h-1.5 w-1.5 flex-none rounded-full"
+                      style={{ background: "rgba(139,125,255,0.85)" }}
+                    />
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="prose-techilla space-y-6">
+            {post.blocks.map((block, i) => (
+              <Block key={i} block={block} />
             ))}
           </div>
-        </div>
 
-        {post.heroImage && (
-          <div className="mb-10 overflow-hidden rounded-2xl border border-border">
-            <img
-              src={post.heroImage}
-              alt={post.heroAlt ?? post.title}
-              width={1600}
-              height={900}
-              className="h-auto w-full"
-            />
+          <BlogEngagement postSlug={post.slug} />
+
+          <div className="mt-16 flex flex-col gap-6 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
+            <Link
+              to="/blog"
+              className="section-index inline-flex items-center gap-2 hover:text-white"
+            >
+              ← Back to all posts
+            </Link>
           </div>
-        )}
+        </article>
 
-        <div className="prose-techilla space-y-6">
-          {post.blocks.map((block, i) => (
-            <Block key={i} block={block} />
-          ))}
+        <div className="lg:sticky lg:top-28 lg:h-max">
+          <BlogSidePanel posts={blogPosts} currentSlug={post.slug} />
         </div>
-
-        <div className="mt-16 flex flex-col gap-6 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <Link
-            to="/blog"
-            className="section-index inline-flex items-center gap-2 hover:text-white"
-          >
-            ← Back to all posts
-          </Link>
-          <div className="flex items-center gap-4">
-            <span className="section-index">Follow</span>
-            <SocialLinks />
-          </div>
-        </div>
-      </article>
+      </div>
     </div>
   );
 }

@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      blog_comments: {
+        Row: {
+          anon_id: string
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          post_slug: string
+        }
+        Insert: {
+          anon_id: string
+          author_name?: string
+          body: string
+          created_at?: string
+          id?: string
+          post_slug: string
+        }
+        Update: {
+          anon_id?: string
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          post_slug?: string
+        }
+        Relationships: []
+      }
+      blog_upvotes: {
+        Row: {
+          anon_id: string
+          created_at: string
+          id: string
+          post_slug: string
+        }
+        Insert: {
+          anon_id: string
+          created_at?: string
+          id?: string
+          post_slug: string
+        }
+        Update: {
+          anon_id?: string
+          created_at?: string
+          id?: string
+          post_slug?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           admin_notes: string | null
