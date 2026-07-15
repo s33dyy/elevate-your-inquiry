@@ -1,5 +1,6 @@
 import brainTumorDemo from "@/assets/brain-tumor-demo.mov.asset.json";
 import smallBusinessHero from "@/assets/small-business-website-hero.jpg";
+import brainTumorHero from "@/assets/brain-tumor-hero.jpg";
 
 export type BlogBlock =
   | { type: "p"; text: string }
@@ -21,6 +22,7 @@ export type BlogPost = {
   tags: string[];
   heroImage?: string;
   heroAlt?: string;
+  tldr?: string[];
   blocks: BlogBlock[];
 };
 
@@ -38,6 +40,11 @@ export const blogPosts: BlogPost[] = [
     heroImage: smallBusinessHero,
     heroAlt:
       "Modern business workspace with a laptop dashboard, phone, and analytics charts under soft purple lighting.",
+    tldr: [
+      "A website is the only digital storefront you fully own — social media accounts can vanish, algorithms shift, but your site stays.",
+      "It works 24/7 to build trust, capture leads, rank on Google, and let customers self-serve information about your business.",
+      "Modern sites double as growth infrastructure: SEO, analytics, automation, bookings, payments, and integrations that scale with you.",
+    ],
     blocks: [
       {
         type: "p",
@@ -378,6 +385,14 @@ export const blogPosts: BlogPost[] = [
     date: "June 2026",
     readingTime: "6 min read",
     tags: ["Deep Learning", "Medical Imaging", "PyTorch", "Streamlit"],
+    heroImage: brainTumorHero,
+    heroAlt:
+      "Stylized brain MRI with glowing neural-network overlays representing deep learning classification.",
+    tldr: [
+      "We built an end-to-end PyTorch pipeline that classifies brain MRIs into Glioma, Meningioma, Pituitary, or No Tumor.",
+      "Four architectures were benchmarked: a custom CNN, ResNet50, MobileNetV2, and EfficientNetB0 — EfficientNetB0 won on accuracy and recall.",
+      "The models ship as a Streamlit web app with drag-and-drop uploads and side-by-side confidence breakdowns; Grad-CAM explainability is next.",
+    ],
     blocks: [
       {
         type: "p",
