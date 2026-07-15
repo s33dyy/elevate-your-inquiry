@@ -133,6 +133,12 @@ function RootShell({ children }: { children: ReactNode }) {
 import { ReactLenis } from 'lenis/react';
 import { CursorProvider } from '../components/cursor/CursorContext';
 import { Cursor } from '../components/cursor/Cursor';
+import { useGlobalSoundHaptics } from '../hooks/useSoundHaptics';
+
+function GlobalInteractions() {
+  useGlobalSoundHaptics();
+  return null;
+}
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -141,6 +147,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ReactLenis root>
         <CursorProvider>
+          <GlobalInteractions />
           <div className="min-h-screen md:cursor-none">
             <Cursor />
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
