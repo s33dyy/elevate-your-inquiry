@@ -365,6 +365,7 @@ function Nav() {
     ["#apply", "02", "Apply"],
     ["#faq", "03", "FAQ"],
     ["/blog", "04", "Blog"],
+    ["/careers", "05", "Careers"],
   ] as const;
 
   return (
