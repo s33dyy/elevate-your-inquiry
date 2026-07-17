@@ -112,7 +112,7 @@ const applicationSchema = z.object({
   joining_date: z.string().trim().max(60).optional().or(z.literal("")),
   why_join: z.string().trim().max(2000).optional().or(z.literal("")),
   lead_strategy: z.string().trim().max(2000).optional().or(z.literal("")),
-  consent: z.literal(true, { errorMap: () => ({ message: "Please accept the agreement." }) }),
+  consent: z.literal(true, { message: "Please accept the agreement." }),
 });
 
 const MAX_FILE = 10 * 1024 * 1024;
