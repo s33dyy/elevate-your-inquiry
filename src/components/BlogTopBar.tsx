@@ -45,6 +45,9 @@ export function BlogTopBar({ backLabel }: { backLabel?: string } = {}) {
             >
               Blog
             </Link>
+            <Link to="/careers" className="section-index hover:text-white">
+              Careers
+            </Link>
             <SocialLinks size={16} />
             <button
               type="button"
@@ -113,6 +116,13 @@ export function BlogTopBar({ backLabel }: { backLabel?: string } = {}) {
               className="font-display text-4xl tracking-tight text-foreground"
             >
               Blog
+            </Link>
+            <Link
+              to="/careers"
+              onClick={() => setOpen(false)}
+              className="font-display text-4xl tracking-tight text-foreground"
+            >
+              Careers
             </Link>
             <Link
               to="/"
