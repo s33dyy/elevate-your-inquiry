@@ -62,6 +62,72 @@ export type Database = {
         }
         Relationships: []
       }
+      job_applications: {
+        Row: {
+          city: string | null
+          cover_letter_url: string | null
+          created_at: string
+          current_occupation: string | null
+          education: string | null
+          email: string
+          experience: string | null
+          full_name: string
+          id: string
+          job_slug: string
+          joining_date: string | null
+          lead_strategy: string | null
+          linkedin: string | null
+          notes: string | null
+          phone: string | null
+          portfolio: string | null
+          resume_url: string | null
+          status: string
+          why_join: string | null
+        }
+        Insert: {
+          city?: string | null
+          cover_letter_url?: string | null
+          created_at?: string
+          current_occupation?: string | null
+          education?: string | null
+          email: string
+          experience?: string | null
+          full_name: string
+          id?: string
+          job_slug?: string
+          joining_date?: string | null
+          lead_strategy?: string | null
+          linkedin?: string | null
+          notes?: string | null
+          phone?: string | null
+          portfolio?: string | null
+          resume_url?: string | null
+          status?: string
+          why_join?: string | null
+        }
+        Update: {
+          city?: string | null
+          cover_letter_url?: string | null
+          created_at?: string
+          current_occupation?: string | null
+          education?: string | null
+          email?: string
+          experience?: string | null
+          full_name?: string
+          id?: string
+          job_slug?: string
+          joining_date?: string | null
+          lead_strategy?: string | null
+          linkedin?: string | null
+          notes?: string | null
+          phone?: string | null
+          portfolio?: string | null
+          resume_url?: string | null
+          status?: string
+          why_join?: string | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           admin_notes: string | null
