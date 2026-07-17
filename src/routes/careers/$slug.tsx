@@ -118,7 +118,7 @@ const applicationSchema = z.object({
 const MAX_FILE = 10 * 1024 * 1024;
 
 function JobDetail() {
-  const { job } = Route.useLoaderData();
+  const { job } = Route.useLoaderData() as { job: import("@/lib/jobs").Job };
   const [saved, setSaved] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
