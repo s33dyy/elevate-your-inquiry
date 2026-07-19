@@ -831,18 +831,18 @@ function PortfolioSection() {
       className="pointer-events-none relative z-10 mx-auto max-w-[1400px] px-6 pb-20 sm:px-10"
     >
       <div className="pointer-events-auto mb-14 flex items-baseline justify-between border-t border-border pt-6">
-        <span className="section-index">02 / Portfolio</span>
+        <span className="section-index">02 / Work</span>
         <span className="section-index hidden sm:block">
-          Selected Web Experiences
+          Selected Projects
         </span>
       </div>
 
       <div className="pointer-events-auto">
         <h2 className="mb-6 max-w-4xl font-display text-5xl leading-[0.97] tracking-[-0.025em] sm:text-7xl">
-          Selected Web Experiences
+          Selected Projects
         </h2>
         <GlowingText className="mb-16 max-w-2xl text-lg leading-relaxed">
-          We collaborate quietly with sports studios, energy brands, art initiatives, crypto funds, and SaaS platforms to ship opinionated interfaces — and 50+ clients trust us with their web presence.
+          A cross-section of automation, integration, and interface work we've shipped for operations-heavy teams.
         </GlowingText>
 
         <div className="grid grid-cols-2 gap-4 sm:gap-6">
