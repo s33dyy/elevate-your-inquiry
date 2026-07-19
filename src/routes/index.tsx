@@ -183,13 +183,13 @@ const SERVICES = [
   "Other",
 ];
 const GOALS = [
-  "Generate more leads",
-  "Increase sales",
-  "Automate operations",
-  "Book appointments",
-  "Improve branding",
   "Reduce manual work",
-  "Launch MVP",
+  "Automate lead follow-up",
+  "Connect disconnected tools",
+  "Faster customer response",
+  "Automate reporting",
+  "Streamline operations",
+  "Build a custom internal tool",
   "Other",
 ];
 const BUDGETS = [
