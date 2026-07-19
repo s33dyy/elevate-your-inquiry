@@ -77,25 +77,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Techilla — Apply to Work With Us" },
+      { title: "Techilla — Business Process Automation" },
       {
         name: "description",
         content:
-          "Techilla is a boutique studio building high-converting websites, custom software, and AI automation. Tell us about your project — we respond within 24 hours.",
+          "Techilla identifies inefficient processes and repetitive work inside your business, then builds automation, AI, and integrations that fix them. Solutions starting from $299.",
       },
       { name: "author", content: "Techilla" },
-      { property: "og:title", content: "Techilla — Apply to Work With Us" },
+      { property: "og:title", content: "Techilla — Business Process Automation" },
       {
         property: "og:description",
         content:
-          "Websites that generate leads. Software that automates operations. Apply to work with Techilla.",
+          "Automate the work that slows your business down. Workflow automation, AI, and custom systems for SMBs.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Techilla — Apply to Work With Us" },
-      { name: "description", content: "Premium Lead Flow is a lead qualification page for Techilla, a web development and AI automation studio." },
-      { property: "og:description", content: "Premium Lead Flow is a lead qualification page for Techilla, a web development and AI automation studio." },
-      { name: "twitter:description", content: "Premium Lead Flow is a lead qualification page for Techilla, a web development and AI automation studio." },
+      { name: "twitter:title", content: "Techilla — Business Process Automation" },
+      { name: "twitter:description", content: "Automate the work that slows your business down. Process automation, AI, integrations, and custom internal tools." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1b0cf11a-f029-4e12-8443-f2db5805351a/id-preview-e2a12758--6398ce63-6786-45b9-8492-99e4e21cbe78.lovable.app-1783016939265.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1b0cf11a-f029-4e12-8443-f2db5805351a/id-preview-e2a12758--6398ce63-6786-45b9-8492-99e4e21cbe78.lovable.app-1783016939265.png" },
     ],

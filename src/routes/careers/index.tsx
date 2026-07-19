@@ -10,17 +10,17 @@ import { SocialLinks } from "@/components/SocialLinks";
 export const Route = createFileRoute("/careers/")({
   head: () => ({
     meta: [
-      { title: "Careers | Techilla" },
+      { title: "Careers | Techilla — Business Process Automation" },
       {
         name: "description",
         content:
-          "Join Techilla's remote-first team. Explore careers in business development, technology and digital growth.",
+          "Join Techilla's remote-first team. Help small and mid-sized businesses automate inefficient processes and manual workflows.",
       },
       { property: "og:title", content: "Careers | Techilla" },
       {
         property: "og:description",
         content:
-          "Join Techilla's remote-first team. Build the future with a boutique studio crafting premium web & AI experiences.",
+          "Remote roles at a business process automation company. Consultative selling, real business outcomes.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -125,7 +125,7 @@ function CareersPage() {
             transition={{ duration: 0.8, delay: 0.05 }}
             className="font-display text-5xl md:text-7xl leading-[1.02] tracking-tight"
           >
-            Build the <em className="italic text-primary/90">Future</em> with Techilla
+            Help Businesses <em className="italic text-primary/90">Automate</em> the Work That Slows Them Down.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -133,8 +133,8 @@ function CareersPage() {
             transition={{ duration: 0.8, delay: 0.15 }}
             className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground"
           >
-            Join our remote-first team and help businesses grow through technology, AI automation
-            and world-class digital experiences.
+            Techilla is a process automation company. Join a remote-first team helping
+            small and mid-sized businesses replace manual processes with technology that works.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 12 }}

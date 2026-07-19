@@ -12,7 +12,7 @@ export type Job = {
   responsibilities: string[];
   requirements: string[];
   perks: string[];
-  compensation: { tier: string; label: string; sub?: string }[];
+  compensation: { label: string; sub?: string };
   process: string[];
 };
 
@@ -27,39 +27,40 @@ export const jobs: Job[] = [
     badge: "Hiring Now",
     department: "Sales",
     short:
-      "Join Techilla's sales team and help businesses discover premium web development, AI automation and digital growth services.",
+      "Help small and mid-sized businesses discover Techilla's process automation solutions. Consultative outreach — not cold pitching.",
     about:
-      "Techilla is a modern digital solutions agency helping startups and businesses build premium websites, AI automation systems and scalable digital products.",
+      "Techilla is a process automation company. We identify inefficient, manual, or disconnected workflows inside businesses and implement technology — automation, AI, integrations, custom tools — to fix them. Your role is to find businesses running on manual processes and start conversations about what they could automate.",
     responsibilities: [
-      "Generate qualified B2B leads",
-      "Cold outreach via LinkedIn, email and calls",
-      "Conduct discovery meetings",
-      "Understand business requirements",
-      "Close deals",
-      "Update CRM",
-      "Attend weekly meetings",
+      "Identify businesses struggling with inefficient or manual processes",
+      "Research potential automation opportunities within target businesses",
+      "Conduct personalized B2B outreach via LinkedIn, email and calls",
+      "Understand prospects' operational challenges in discovery conversations",
+      "Qualify potential automation opportunities",
+      "Explain Techilla's value proposition in plain business terms",
+      "Schedule discovery calls with the Techilla team",
+      "Maintain accurate lead and pipeline records",
+      "Work with the team to convert qualified opportunities into clients",
     ],
     requirements: [
       "Excellent English communication",
+      "Consultative mindset — comfortable asking questions, not pitching",
       "Laptop & stable internet",
-      "Self motivated",
-      "Target driven",
+      "Self-motivated and target-driven",
       "Freshers welcome",
-      "Sales experience is a bonus",
+      "B2B sales experience is a bonus",
     ],
     perks: [
       "Remote Work",
       "Flexible Hours",
-      "Performance Bonuses",
+      "Performance-Based Earnings",
       "Learning Resources",
       "Startup Environment",
       "Growth Opportunities",
     ],
-    compensation: [
-      { tier: "1–19 deals / month", label: "₹500", sub: "per closed deal" },
-      { tier: "20 deals / month", label: "₹10,000", sub: "milestone payout" },
-      { tier: "21+ deals / month", label: "₹10,000 + ₹700", sub: "for every additional deal" },
-    ],
+    compensation: {
+      label: "Earn up to ₹10,000 per closed deal.",
+      sub: "Your earnings are directly linked to the business you help bring to Techilla. Full compensation terms and eligibility criteria are discussed during the hiring process.",
+    },
     process: [
       "Application Submitted",
       "Application Review",

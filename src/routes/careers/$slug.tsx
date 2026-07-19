@@ -371,19 +371,16 @@ function JobDetail() {
           </ul>
         </Block>
 
-        <Block title="Compensation">
-          <div className="grid md:grid-cols-3 gap-4">
-            {job.compensation.map((c) => (
-              <div key={c.tier} className="rounded-2xl border border-white/5 bg-white/[0.02] p-6">
-                <div className="text-xs uppercase tracking-widest text-muted-foreground">{c.tier}</div>
-                <div className="font-display text-3xl mt-3">{c.label}</div>
-                {c.sub && <div className="text-xs text-muted-foreground mt-1">{c.sub}</div>}
-              </div>
-            ))}
+        <Block title="Performance-Based Compensation">
+          <div className="rounded-2xl border border-primary/25 bg-primary/[0.04] p-8">
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Compensation</div>
+            <div className="font-display text-4xl md:text-5xl mt-3">{job.compensation.label}</div>
+            {job.compensation.sub && (
+              <p className="text-sm text-muted-foreground mt-4 max-w-2xl leading-relaxed">
+                {job.compensation.sub}
+              </p>
+            )}
           </div>
-          <p className="text-xs text-muted-foreground mt-4">
-            Payouts are processed monthly after verification of successfully closed client projects.
-          </p>
         </Block>
 
         <Block title="Perks">
