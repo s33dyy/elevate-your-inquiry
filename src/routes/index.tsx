@@ -209,38 +209,38 @@ const TIMELINES = [
 const CONTACT_METHODS = ["Phone", "WhatsApp", "Meeting"];
 
 const TRUST = [
-  { icon: Zap, label: "5–7 Day Prototype" },
-  { icon: TrendingUp, label: "Monthly Updates" },
-  { icon: Sparkles, label: "AI Ready" },
-  { icon: FileCheck, label: "Built for Growth" },
-  { icon: Server, label: "Hosting Included" },
+  { icon: Zap, label: "Process-First Approach" },
+  { icon: TrendingUp, label: "Measurable Outcomes" },
+  { icon: Sparkles, label: "AI Where It Matters" },
+  { icon: FileCheck, label: "Built for Your Workflow" },
+  { icon: Server, label: "Integrations Included" },
   { icon: Shield, label: "NDA Available" },
 ];
 
 const FAQS = [
   {
-    q: "Do you only build websites?",
-    a: "No. Websites are one piece. We build custom software, CRMs, AI automations, dashboards, and integrations — anything that helps a business run itself.",
+    q: "What exactly does Techilla do?",
+    a: "We identify inefficient, repetitive, or disconnected processes inside your business and implement technology to fix them — automation, AI, integrations, internal tools, or custom software depending on what the problem needs.",
   },
   {
-    q: "How long does a project take?",
-    a: "A working prototype in 5–7 days. Full production builds typically ship in 3–8 weeks depending on scope. We share a firm timeline after the discovery call.",
+    q: "How is this different from an agency?",
+    a: "We don't start with 'you need a website' or 'you need AI'. We start with your process. Technology is the tool, not the product. If your problem is best solved by connecting two tools you already use, that's what we build.",
   },
   {
-    q: "Can you redesign my existing website?",
-    a: "Yes. We audit what's there, keep what converts, and rebuild the rest with a modern stack, faster performance, and clearer conversion paths.",
+    q: "How much does an automation project cost?",
+    a: "Solutions start from $299. Every business process is different, so we scope each solution based on complexity, integrations, and implementation. You get a custom quote after a short discovery conversation.",
   },
   {
-    q: "Do you offer monthly maintenance?",
-    a: "Yes. Every project ships with an optional monthly retainer for updates, monitoring, new features, and hosting — no surprise invoices.",
+    q: "How long does a typical project take?",
+    a: "A focused workflow automation often ships in 1–3 weeks. Multi-step systems and integrations take 3–8 weeks. We share a firm timeline after we understand your current process.",
   },
   {
-    q: "Do you build AI automation?",
-    a: "It's half of what we do. Lead qualification, WhatsApp bots, internal copilots, document processing, custom dashboards on top of LLMs — production grade, not demos.",
+    q: "Do you work with small businesses?",
+    a: "Yes — small and mid-sized businesses are our focus. Clinics, agencies, real estate, education, hospitality, professional services. If your team spends hours on repetitive work, there's usually something to automate.",
   },
   {
-    q: "Can I request custom software?",
-    a: "Absolutely. Most of our best work is bespoke: CRMs, admin panels, booking platforms, marketplaces, internal tools. Tell us the problem, we'll design the system.",
+    q: "Do you use AI in every project?",
+    a: "Only when it genuinely helps. AI is powerful for classification, extraction, routing, and intelligent workflows — but many operational problems are solved better and cheaper with plain automation and integrations.",
   },
 ];
 
