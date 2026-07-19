@@ -10,17 +10,17 @@ import { SocialLinks } from "@/components/SocialLinks";
 export const Route = createFileRoute("/careers/")({
   head: () => ({
     meta: [
-      { title: "Careers | Techilla" },
+      { title: "Careers | Techilla — Business Process Automation" },
       {
         name: "description",
         content:
-          "Join Techilla's remote-first team. Explore careers in business development, technology and digital growth.",
+          "Join Techilla's remote-first team. Help small and mid-sized businesses automate inefficient processes and manual workflows.",
       },
       { property: "og:title", content: "Careers | Techilla" },
       {
         property: "og:description",
         content:
-          "Join Techilla's remote-first team. Build the future with a boutique studio crafting premium web & AI experiences.",
+          "Remote roles at a business process automation company. Consultative selling, real business outcomes.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
