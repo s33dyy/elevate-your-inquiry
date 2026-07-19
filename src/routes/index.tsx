@@ -891,6 +891,50 @@ function PortfolioSection() {
 /* ============================================================ */
 
 function PricingSection({ onCta }: { onCta: () => void }) {
+  const tiers = [
+    {
+      name: "Automation Starter",
+      price: "From $299",
+      sub: "One focused workflow",
+      desc: "For automating a single repetitive process — lead capture, follow-up sequences, form-to-CRM, or a specific manual task consuming your team's time.",
+      features: [
+        "Scoped to one workflow",
+        "Tool integrations included",
+        "Runbook & documentation",
+        "2 weeks of iteration",
+      ],
+      cta: "Start with a workflow",
+      highlight: false,
+    },
+    {
+      name: "Custom Automation",
+      price: "Custom Quote",
+      sub: "Multi-step systems",
+      desc: "For multi-step workflows, business-specific systems, and connecting several tools. AI where it genuinely helps, integrations, and internal dashboards.",
+      features: [
+        "Discovery & process mapping",
+        "Multi-tool integrations",
+        "AI / custom logic where useful",
+        "Testing against real workflows",
+      ],
+      cta: "Get a custom quote",
+      highlight: true,
+    },
+    {
+      name: "Automation Partnership",
+      price: "Custom Quote",
+      sub: "Ongoing development",
+      desc: "For businesses that want a team continuously improving their operations — new automations, optimizations, and maintenance as the business evolves.",
+      features: [
+        "Monthly automation roadmap",
+        "Ongoing development",
+        "Priority support",
+        "Optimization & monitoring",
+      ],
+      cta: "Talk about partnering",
+      highlight: false,
+    },
+  ];
   return (
     <section
       id="pricing"
@@ -899,253 +943,88 @@ function PricingSection({ onCta }: { onCta: () => void }) {
       <div className="pointer-events-auto mb-14 flex items-baseline justify-between border-t border-border pt-6">
         <span className="section-index">03 / Pricing</span>
         <span className="section-index hidden sm:block">
-          Clear scope, honest pricing
+          Every process is different
         </span>
       </div>
 
       <div className="pointer-events-auto">
         <h2 className="mb-6 max-w-4xl font-display text-5xl leading-[0.97] tracking-[-0.025em] sm:text-7xl">
-          Pricing &amp; Packages
+          Automation, priced to your <span style={purpleText(true)}>process.</span>
         </h2>
         <GlowingText className="mb-16 max-w-2xl text-lg leading-relaxed">
-          Two ways to get a website live — pick the one that fits, and everything below is included from day one.
+          Solutions start from $299. Every business process is different — we scope each engagement based on complexity, integrations, and implementation requirements.
         </GlowingText>
 
-        <h3 className="mb-8 font-display text-3xl tracking-tight text-white/90">Website Packages</h3>
-        <div className="mb-24 grid grid-cols-2 gap-4 sm:gap-6 lg:gap-10">
-          {/* Web Plan 1 */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: 0 }}
-            className="flex flex-col justify-between rounded-2xl border border-[rgba(139,125,255,0.15)] bg-card/10 p-5 backdrop-blur-md sm:p-10 transition-colors hover:border-[rgba(139,125,255,0.3)]"
-          >
-            <div>
-              <h3 className="font-display text-2xl sm:text-3xl">No Domain</h3>
-              <p className="hidden mt-3 min-h-[3rem] text-sm text-white/70 sm:block">
-                Bring your own domain later — we build and host on ours to start.
-              </p>
+        <div className="grid gap-4 sm:gap-6 lg:gap-8 md:grid-cols-3">
+          {tiers.map((t, i) => (
+            <motion.div
+              key={t.name}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ delay: i * 0.1 }}
+              className={cn(
+                "relative flex flex-col justify-between rounded-2xl p-6 sm:p-8 backdrop-blur-md transition-colors",
+                t.highlight
+                  ? "border border-primary/40 bg-primary/5"
+                  : "border border-[rgba(139,125,255,0.15)] bg-card/10 hover:border-[rgba(139,125,255,0.3)]",
+              )}
+              style={t.highlight ? { boxShadow: "0 0 40px rgba(139,125,255,0.05)" } : undefined}
+            >
+              {t.highlight && (
+                <div className="absolute -top-3 right-8 rounded-full bg-primary px-3 py-1 text-[10px] font-bold tracking-wider text-white">
+                  MOST COMMON
+                </div>
+              )}
+              <div>
+                <h3 className="font-display text-2xl sm:text-3xl">{t.name}</h3>
+                <p className="mt-2 text-xs uppercase tracking-widest text-white/60 font-mono">{t.sub}</p>
 
-              <div className="my-3 border-y border-white/10 py-3 sm:my-8 sm:py-8">
-                <div className="flex items-baseline gap-2">
-                  <span className="font-display text-2xl tracking-tight sm:text-6xl" style={purpleText(false)}>
-                    ₹499
-                  </span>
-                  <span className="text-white/70 text-xs sm:text-base">/ mo</span>
+                <div className="my-6 border-y border-white/10 py-6">
+                  <div className="font-display text-3xl sm:text-5xl" style={purpleText(false)}>
+                    {t.price}
+                  </div>
                 </div>
-                <div className="mt-1 sm:mt-2 text-[10px] sm:text-xs uppercase tracking-wider text-white/70/80 font-mono">
-                  Setup fee: ₹1,499 one-time
-                </div>
+
+                <p className="mb-6 text-sm text-white/70 leading-relaxed">{t.desc}</p>
+
+                <ul className="mb-8 space-y-3">
+                  {t.features.map((f) => (
+                    <li key={f} className="flex items-start gap-3">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                      <span className="text-sm text-white/75">{f}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              <ul className="mb-5 space-y-2 sm:mb-10 sm:space-y-4">
-                {[
-                  "Hosting up to 10k visitors/mo",
-                  "1 major + 2 minor updates/month",
-                  "Uptime monitoring",
-                ].map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary sm:h-4 sm:w-4" />
-                    <span className="text-[10px] leading-tight sm:text-sm text-white/70">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <motion.button
-              onClick={onCta}
-              whileHover={{ y: -2, ...G.primaryBtnHover }}
-              whileTap={{ y: 0, scale: 0.98 }}
-              className="w-full rounded-xl py-2 sm:py-4 text-[11px] sm:text-sm font-medium text-white transition-all"
-              style={{
-                background: "rgba(139,125,255,0.12)",
-                border: "1px solid rgba(139,125,255,0.25)",
-              }}
-            >
-              Start This Plan
-            </motion.button>
-          </motion.div>
-
-          {/* Web Plan 2 */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: 0.15 }}
-            className="relative flex flex-col justify-between rounded-2xl border border-primary/40 bg-primary/5 p-5 backdrop-blur-md sm:p-10"
-            style={{ boxShadow: "0 0 40px rgba(139,125,255,0.05)" }}
-          >
-            <div className="absolute -top-3 right-8 rounded-full bg-primary px-3 py-1 text-[10px] font-bold tracking-wider text-white">
-              MOST CHOSEN
-            </div>
-            
-            <div>
-              <h3 className="font-display text-2xl sm:text-3xl">With Domain</h3>
-              <p className="hidden mt-3 min-h-[3rem] text-sm text-white/70 sm:block">
-                Full setup on your own domain, live and indexed from launch.
-              </p>
-
-              <div className="my-3 border-y border-white/10 py-3 sm:my-8 sm:py-8">
-                <div className="flex items-baseline gap-2">
-                  <span className="font-display text-2xl tracking-tight sm:text-6xl" style={purpleText(false)}>
-                    ₹499
-                  </span>
-                  <span className="text-white/70 text-xs sm:text-base">/ mo</span>
-                </div>
-                <div className="mt-1 sm:mt-2 text-[10px] sm:text-xs uppercase tracking-wider text-white/70/80 font-mono">
-                  Setup fee: ₹2,999 one-time
-                </div>
-              </div>
-
-              <ul className="mb-5 space-y-2 sm:mb-10 sm:space-y-4">
-                {[
-                  "Hosting up to 10k visitors/mo",
-                  "1 major + 2 minor updates/month",
-                  "Uptime monitoring",
-                ].map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary sm:h-4 sm:w-4" />
-                    <span className="text-[10px] leading-tight sm:text-sm text-white/70">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <motion.button
-              onClick={onCta}
-              whileHover={{ y: -2, ...G.primaryBtnHover }}
-              whileTap={{ y: 0, scale: 0.98 }}
-              className="w-full rounded-xl py-2 sm:py-4 text-[11px] sm:text-sm font-medium text-white transition-all"
-              style={G.primaryBtn}
-            >
-              Start This Plan
-            </motion.button>
-          </motion.div>
+              <motion.button
+                onClick={onCta}
+                whileHover={{ y: -2, ...G.primaryBtnHover }}
+                whileTap={{ y: 0, scale: 0.98 }}
+                className="w-full rounded-xl py-3 text-sm font-medium text-white transition-all"
+                style={
+                  t.highlight
+                    ? G.primaryBtn
+                    : {
+                        background: "rgba(139,125,255,0.12)",
+                        border: "1px solid rgba(139,125,255,0.25)",
+                      }
+                }
+              >
+                {t.cta}
+              </motion.button>
+            </motion.div>
+          ))}
         </div>
 
-        <h3 className="mb-8 font-display text-3xl tracking-tight text-white/90">Custom Software &amp; AI Builds</h3>
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:gap-10">
-          {/* Plan 1 */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: 0 }}
-            className="flex flex-col justify-between rounded-2xl border border-[rgba(139,125,255,0.15)] bg-card/10 p-5 backdrop-blur-md sm:p-10 transition-colors hover:border-[rgba(139,125,255,0.3)]"
-          >
-            <div>
-              <h3 className="font-display text-2xl sm:text-3xl">One-Time Build</h3>
-              <p className="hidden mt-3 min-h-[3rem] text-sm text-white/70 sm:block">
-                The one-time build — planning, development, and getting it live in your stack.
-              </p>
-
-              <div className="my-3 border-y border-white/10 py-3 sm:my-8 sm:py-8">
-                <div className="flex items-baseline gap-2">
-                  <span className="font-display text-2xl tracking-tight sm:text-6xl" style={purpleText(false)}>
-                    ₹4,999 – ₹1L
-                  </span>
-                </div>
-                <div className="mt-1 sm:mt-2 text-[10px] sm:text-xs uppercase tracking-wider text-white/70/80 font-mono">
-                  Priced after Discovery
-                </div>
-              </div>
-
-              <ul className="mb-5 space-y-2 sm:mb-10 sm:space-y-4">
-                {[
-                  "Hosting up to 10k visitors/mo",
-                  "Clear documentation, so you're never locked in",
-                  "NDA on request",
-                ].map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary sm:h-4 sm:w-4" />
-                    <span className="text-[10px] leading-tight sm:text-sm text-white/70">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <motion.button
-              onClick={onCta}
-              whileHover={{ y: -2, ...G.primaryBtnHover }}
-              whileTap={{ y: 0, scale: 0.98 }}
-              className="w-full rounded-xl py-2 sm:py-4 text-[11px] sm:text-sm font-medium text-white transition-all"
-              style={{
-                background: "rgba(139,125,255,0.12)",
-                border: "1px solid rgba(139,125,255,0.25)",
-              }}
-            >
-              Apply to Work Together
-            </motion.button>
-          </motion.div>
-
-          {/* Plan 2 */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: 0.15 }}
-            className="relative flex flex-col justify-between rounded-2xl border border-primary/40 bg-primary/5 p-5 backdrop-blur-md sm:p-10"
-            style={{ boxShadow: "0 0 40px rgba(139,125,255,0.05)" }}
-          >
-            <div className="absolute -top-3 right-8 rounded-full bg-primary px-3 py-1 text-[10px] font-bold tracking-wider text-white">
-              ONGOING
-            </div>
-            
-            <div>
-              <h3 className="font-display text-2xl sm:text-3xl">Maintenance Subscription</h3>
-              <p className="hidden mt-3 min-h-[3rem] text-sm text-white/70 sm:block">
-                Monitoring and hands-on management of what's live, month to month.
-              </p>
-
-              <div className="my-3 border-y border-white/10 py-3 sm:my-8 sm:py-8">
-                <div className="flex items-baseline gap-2">
-                  <span className="font-display text-2xl tracking-tight sm:text-6xl" style={purpleText(false)}>
-                    ₹999 – ₹10K
-                  </span>
-                  <span className="text-white/70 text-xs sm:text-base">/ mo</span>
-                </div>
-                <div className="mt-2 text-xs uppercase tracking-wider text-white/70/80 font-mono">
-                  Scales with what you're running
-                </div>
-              </div>
-
-              <ul className="mb-5 space-y-2 sm:mb-10 sm:space-y-4">
-                {[
-                  "Uptime & monitoring included",
-                  "Bug fixes & stability checks",
-                  "New feature work quoted separately",
-                ].map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary sm:h-4 sm:w-4" />
-                    <span className="text-[10px] leading-tight sm:text-sm text-white/70">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <motion.button
-              onClick={onCta}
-              whileHover={{ y: -2, ...G.primaryBtnHover }}
-              whileTap={{ y: 0, scale: 0.98 }}
-              className="w-full rounded-xl py-2 sm:py-4 text-[11px] sm:text-sm font-medium text-white transition-all"
-              style={G.primaryBtn}
-            >
-              Apply to Work Together
-            </motion.button>
-          </motion.div>
-        </div>
-        
         <div className="mt-12 flex flex-col items-center gap-4 text-center">
           <p className="text-sm text-white/70">
-            Free, always: Hosting · Uptime monitoring · Changelog — included with every plan, no extra line item.
+            Every project starts with a free automation opportunity audit — we review your process before quoting anything.
           </p>
-          <p className="text-xs text-white/70/60 section-index">
-            Pricing is set after Discovery, based on scope · NDA available on request.
+          <p className="text-xs text-white/60 section-index">
+            NDA available on request · Solutions start from $299
           </p>
         </div>
       </div>
