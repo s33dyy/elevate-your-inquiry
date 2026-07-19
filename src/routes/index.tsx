@@ -647,16 +647,16 @@ function TrustStrip() {
       className="pointer-events-none relative z-10 mx-auto max-w-[1400px] px-6 pb-20 sm:px-10"
     >
       <div className="pointer-events-auto mb-14 flex items-baseline justify-between border-t border-border pt-6">
-        <span className="section-index">01 / Practice</span>
+        <span className="section-index">01 / How We Work</span>
         <span className="section-index hidden sm:block">
-          What every project ships with
+          Process first. Technology second.
         </span>
       </div>
 
       <h2 className="mb-16 max-w-4xl font-display text-5xl leading-[0.97] tracking-[-0.025em] sm:text-7xl">
-        A small studio,
+        We don't start with technology.
         <br />
-        <span style={purpleText(true)}>deliberately.</span>
+        We start with the <span style={purpleText(true)}>problem.</span>
       </h2>
 
       {/* Glass cards grid */}
