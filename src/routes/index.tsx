@@ -169,16 +169,17 @@ const ONLINE_PRESENCE = [
   "None",
 ];
 const SERVICES = [
-  "Website",
-  "Landing Page",
-  "Website Redesign",
-  "Custom Software",
-  "CRM",
+  "Workflow Automation",
+  "Lead & Sales Automation",
+  "Customer Communication",
+  "Systems Integration",
   "AI Automation",
+  "Internal Tools & Dashboards",
+  "CRM Automation",
   "WhatsApp Automation",
-  "Lead Management",
-  "Dashboard",
-  "API Integration",
+  "Document Processing",
+  "Reporting Automation",
+  "Custom Process Automation",
   "Other",
 ];
 const GOALS = [
