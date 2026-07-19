@@ -551,27 +551,24 @@ function Hero({ onCta }: { onCta: () => void }) {
         transition={{ duration: 0.8, delay: 0.1 }}
         className="pointer-events-auto mb-16 flex items-baseline justify-between border-t border-border pt-6"
       >
-        <span className="section-index">00 / Introduction</span>
+        <span className="section-index">00 / Business Process Automation</span>
         <span className="section-index hidden sm:block">
-          Now accepting projects · 2026
+          Solutions starting from $299
         </span>
       </motion.div>
 
       {/* Content grid */}
       <div className="grid items-center gap-12 lg:grid-cols-1">
-        {/* Main column */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
         >
           <div className="relative">
-            <h1 className="font-display leading-[0.92] tracking-[-0.03em] text-[clamp(2.6rem,11vw,8.8rem)]">
-              Websites &amp; software
+            <h1 className="font-display leading-[0.92] tracking-[-0.03em] text-[clamp(2.6rem,10vw,8rem)]">
+              Automate the work
               <br />
-              that{" "}
-              <span style={purpleText(true)}>earn</span>
-              {" "}their keep.
+              that <span style={purpleText(true)}>slows</span> your business down.
             </h1>
           </div>
 
@@ -579,16 +576,15 @@ function Hero({ onCta }: { onCta: () => void }) {
           <div className="mt-10 grid gap-6 sm:mt-12 sm:grid-cols-12">
             <div className="sm:col-span-5">
               <p className="text-compressed text-xl leading-[0.93] text-white/75 sm:text-4xl">
-                BoutiqueStudio
+                ProcessFirst
                 <br />
-                SinceDay1
+                TechnologySecond
               </p>
             </div>
             <GlowingText className="max-w-xl text-sm leading-relaxed sm:col-span-6 sm:col-start-7 sm:text-lg">
-              Techilla is a boutique studio for founders who need more than a
-              template. We build high-conversion websites, custom software, and
-              AI automation for teams that actually ship. Tell us about your
-              business — we respond within twenty-four hours.
+              Techilla identifies inefficient processes, repetitive tasks, and disconnected
+              workflows in your business — then builds the technology that fixes them.
+              Automation, AI, integrations, and custom internal tools. Solutions starting from $299.
             </GlowingText>
           </div>
 
@@ -606,7 +602,7 @@ function Hero({ onCta }: { onCta: () => void }) {
                 className="group inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium text-white"
                 style={G.primaryBtn}
               >
-                Begin application
+                Find what you can automate
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </motion.button>
             </Magnetic>
@@ -615,7 +611,7 @@ function Hero({ onCta }: { onCta: () => void }) {
               href="#faq"
               className="section-index transition-colors duration-200 hover:text-white"
             >
-              → Read FAQ first
+              → Book an automation call
             </a>
           </div>
         </motion.div>
