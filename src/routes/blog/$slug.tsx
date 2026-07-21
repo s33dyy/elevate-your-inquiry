@@ -219,7 +219,7 @@ function BlogPostView({ post, sidePanelPosts }: { post: BlogPost; sidePanelPosts
         </article>
 
         <div className="lg:sticky lg:top-28 lg:h-max">
-          <BlogSidePanel posts={blogPosts} currentSlug={post.slug} />
+          <BlogSidePanel posts={sidePanelPosts} currentSlug={post.slug} />
         </div>
       </div>
     </div>
