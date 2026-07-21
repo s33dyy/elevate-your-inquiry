@@ -41,6 +41,60 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_posts: {
+        Row: {
+          author: string
+          blocks: Json
+          created_at: string
+          date_label: string
+          excerpt: string
+          hero_alt: string | null
+          hero_image: string | null
+          id: string
+          published: boolean
+          reading_time: string
+          slug: string
+          tags: string[]
+          title: string
+          tldr: string[]
+          updated_at: string
+        }
+        Insert: {
+          author?: string
+          blocks?: Json
+          created_at?: string
+          date_label?: string
+          excerpt?: string
+          hero_alt?: string | null
+          hero_image?: string | null
+          id?: string
+          published?: boolean
+          reading_time?: string
+          slug: string
+          tags?: string[]
+          title: string
+          tldr?: string[]
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          blocks?: Json
+          created_at?: string
+          date_label?: string
+          excerpt?: string
+          hero_alt?: string | null
+          hero_image?: string | null
+          id?: string
+          published?: boolean
+          reading_time?: string
+          slug?: string
+          tags?: string[]
+          title?: string
+          tldr?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       blog_upvotes: {
         Row: {
           anon_id: string
