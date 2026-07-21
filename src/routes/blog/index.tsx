@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { blogPosts } from "@/lib/blog-posts";
+import { useQuery } from "@tanstack/react-query";
+import { blogPosts, type BlogPost, type BlogBlock } from "@/lib/blog-posts";
+import { supabase } from "@/integrations/supabase/client";
 import { BlogTopBar } from "@/components/BlogTopBar";
 import { ArrowRight } from "lucide-react";
 
@@ -25,7 +27,33 @@ export const Route = createFileRoute("/blog/")({
 });
 
 function BlogIndex() {
-  const [featured, ...rest] = blogPosts;
+  const dbQuery = useQuery({
+    queryKey: ["blog_posts_public"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("blog_posts")
+        .select("*")
+        .eq("published", true)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []).map((r) => ({
+        slug: r.slug,
+        title: r.title,
+        excerpt: r.excerpt,
+        author: r.author,
+        date: r.date_label,
+        readingTime: r.reading_time,
+        tags: r.tags ?? [],
+        heroImage: r.hero_image ?? undefined,
+        heroAlt: r.hero_alt ?? undefined,
+        tldr: r.tldr ?? [],
+        blocks: (r.blocks as unknown as BlogBlock[]) ?? [],
+      })) as BlogPost[];
+    },
+  });
+
+  const allPosts = [...(dbQuery.data ?? []), ...blogPosts];
+  const [featured, ...rest] = allPosts;
 
   return (
     <div className="min-h-screen bg-background">
@@ -55,7 +83,8 @@ function BlogIndex() {
   );
 }
 
-type Post = (typeof blogPosts)[number];
+type Post = BlogPost;
+
 
 function FeatureCard({ post }: { post: Post }) {
   return (
