@@ -1,12 +1,46 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { blogPosts, getPostBySlug, type BlogBlock } from "@/lib/blog-posts";
+import { useQuery } from "@tanstack/react-query";
+import {
+  blogPosts,
+  getPostBySlug,
+  type BlogBlock,
+  type BlogPost,
+} from "@/lib/blog-posts";
+import { supabase } from "@/integrations/supabase/client";
 import { BlogTopBar } from "@/components/BlogTopBar";
 import { BlogSidePanel } from "@/components/BlogSidePanel";
 import { BlogEngagement } from "@/components/BlogEngagement";
 import { Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => {
+  loader: async ({ params }) => {
+    // Check DB first for published posts, then fall back to static
+    try {
+      const { data } = await supabase
+        .from("blog_posts")
+        .select("*")
+        .eq("slug", params.slug)
+        .eq("published", true)
+        .maybeSingle();
+      if (data) {
+        const post: BlogPost = {
+          slug: data.slug,
+          title: data.title,
+          excerpt: data.excerpt,
+          author: data.author,
+          date: data.date_label,
+          readingTime: data.reading_time,
+          tags: data.tags ?? [],
+          heroImage: data.hero_image ?? undefined,
+          heroAlt: data.hero_alt ?? undefined,
+          tldr: data.tldr ?? [],
+          blocks: (data.blocks as unknown as BlogBlock[]) ?? [],
+        };
+        return { post };
+      }
+    } catch {
+      // ignore and fall through to static
+    }
     const post = getPostBySlug(params.slug);
     if (!post) throw notFound();
     return { post };
@@ -53,13 +87,44 @@ export const Route = createFileRoute("/blog/$slug")({
       </div>
     </div>
   ),
-  component: BlogPost,
+  component: BlogPostPage,
 });
 
-function BlogPost() {
-  const { post } = Route.useLoaderData() as {
-    post: NonNullable<ReturnType<typeof getPostBySlug>>;
-  };
+function BlogPostPage() {
+  const { post } = Route.useLoaderData() as { post: BlogPost };
+
+  // Live list of DB + static posts for the side panel
+  const dbQuery = useQuery({
+    queryKey: ["blog_posts_public"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("blog_posts")
+        .select("slug,title,excerpt,date_label,reading_time,tags,hero_image,hero_alt")
+        .eq("published", true)
+        .order("created_at", { ascending: false });
+      return (data ?? []).map((r) => ({
+        slug: r.slug,
+        title: r.title,
+        excerpt: r.excerpt,
+        author: "Techilla",
+        date: r.date_label,
+        readingTime: r.reading_time,
+        tags: r.tags ?? [],
+        heroImage: r.hero_image ?? undefined,
+        heroAlt: r.hero_alt ?? undefined,
+        blocks: [] as BlogBlock[],
+      })) as BlogPost[];
+    },
+  });
+
+  const allPosts = [...(dbQuery.data ?? []), ...blogPosts];
+
+  const _postForRender = post;
+  return <BlogPostView post={_postForRender} sidePanelPosts={allPosts} />;
+}
+
+function BlogPostView({ post, sidePanelPosts }: { post: BlogPost; sidePanelPosts: BlogPost[] }) {
+
 
   return (
     <div className="min-h-screen bg-background">
