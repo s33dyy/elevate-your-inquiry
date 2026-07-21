@@ -1,6 +1,9 @@
 import brainTumorDemo from "@/assets/brain-tumor-demo.mov.asset.json";
 import smallBusinessHero from "@/assets/small-business-website-hero.jpg";
 import brainTumorHero from "@/assets/brain-tumor-hero.jpg";
+import automationHero from "@/assets/business-process-automation-hero.jpg";
+import automationDiagram from "@/assets/business-process-automation-diagram.jpg";
+
 
 export type BlogBlock =
   | { type: "p"; text: string }
