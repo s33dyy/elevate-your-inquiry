@@ -117,7 +117,8 @@ function BlogPostPage() {
     },
   });
 
-  const allPosts = [...(dbQuery.data ?? []), ...blogPosts];
+  const dbSlugs = new Set((dbQuery.data ?? []).map((p) => p.slug));
+  const allPosts = [...(dbQuery.data ?? []), ...blogPosts.filter((p) => !dbSlugs.has(p.slug))];
 
   const _postForRender = post;
   return <BlogPostView post={_postForRender} sidePanelPosts={allPosts} />;
