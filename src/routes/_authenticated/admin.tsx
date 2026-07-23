@@ -581,6 +581,7 @@ function AppDrawer({ app, onClose, onSaved }: { app: JobApp | null; onClose: () 
 function BlogPanel() {
   const qc = useQueryClient();
   const [editing, setEditing] = useState<BlogPostRow | "new" | null>(null);
+  const [importing, setImporting] = useState<string | null>(null);
 
   const postsQuery = useQuery({
     queryKey: ["blog_posts_admin"],
@@ -608,6 +609,36 @@ function BlogPanel() {
     qc.invalidateQueries({ queryKey: ["blog_posts_public"] });
   }
 
+  async function importStatic(p: (typeof blogPosts)[number]) {
+    setImporting(p.slug);
+    try {
+      const payload = {
+        slug: p.slug,
+        title: p.title,
+        excerpt: p.excerpt,
+        author: p.author,
+        date_label: p.date,
+        reading_time: p.readingTime,
+        tags: p.tags,
+        hero_image: p.heroImage ?? null,
+        hero_alt: p.heroAlt ?? null,
+        tldr: p.tldr ?? [],
+        blocks: p.blocks as unknown as Database["public"]["Tables"]["blog_posts"]["Insert"]["blocks"],
+        published: true,
+      };
+      const { data, error } = await supabase.from("blog_posts").insert(payload).select("*").single();
+      if (error) throw error;
+      toast.success("Imported. You can now edit it.");
+      qc.invalidateQueries({ queryKey: ["blog_posts_admin"] });
+      qc.invalidateQueries({ queryKey: ["blog_posts_public"] });
+      setEditing(data as BlogPostRow);
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setImporting(null);
+    }
+  }
+
   if (editing) {
     return (
       <BlogEditor
@@ -621,12 +652,15 @@ function BlogPanel() {
     );
   }
 
+  const dbSlugs = new Set((postsQuery.data ?? []).map((r) => r.slug));
+  const builtIn = blogPosts.filter((p) => !dbSlugs.has(p.slug));
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between gap-3">
         <div>
           <h2 className="font-serif text-xl">Posts</h2>
-          <p className="text-xs text-muted-foreground">Draft, edit, publish. Published posts appear at <span className="text-foreground">/blog</span>.</p>
+          <p className="text-xs text-muted-foreground">Draft, edit, publish. Built-in posts can be imported to become editable.</p>
         </div>
         <Button onClick={() => setEditing("new")}><Plus className="mr-2 h-4 w-4" /> New post</Button>
       </div>
@@ -635,8 +669,6 @@ function BlogPanel() {
         <TableSkeleton />
       ) : postsQuery.error ? (
         <p className="text-sm text-destructive">Failed: {(postsQuery.error as Error).message}</p>
-      ) : !postsQuery.data?.length ? (
-        <EmptyState label="No posts yet. Create your first draft." />
       ) : (
         <div className="overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02]">
           <table className="w-full text-sm">
@@ -650,7 +682,7 @@ function BlogPanel() {
               </tr>
             </thead>
             <tbody>
-              {postsQuery.data.map((p) => (
+              {(postsQuery.data ?? []).map((p) => (
                 <tr key={p.id} className="border-b border-white/5 hover:bg-white/[0.03]">
                   <td className="px-4 py-3">
                     <div className="font-medium">{p.title}</div>
@@ -665,6 +697,22 @@ function BlogPanel() {
                     </Button>
                     <Button size="sm" variant="ghost" onClick={() => setEditing(p)}>Edit</Button>
                     <Button size="sm" variant="ghost" onClick={() => remove(p)}><Trash2 className="h-3.5 w-3.5 text-destructive" /></Button>
+                  </td>
+                </tr>
+              ))}
+              {builtIn.map((p) => (
+                <tr key={`static-${p.slug}`} className="border-b border-white/5 hover:bg-white/[0.03]">
+                  <td className="px-4 py-3">
+                    <div className="font-medium">{p.title}</div>
+                    <div className="text-xs text-muted-foreground line-clamp-1">{p.excerpt}</div>
+                  </td>
+                  <td className="px-4 py-3 text-xs text-muted-foreground">{p.slug}</td>
+                  <td className="px-4 py-3"><Badge variant="outline">Built-in</Badge></td>
+                  <td className="px-4 py-3 text-xs text-muted-foreground">—</td>
+                  <td className="px-4 py-3 text-right">
+                    <Button size="sm" variant="ghost" disabled={importing === p.slug} onClick={() => importStatic(p)}>
+                      {importing === p.slug ? "Importing…" : "Import & Edit"}
+                    </Button>
                   </td>
                 </tr>
               ))}
